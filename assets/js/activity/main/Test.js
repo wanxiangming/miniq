@@ -21,6 +21,7 @@ function host(){
 	var changeTransactionModal=ChangeTransactionModal.creatNew();
 	var logScope=LogScope.creatNew(mainTable);
 	var dayLogAry=DayLogAry.creatNew();
+	var test;
 
 	logScope.initByTime(selectData);
 
