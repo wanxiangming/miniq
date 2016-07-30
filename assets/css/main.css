@@ -1,0 +1,87 @@
+.clear-fix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.white{
+	color:#FFFFFF;
+}
+
+.correction-row-css{
+	margin-left:0px;
+	margin-right:0px;
+}
+
+.correction-animated-css{
+	-webkit-animation-fill-mode: none;
+	animation-fill-mode: none;
+}
+
+.correction-dropdown-menu-padding{
+	padding:0px;
+}
+
+.correction-cancel-border{
+	border:0px
+}
+
+.correction-dropdown-btn-css{
+	border:0px;
+	text-align:left;
+	font-size: 13px;
+	padding: 6px 20px;
+}
+
+.correction-alerts{
+	position:absolute;
+	padding:6px;	
+}
+
+.correction-clear-col-xs-padding{
+	padding: 0px
+}
+
+.table-list-text-css{
+	padding-top: 6px;
+    padding-bottom: 3px;
+}
+
+.deep-background-on-hover:hover{
+	background:#F5F6FA
+}
+
+.btn-mine1:hover{
+	color:#505050;
+	background-color:#b9bfc1;
+	border-color:#ccc;
+}
+
+.btn-mine1{
+	color:#fff;
+	background-color:#979B9C;
+	border-color:#adadad;
+}
+
+.btn-activity-main-dateBtn{
+	color:#fff;
+	background-color:#979B9C;
+	border-color:#adadad;
+}
+
+.btn-activity-main-dateBtn:hover{
+	color:#505050;
+	background-color:#b9bfc1;
+	border-color:#ccc;
+}
+
+.transaction-scroll{
+	height:inherit;
+	overflow:auto;
+}
+
+
+
+

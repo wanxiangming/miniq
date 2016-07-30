@@ -1,0 +1,775 @@
+2016/04/19 19:47:36 [error] [exception.CException] exception 'CException' with message 'LoginController and its behaviors do not have a method or closure named "partial".' in /alidata/www/yii1.1.15/framework/base/CComponent.php:266
+Stack trace:
+#0 /alidata/www/mini/protected/controllers/LoginController.php(4): CComponent->__call('partial', Array)
+#1 /alidata/www/mini/protected/controllers/LoginController.php(4): LoginController->partial('Login')
+#2 /alidata/www/yii1.1.15/framework/web/actions/CInlineAction.php(49): LoginController->actionLogin()
+#3 /alidata/www/yii1.1.15/framework/web/CController.php(308): CInlineAction->runWithParams(Array)
+#4 /alidata/www/yii1.1.15/framework/web/CController.php(286): CController->runAction(Object(CInlineAction))
+#5 /alidata/www/yii1.1.15/framework/web/CController.php(265): CController->runActionWithFilters(Object(CInlineAction), Array)
+#6 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Login')
+#7 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Login/Login')
+#8 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#9 /alidata/www/mini/index.php(14): CApplication->run()
+#10 {main}
+REQUEST_URI=/mini/index.php?r=Login/Login
+---
+2016/04/19 21:17:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 21:38:35 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 21:38:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 21:45:14 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 21:45:33 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 22:27:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:04:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:30:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "post".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:31:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:31:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:32:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:39:17 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:39:18 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:39:20 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:39:21 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:58:38 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/19 23:58:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:01:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:01:09 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:02:02 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:02:03 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:02:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:03:07 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "index".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:03:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:03:57 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:09:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:09:42 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:10:23 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:11:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:19:04 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:21:25 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "cgi-bin/common/attr".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('cgi-bin/common/...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.6307511304245602
+---
+2016/04/20 00:21:26 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "cgi-bin/common/attr".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('cgi-bin/common/...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.5790465229243806
+---
+2016/04/20 00:28:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 00:29:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/
+---
+2016/04/20 12:29:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://www.miniq.site/
+---
+2016/04/20 12:48:01 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://www.miniq.site/
+---
+2016/04/20 16:09:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "cgi-bin/common/attr".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('cgi-bin/common/...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.2432924042483632
+---
+2016/04/20 19:32:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+HTTP_REFERER=http://www.miniq.site/
+---
+2016/04/20 19:34:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2016/04/20 19:45:24 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "cgi-bin/common/attr".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('cgi-bin/common/...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.1225844879472187
+---
+2016/04/20 19:47:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "favicon.ico".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('favicon.ico')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/favicon.ico
+---
+2016/04/20 19:53:41 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:53:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/?r=Main/main
+---
+2016/04/20 19:53:56 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:54:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:54:45 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:54:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/i?r=Main/main
+---
+2016/04/20 19:54:49 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/i?r=Main/main
+---
+2016/04/20 19:54:50 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/i?r=Main/main
+---
+2016/04/20 19:55:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/r=Main/main
+---
+2016/04/20 19:55:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/r=Main/main
+---
+2016/04/20 19:55:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+HTTP_REFERER=http://www.miniq.site/miniq/r=Main/main
+---
+2016/04/20 19:55:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:16 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:19 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:22 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/miniq/i?r=Main/main
+---
+2016/04/20 19:55:37 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:55:53 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "site".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/index.php?r=Login/Login
+---
+2016/04/20 19:56:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:56:10 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:56:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:56:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "miniq/r=Main/main".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('miniq/r=Main/ma...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/miniq/r=Main/main
+---
+2016/04/20 19:57:54 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:58:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+HTTP_REFERER=http://www.miniq.site/index.php?r=Main/Main
+---
+2016/04/20 19:58:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+HTTP_REFERER=http://www.miniq.site/index.php?r=Main/Main
+---
+2016/04/20 19:58:44 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+HTTP_REFERER=http://www.miniq.site/index.php?r=Main/Main
+---
+2016/04/20 19:58:58 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:58:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:05 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:08 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:11 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 19:59:13 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "Main".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('Main')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('Main')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Main/Main')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/index.php?r=Main/Main
+---
+2016/04/20 20:57:59 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.8288780796164288".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.8288780796164...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.8288780796164288
+---
+2016/04/20 22:11:36 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.3578714412247446".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.3578714412247...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.3578714412247446
+---
+2016/04/21 04:16:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.7421077899672737".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.7421077899672...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.7421077899672737
+---
+2016/04/21 06:42:27 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.5260451671713406".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.5260451671713...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.5260451671713406
+---
+2016/04/21 10:21:06 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.6930976527676907".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.6930976527676...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.6930976527676907
+---
+2016/04/21 11:33:43 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.4023844109959666".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.4023844109959...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.4023844109959666
+---
+2016/04/21 11:33:47 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'Unable to resolve the request "0.4968021679347388".' in /alidata/www/yii1.1.15/framework/web/CWebApplication.php:286
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('0.4968021679347...')
+#1 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#2 /alidata/www/miniq/index.php(14): CApplication->run()
+#3 {main}
+REQUEST_URI=/cgi-bin/common/attr?id=260714&r=0.4968021679347388
+---
