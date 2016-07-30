@@ -3,6 +3,7 @@ document.write('<script' + ' type="text/javascript" src="'+"assets/js/util/TextT
 document.write('<script' + ' type="text/javascript" src="'+"assets/js/uitool/div/Div.js"+'">' + '</script>');
 document.write('<script' + ' type="text/javascript" src="'+"assets/js/uitool/button/Button.js"+'">' + '</script>');
 
+
 function host(){
 	var timePicker=$("#mainTimePicker");
 	var mainTable=$("#mainTable");
@@ -15,13 +16,13 @@ function host(){
 	var theDataIsHas=[];
 	var isGetTransactionActivityComplete=true;
 	var selectData=new Date();
-	var noAttentionToAnyLogTable=false;
 	var getLogTableList=GetLogTableList.creatNew(openId);
 	var createTransactionModal=CreateTransactionModal.creatNew();
 	var changeTransactionModal=ChangeTransactionModal.creatNew();
-	var logTransactionItemAry=LogTransactionAry.creatNew();
 	var logScope=LogScope.creatNew(mainTable);
+	var dayLogAry=DayLogAry.creatNew();
 
+	logScope.initByTime(selectData);
 
 	timePicker.datetimepicker({
 		language:'zh-CN',
@@ -52,7 +53,7 @@ function host(){
 	}
 
 	timePickerInput.bind('mousewheel',function(event,delta){
-		var dl=delta >0 ? false:true;
+		var dl=delta > 0 ? false:true;
 		if(dl){
 			pushDataToTheDataNeedToRequest(MDate.creatNew(selectData).getTheDayBeginingTime().getTime()+dayNum*aDay);
 			selectData.setDate(Number(selectData.getDate())+1);
@@ -77,13 +78,13 @@ function host(){
 
 	setInterval(function(){
 		getTransactionFromInternet();
-	},2000);
+	},200);
 
 	function getTransactionFromInternet(){
-		var theDataNeedToRequestNew=getTheDataNeedToRequestAry();
-		if(isGetTransactionActivityComplete && theDataNeedToRequestNew.length!=0){
+		var theNewDataNeedToRequest=getTheDataNeedToRequestAry();
+		if(isGetTransactionActivityComplete && theNewDataNeedToRequest.length!=0){
 			isGetTransactionActivityComplete=false;
-			var getTransactionByTimeAry=GetTransactionByTimeAry.creatNew(openId,theDataNeedToRequestNew);
+			var getTransactionByTimeAry=GetTransactionByTimeAry.creatNew(openId,theNewDataNeedToRequest);
 			getTransactionByTimeAry.onSuccessLisenter(function(data){
 				$.each(data,function(index,value){
 					$.each(value.transactionInfo,function(transactionInfoIndex,transactionInfoValue){
@@ -96,46 +97,58 @@ function host(){
 							logTransaction.setLogTableState(value.tableState);
 							logTransaction.setLogTransactionId(transactionValue.id);
 							logTransaction.setLogTransactionContent(transactionValue['content']);
-							logTransaction.setLogTransactionTime(transactionValue['time']);
-							initTransactionItem(logTransaction);
-							logTransactionItemAry.push(logTransaction);
+							logTransaction.setLogTransactionTime(transactionValue['time']);	//time就是flag，用flag找到dayLog，add进去
+							var dayLog=dayLogAry.getDayLog(MDate.creatNew(Number(transactionValue['time'])).getDayFlag());
+							initTransactionItem(logTransaction,dayLog);
+							dayLog.addTransaction(logTransaction);
 						});
 					});
 				});
-				pushDataToTheDataIsHas(theDataNeedToRequestNew);
+				eachDaylogAry(function(DAYLOG){
+					DAYLOG.loadComplete();
+				});
+				pushDataToTheDataIsHas(theNewDataNeedToRequest);
 				isGetTransactionActivityComplete=true;
 				flashLogScope(selectData);
 			});
 			getTransactionByTimeAry.launch();
+			eachDaylogAry(function(DAYLOG){
+				DAYLOG.loading();
+			});
 		}
+
+		function eachDaylogAry(CALL_BACK){
+			$.each(theNewDataNeedToRequest,function(index,value){
+				CALL_BACK(dayLogAry.getDayLog(MDate.creatNew(value).getDayFlag()));
+			});
+		}
+
 	}
 
-	function initTransactionItem(LOG_TRANSACTION){
-		LOG_TRANSACTION.initTransactionItem(function(){
-			changeTransactionModal.initChangeTransactionModal(LOG_TRANSACTION,function(data,content,time){
+	function initTransactionItem(LOG_TRANSACTION,DAYLOG){
+		LOG_TRANSACTION.onClickListener(function(){
+			changeTransactionModal.initChangeTransactionModalBeforeShow(LOG_TRANSACTION,function(data,content,time){
 				if(data == 0){
-					LOG_TRANSACTION.setLogTransactionContent(content);
-					LOG_TRANSACTION.setLogTransactionTime(time);
-					flashLogScope(getDateByTimePickerInput());
+					DAYLOG.changeTransactionById(LOG_TRANSACTION.getLogTransactionId(),content,time);
 				}
 			},function(data){
 				if(data == 0){
-					logTransactionItemAry.deleteByTransactionId(LOG_TRANSACTION.getLogTransactionId());
-					flashLogScope(getDateByTimePickerInput());
+					DAYLOG.deleteTransactionById(LOG_TRANSACTION.getLogTransactionId());
 				}
 			});
 		});
 	}
 
+	//返回一个数组，仅包含最新需要请求的transaction的日期，且不重复
 	function getTheDataNeedToRequestAry(){
-		var theDataNeedToRequestNew=[];
+		var theNewDataNeedToRequest=[];
 		theDataNeedToRequest=eliminatingDuplicateForAry(theDataNeedToRequest);
 		$.each(theDataNeedToRequest,function(index,value){
 			if($.inArray(value,theDataIsHas) == -1){
-				theDataNeedToRequestNew.push(value);
+				theNewDataNeedToRequest.push(value);
 			}
 		});
-		return theDataNeedToRequestNew;
+		return theNewDataNeedToRequest;
 	}
 
 	function pushDataToTheDataIsHas(NEWDATA){
@@ -168,81 +181,39 @@ function host(){
 
 	});
 
-	function flashLogScope(BEGINNING_DATE){
-		destroyPopover();
-		logTransactionItemAry.sort();
-		logScope.initByTime(BEGINNING_DATE);
-		installLogScope();
-	}
-
-	function destroyPopover(){
-		logTransactionItemAry.each(function(index,value){
-			value.destroyPopover();
+	function flashLogScope(DATE){
+		logScope.each(function(index,value,flag){
+			if(dayLogAry.isDayLogExist(flag)){
+				dayLogAry.getDayLog(flag).hide();
+			}
 		});
-	}
-
-	function installLogScope(){
-		if(!noAttentionToAnyLogTable){
-			logScope.each(function(index,value,beginningTimeOfToday){
-				makeADateBtn(beginningTimeOfToday).appendTo(value.ui);
-				$.each(getTheDayTransactionList(beginningTimeOfToday),function(transactionIndex,transactionValue){
-					transactionValue.getTransactionButton().appendTo(value.ui);
+		logScope.flashByTime(DATE);
+		logScope.each(function(index,value,flag){
+			if(!dayLogAry.isDayLogExist(flag)){
+				var dayLog=DayLog.creatNew(flag);
+				dayLog.setDateBtnOnClickLstener(function(time){
+					createTransactionModal.initCreateTransactionModal(time,function(tableId,content,transactionTime,transactionId){
+						var logTable=getLogTableObjByTableId(tableId);
+						var logTransaction=LogTransactionItem.creatNew();
+						logTransaction.setLogTableId(logTable.getLogTableId());
+						logTransaction.setLogTableState(logTable.getLogTableState());
+						logTransaction.setLogTableCreatorId(logTable.getLogTableCreatorId());
+						logTransaction.setLogTableAnotherName(logTable.getLogTableAnotherName());
+						logTransaction.setLogTableUserId(logTable.getLogTableUserId());
+						logTransaction.setLogTransactionContent(content);
+						logTransaction.setLogTransactionTime(transactionTime);
+						logTransaction.setLogTransactionId(transactionId);
+						initTransactionItem(logTransaction,dayLog);
+						dayLog.addTransaction(logTransaction);
+					});
 				});
-				if(value.ui.height()>=350){
-					value.addClass("transaction-scroll");
-				}
-			});
-		}
-	}
-
-	function getTheDayTransactionList(BEGINNING_TIME_OF_TODAY){
-		var transactionList=[];
-		logTransactionItemAry.each(function(logTransactionAry_index,logTransactionAry_value){
-			if(isTheTodayLog(BEGINNING_TIME_OF_TODAY,logTransactionAry_value.getLogTransactionTime())){
-				transactionList.push(logTransactionAry_value);
-			}	
+				dayLog.show().appendTo(value.ui);
+				dayLogAry.addDayLog(dayLog);
+			}
+			else{
+				dayLogAry.getDayLog(flag).show().appendTo(value.ui);
+			}
 		});
-		return transactionList;
-	}
-
-	function isTheTodayLog(THE_DAY_TIME,TRANSACTION_TIME){
-		if(TRANSACTION_TIME>=THE_DAY_TIME && TRANSACTION_TIME<THE_DAY_TIME+aDay)
-			return true;
-		else
-			return false;
-	}
-
-	function makeADateBtn(BEGINNING_TIME_OF_TODAY){
-		var mDate=MDate.creatNew(BEGINNING_TIME_OF_TODAY);
-		var dateBtn=Button.creatNew();
-		var loaderScope=Div.creatNew();
-		dateBtn.html(mDate.getChineseDay()+"&nbsp;&nbsp;&nbsp;"+mDate.getDate());
-		dateBtn.addClass("btn btn-mine1 text-center col-xs-12");
-		dateBtn.setAttribute("data-toggle","modal");
-		dateBtn.setAttribute("data-target","#create_log_transaction_modal");
-		dateBtn.onClickListener(function(){
-			createTransactionModal.initCreateTransactionModal(BEGINNING_TIME_OF_TODAY,function(tableId,content,transactionTime,transactionId){
-				var logTable=getLogTableObjByTableId(tableId);
-				var logTransaction=LogTransactionItem.creatNew();
-				logTransaction.setLogTableId(logTable.getLogTableId());
-				logTransaction.setLogTableState(logTable.getLogTableState());
-				logTransaction.setLogTableCreatorId(logTable.getLogTableCreatorId());
-				logTransaction.setLogTableAnotherName(logTable.getLogTableAnotherName());
-				logTransaction.setLogTableUserId(logTable.getLogTableUserId());
-				logTransaction.setLogTransactionContent(content);
-				logTransaction.setLogTransactionTime(transactionTime);
-				logTransaction.setLogTransactionId(transactionId);
-				initTransactionItem(logTransaction);
-				logTransactionItemAry.push(logTransaction);
-				flashLogScope(getDateByTimePickerInput());
-			});
-		});
-		loaderScope.setAttribute("style","position:absolute;top:15%;left:80%");
-		loaderScope.appendTo(dateBtn.ui);
-		if($.inArray(BEGINNING_TIME_OF_TODAY,theDataIsHas) == -1){
-			LoaderPiano.creatNew().appendTo(loaderScope.ui);
-		}
-		return dateBtn;
 	}
 
 	function getLogTableObjByTableId(TABLEID){
@@ -280,6 +251,161 @@ function host(){
 
 
 
+
+
+
+
+
+
+
+var DayLogAry={
+	creatNew:function(){
+		var DayLogAry={};
+
+		var dayLogAry=[];
+
+		DayLogAry.addDayLog=function(DAYLOG){
+			dayLogAry.push(DAYLOG);
+		}
+
+		DayLogAry.getDayLog=function(FLAG){
+			var daylog;
+			$.each(dayLogAry,function(index,value){
+				if(value.getFlag() == FLAG)
+					daylog=value;
+			});
+			return daylog;
+		}
+
+		DayLogAry.isDayLogExist=function(FLAG){
+			var isExist=false;
+			$.each(dayLogAry,function(index,value){
+				if(value.getFlag() == FLAG)
+					isExist=true;
+			});
+			return isExist;
+		}
+
+		DayLogAry.iterator=function(CALL_BACK){
+			$.each(dayLogAry,function(index,value){
+				CALL_BACK(index,value);
+			});
+		}
+
+		return DayLogAry;
+	}
+}
+
+var DayLog={
+	creatNew:function(TIME){
+		var DayLog={};
+
+		var theDayTime=MDate.creatNew(TIME);	
+		var theDayFlag=theDayTime.getDayFlag();
+		var logTransactionAry=LogTransactionAry.creatNew();
+		var scope=Div.creatNew();
+		var dateBtn=Button.creatNew();
+		var loaderScope=Div.creatNew();
+		var dateBtnOnClickListener;
+		var loaderPiano=LoaderPiano.creatNew();
+
+		init();
+
+		function init(){
+			initDateBtn();
+			dateBtn.appendTo(scope.ui);
+			initloadUi();
+		}
+
+		function initloadUi(){
+			loaderPiano.appendTo(loaderScope.ui);
+			hideLoad();
+			loaderScope.setAttribute("style","position:absolute;top:15%;left:80%");
+			loaderScope.appendTo(dateBtn.ui);
+		}
+
+		function initDateBtn(){
+			dateBtn.html(theDayTime.getChineseDay()+"&nbsp;&nbsp;&nbsp;"+theDayTime.getDate());
+			dateBtn.addClass("btn text-center col-xs-12");
+			if(isToday()){
+				dateBtn.addClass("btn-info");
+			}
+			else{
+				dateBtn.addClass("btn-activity-main-dateBtn");
+			}
+		}
+
+		function isToday(){
+			var todayFlag=MDate.creatNew(new Date()).getDayFlag();
+			return theDayFlag == todayFlag;
+		}
+
+		DayLog.show=function(){
+			show();
+			return scope;
+		}
+
+		function show(){
+			scope.removeClass('hide');
+		}
+
+		DayLog.addTransaction=function(TRANSACTION){
+			TRANSACTION.getTransactionButton().appendTo(scope.ui);
+			logTransactionAry.push(TRANSACTION);
+		}
+
+		DayLog.deleteTransactionById=function(ID){
+			logTransactionAry.each(function(index,value){
+				if(value.getLogTransactionId() == ID){
+					value.hide();
+				}
+			});
+			logTransactionAry.deleteByTransactionId(ID);
+		}
+
+		DayLog.changeTransactionById=function(ID,CONTENT,TIME){
+			transaction=logTransactionAry.findById(ID);
+			transaction.changeTransactionContent(CONTENT,TIME);
+		}
+
+		DayLog.setDateBtnOnClickLstener=function(CALL_BACK){
+			dateBtnOnClickListener=CALL_BACK;
+			dateBtn.setAttribute("data-toggle","modal");
+			dateBtn.setAttribute("data-target","#create_log_transaction_modal");
+			dateBtn.ui.on("click",function(){
+				dateBtnOnClickListener(theDayTime);
+			});
+		}
+
+		DayLog.getFlag=function(){
+			return  theDayFlag;
+		}
+
+		DayLog.hide=function(){
+			scope.addClass('hide');
+		}
+
+		DayLog.loading=function(){
+			showLoad();
+		}
+
+		function showLoad(){
+			loaderPiano.show();
+		}
+
+		DayLog.loadComplete=function(){
+			hideLoad();
+		}
+
+		function hideLoad(){
+			loaderPiano.hide();
+		}
+
+		return DayLog;
+	}
+}
+
+
 var LogScope={
 	creatNew:function(PARENT_UI){
 		var LogScope={};
@@ -288,44 +414,45 @@ var LogScope={
 		var aDay=Number(86400000);
 		var dayNum=6;
 		var parentUI=PARENT_UI;
-		PARENT_UI.attr("style","height:350px;border-bottom: 1px solid #DADADA; border-left: 1px solid #DADADA;border-right: 1px solid #DADADA;");
+		PARENT_UI.attr("style","height:350px;border-bottom: 1px solid #DADADA; border-left: 1px solid #DADADA; border-right: 1px solid #DADADA;");
 
 		LogScope.initByTime=function(FIRST_DAY_TIME){
-			emptyLogScope();
 			setLogScope(FIRST_DAY_TIME);
+		}
+
+		LogScope.flashByTime=function(FIRST_DAY_TIME){
+			// emptyLogScope();
+			setTimeForLogScope(FIRST_DAY_TIME);
 		}
 
 		LogScope.each=function(CALL_BACK){
 			$.each(logScopeList,function(index,value){
-				CALL_BACK(index,value,Number(value.getAttribute("toDayTime")));
+				CALL_BACK(index,value,Number(value.getAttribute("todayTime")));
 			});
 		}
 
 		function emptyLogScope(){
 			$.each(logScopeList,function(index,value){
-				value.remove();
+				value.html("");
 			});
-			logScopeList=[];
 		}
 
 		function setLogScope(THE_BEGINING_DATE){
-			$.each(everyDayBeginTimeAry(THE_BEGINING_DATE,dayNum),function(index,value){
+			for(i=0; i<dayNum; i++){
 				var logScope=Div.creatNew();
 				logScope.addClass("col-xs-2");
-				logScope.setAttribute("toDayTime",value);
 				logScope.appendTo(parentUI);
 				logScopeList.push(logScope);
-			}); 
+			}
+			setTimeForLogScope(THE_BEGINING_DATE);
 		}
 
-		function everyDayBeginTimeAry(SELECT_DATA,DAY_NUM){
-			var time=MDate.creatNew(SELECT_DATA).getTheDayBeginingTime().getTime();	//时间在这里才转换为了beginningTime
-			var timeAry=[];
-			for(var i=0; i<DAY_NUM; i++){
-				timeAry.push(time);
+		function setTimeForLogScope(TIME){
+			var time=MDate.creatNew(TIME).getTheDayBeginingTime().getTime();	//时间在这里才转换为了beginningTime
+			$.each(logScopeList,function(index,value){
+				value.setAttribute("todayTime",time);
 				time+=aDay;
-			}
-			return timeAry;
+			});
 		}
 
 		return LogScope;
@@ -369,6 +496,16 @@ var LogTransactionAry={
 			});
 		}
 
+		LogTransactionAry.findById=function(TRANSACTION_ID){
+			var transaction;
+			LogTransactionAry.each(function(index,value){
+				if(value.getLogTransactionId() == TRANSACTION_ID){
+					transaction=value;
+				}
+			});
+			return transaction;
+		}
+
 		return LogTransactionAry;
 	}
 }
@@ -383,20 +520,21 @@ var LogTransactionItem={
 		var btn=Button.creatNew();
 		var onClickListener;
 
-		LogTransactionItem.initTransactionItem=function(ONCLICKLISTENER){
+		btn.addClass("btn btn-default text-center col-xs-12 ");
+		btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
+		btn.setAttribute("data-toggle","popover");
+		btn.setAttribute("data-container","body");
+		btn.setAttribute("data-trigger","hover");
+		btn.setAttribute("data-html","true");
+		btn.appendTo(div.ui);
+
+		LogTransactionItem.onClickListener=function(ONCLICKLISTENER){
 			onClickListener=ONCLICKLISTENER;
-			btn.addClass("btn btn-default text-center col-xs-12 ");
-			btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
-			btn.appendTo(div.ui);
 		}
 
 		LogTransactionItem.getTransactionButton=function(){
-			var logTableAnotherName=LogTransactionItem.getLogTableAnotherName();
-			var logTransactionContent=LogTransactionItem.getLogTransactionContent();
-			var time=new Date(LogTransactionItem.getLogTransactionTime());
+			initTransactionItemUI();
 
-			btn.html("<span>"+textTranslator.encodeEnterToSpacing(logTransactionContent)+"</span>");
-			setPopover(logTableAnotherName,"<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+logTransactionContent);
 			if(isMineTransaction()){
 				btn.setAttribute("data-toggle","modal");
 				btn.setAttribute("data-target","#change_log_transaction_modal");
@@ -410,7 +548,24 @@ var LogTransactionItem={
 					btn.removeClass("wobble animated");
 				});
 			}
+
 			return div;
+		}
+
+		function initTransactionItemUI(){
+			var time=new Date(LogTransactionItem.getLogTransactionTime());
+			btn.html("<span>"+textTranslator.encodeEnterToSpacing(LogTransactionItem.getLogTransactionContent())+"</span>");
+			setPopover(LogTransactionItem.getLogTableAnotherName(),"<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+LogTransactionItem.getLogTransactionContent());
+		}
+
+		LogTransactionItem.changeTransactionContent=function(CONTENT,TIME){
+			LogTransactionItem.setLogTransactionContent(CONTENT);
+			LogTransactionItem.setLogTransactionTime(TIME);
+			initTransactionItemUI();
+		}
+
+		LogTransactionItem.hide=function(){
+			div.addClass("hide");
 		}
 
 		LogTransactionItem.destroyPopover=function(){
@@ -418,12 +573,8 @@ var LogTransactionItem={
 		}
 
 		function setPopover(TITLE,CONTENT){
-			btn.setAttribute("data-toggle","popover");
 			btn.setAttribute("title",TITLE);
 			btn.setAttribute("data-content",CONTENT);
-			btn.setAttribute("data-container","body");
-			btn.setAttribute("data-trigger","hover");
-			btn.setAttribute("data-html","true");
 			btn.ui.popover();
 		}
 
@@ -625,7 +776,6 @@ var ChangeTransactionModal={
 		return ChangeTransactionModal;
 	}
 }
-
 
 
 
