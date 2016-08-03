@@ -731,7 +731,7 @@ var ChangeTransactionModal={
 		ChangeTransactionModal.hourBind(changeTransactionModalHour,changeTransactionModalHourDownBtn,changeTransactionModalHourUpBtn);
 		ChangeTransactionModal.minuteBind(changeTransactionModalMinute,changeTransactionModalMinuteDownBtn,changeTransactionModalMinuteUpBtn);
 
-		ChangeTransactionModal.initChangeTransactionModal=function(LOG_TRANSACTION,CHANGE_SECCESS_CALL_BACK,DELETE_SECCESS_CALL_BACK){
+		ChangeTransactionModal.initChangeTransactionModalBeforeShow=function(LOG_TRANSACTION,CHANGE_SECCESS_CALL_BACK,DELETE_SECCESS_CALL_BACK){
 			logTransaction=LOG_TRANSACTION;
 			mDate=MDate.creatNew(logTransaction.getLogTransactionTime());
 			content=logTransaction.getLogTransactionContent();
