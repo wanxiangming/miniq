@@ -89,7 +89,7 @@ function host(){
 				$.each(data,function(index,value){
 					$.each(value.transactionInfo,function(transactionInfoIndex,transactionInfoValue){
 						$.each(transactionInfoValue,function(transactionInfoIndex,transactionValue){
-							var logTransaction=LogTransactionItem.creatNew();
+							var logTransaction=LogTransaction.creatNew();
 							logTransaction.setLogTableUserId(value.userId);
 							logTransaction.setLogTableId(value.tableId);
 							logTransaction.setLogTableAnotherName(value.anotherName);
@@ -98,9 +98,10 @@ function host(){
 							logTransaction.setLogTransactionId(transactionValue.id);
 							logTransaction.setLogTransactionContent(transactionValue['content']);
 							logTransaction.setLogTransactionTime(transactionValue['time']);	//time就是flag，用flag找到dayLog，add进去
+							var logTransactionItem=LogTransactionItem.creatNew(logTransaction);
 							var dayLog=dayLogAry.getDayLog(MDate.creatNew(Number(transactionValue['time'])).getDayFlag());
-							initTransactionItem(logTransaction,dayLog);
-							dayLog.addTransaction(logTransaction);
+							initTransactionItem(logTransactionItem,dayLog);
+							dayLog.addTransaction(logTransactionItem);
 						});
 					});
 				});
@@ -194,7 +195,7 @@ function host(){
 				dayLog.setDateBtnOnClickLstener(function(time){
 					createTransactionModal.initCreateTransactionModal(time,function(tableId,content,transactionTime,transactionId){
 						var logTable=getLogTableObjByTableId(tableId);
-						var logTransaction=LogTransactionItem.creatNew();
+						var logTransaction=LogTransaction.creatNew();
 						logTransaction.setLogTableId(logTable.getLogTableId());
 						logTransaction.setLogTableState(logTable.getLogTableState());
 						logTransaction.setLogTableCreatorId(logTable.getLogTableCreatorId());
@@ -203,8 +204,9 @@ function host(){
 						logTransaction.setLogTransactionContent(content);
 						logTransaction.setLogTransactionTime(transactionTime);
 						logTransaction.setLogTransactionId(transactionId);
-						initTransactionItem(logTransaction,dayLog);
-						dayLog.addTransaction(logTransaction);
+						var logTransactionItem=LogTransactionItem.creatNew(logTransaction);
+						initTransactionItem(logTransactionItem,dayLog);
+						dayLog.addTransaction(logTransactionItem);
 					});
 				});
 				dayLog.show().appendTo(value.ui);
@@ -350,8 +352,16 @@ var DayLog={
 		}
 
 		DayLog.addTransaction=function(TRANSACTION){
-			TRANSACTION.getTransactionButton().appendTo(scope.ui);
 			logTransactionAry.push(TRANSACTION);
+			refreshLogTransaction();
+		}
+
+		function refreshLogTransaction(){
+			logTransactionAry.sort();
+			logTransactionAry.each(function(index,value){
+				value.hide();
+				value.show().appendTo(scope.ui);
+			});
 		}
 
 		DayLog.deleteTransactionById=function(ID){
@@ -366,6 +376,7 @@ var DayLog={
 		DayLog.changeTransactionById=function(ID,CONTENT,TIME){
 			transaction=logTransactionAry.findById(ID);
 			transaction.changeTransactionContent(CONTENT,TIME);
+			refreshLogTransaction();
 		}
 
 		DayLog.setDateBtnOnClickLstener=function(CALL_BACK){
@@ -512,33 +523,26 @@ var LogTransactionAry={
 
 
 var LogTransactionItem={
-	creatNew:function(){
-		var LogTransactionItem=LogTransaction.creatNew();
+	creatNew:function(LOGTRANSACTION){
+		var LogTransactionItem=LOGTRANSACTION;
 
 		var textTranslator=TextTranslator.creatNew();
 		var div=Div.creatNew();
 		var btn=Button.creatNew();
-		var onClickListener;
 
-		btn.addClass("btn btn-default text-center col-xs-12 ");
-		btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
-		btn.setAttribute("data-toggle","popover");
-		btn.setAttribute("data-container","body");
-		btn.setAttribute("data-trigger","hover");
-		btn.setAttribute("data-html","true");
-		btn.appendTo(div.ui);
-
-		LogTransactionItem.onClickListener=function(ONCLICKLISTENER){
-			onClickListener=ONCLICKLISTENER;
-		}
-
-		LogTransactionItem.getTransactionButton=function(){
+		(function(){
+			btn.addClass("btn btn-default text-center col-xs-12 ");
+			btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
+			btn.setAttribute("data-toggle","popover");
+			btn.setAttribute("data-container","body");
+			btn.setAttribute("data-trigger","hover");
+			btn.setAttribute("data-html","true");
+			btn.appendTo(div.ui);
+			btn.ui.popover();
 			initTransactionItemUI();
-
 			if(isMineTransaction()){
 				btn.setAttribute("data-toggle","modal");
 				btn.setAttribute("data-target","#change_log_transaction_modal");
-				btn.onClickListener(onClickListener);
 			}
 			else{
 				btn.onClickListener(function(){
@@ -548,8 +552,20 @@ var LogTransactionItem={
 					btn.removeClass("wobble animated");
 				});
 			}
+		})();
+		
 
+		LogTransactionItem.onClickListener=function(ONCLICKLISTENER){
+			btn.onClickListener(ONCLICKLISTENER);
+		}
+
+		LogTransactionItem.show=function(){
+			div.removeClass('hide');
 			return div;
+		}
+
+		function isMineTransaction(){
+			return LogTransactionItem.getLogTableUserId() == LogTransactionItem.getLogTableCreatorId() ? true:false;
 		}
 
 		function initTransactionItemUI(){
@@ -573,13 +589,8 @@ var LogTransactionItem={
 		}
 
 		function setPopover(TITLE,CONTENT){
-			btn.setAttribute("title",TITLE);
+			btn.setAttribute("data-original-title",TITLE);
 			btn.setAttribute("data-content",CONTENT);
-			btn.ui.popover();
-		}
-
-		function isMineTransaction(){
-			return LogTransactionItem.getLogTableUserId() == LogTransactionItem.getLogTableCreatorId() ? true:false;
 		}
 
 		return LogTransactionItem;
