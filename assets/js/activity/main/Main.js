@@ -52,7 +52,7 @@ function host(){
 		return timeAry;
 	}
 
-	timePickerInput.bind('mousewheel',function(event,delta){
+	mainTable.bind('mousewheel',function(event,delta){
 		var dl=delta > 0 ? false:true;
 		if(dl){
 			pushDataToTheDataNeedToRequest(MDate.creatNew(selectData).getTheDayBeginingTime().getTime()+dayNum*aDay);
@@ -64,6 +64,7 @@ function host(){
 		}
 		timePicker.datetimepicker('update',selectData);
 		flashLogScope(selectData);
+		return false;
 	});
 
 	function pushDataAryToTheDataNeedToRequest(ARY){

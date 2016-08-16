@@ -5,8 +5,8 @@ var Button={
 		var Button=Ui.creatNew($("<button></button"));
 
 		Button.onClickListener=function(CALL_BACK){
-			Button.ui.bind("click",function(){
-				CALL_BACK($(this));
+			Button.ui.bind("click",function(ev){
+				CALL_BACK($(this),ev);
 			});
 		}
 

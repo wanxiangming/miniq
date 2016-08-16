@@ -24,7 +24,7 @@
     <script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>util/DataStructure.js"></script> 
 	<script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>activity/Main.js"></script> 
     
-    <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>dialog/common.css"/>
+    <!-- <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>dialog/common.css"/> -->
     <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/bootstrap-datetimepicker-master/css/bootstrap-datetimepicker.min.css"/>
     <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>animate/animate.min.css"/>
