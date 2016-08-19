@@ -35,22 +35,46 @@ function host(){
 	var area=$("#backlogBoxRow");
 	var backlogBoxManager=BacklogBoxManager.creatNew(backlogAry,"",area);
 	backlogBoxManager.onRemoveItem(function(ID){
-		return true;
+		var def=$.Deferred();
+		setTimeout(function(){
+			def.resolve();
+		},500);
+		return def;
 	});
 	backlogBoxManager.onItemChange(function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){
-		return true;
+		var def=$.Deferred();
+		setTimeout(function(){
+			def.resolve();
+		},500);
+		return def;
 	});
 	backlogBoxManager.onItemComplete(function(ID){
-		return true;
+		var def=$.Deferred();
+		setTimeout(function(){
+			def.resolve();
+		},500);
+		return def;
 	});
 	backlogBoxManager.onAddItem(function(content,isMainQuest,isRecent){
-		var backlog=Backlog.creatNew();
-		backlog.setId(t);
-		backlog.setContent(content);
-		backlog.setIsMainQuest(isMainQuest);
-		backlog.setIsRecent(isRecent);
-		t++;
-		return backlog;
+		var def=$.Deferred();
+		setTimeout(function(){
+			var backlog=Backlog.creatNew();
+			backlog.setId(t);
+			backlog.setContent(content);
+			backlog.setIsMainQuest(isMainQuest);
+			backlog.setIsRecent(isRecent);
+			t++;
+			def.resolve(backlog);
+		},1000);
+		return def;
+	});
+	backlogBoxManager.onAddMainQuest(function(CONTENT){
+		var def=$.Deferred();
+		setTimeout(function(){
+			$(".mainQuestContent_span").html(CONTENT);
+			def.resolve();
+		},1000);
+		return def;
 	});
 
 	// var backlogBox=BacklogBox.creatNew(area,backlogAry);
@@ -75,7 +99,7 @@ function host(){
  * 待办事项盒子们的位置应该作为它的参数传递给它
  * 主线信息作为参数传递给它
  * 
- * BacklogBoxManager(backlogAry,mainQuestInfo,area)
+ * BacklogBoxManager(backlogAry,hasMainQuest,area)
  * 		onAddItem(CALL_BACK(content,isMainQuest,isRecent))	当待办事项管理员要添加一条待办事项时，你可以进行一些操作，
  * 			当且仅当你的操作返回true时，待办事项管理员才真正的添加这条待办事项
  * 		onRemoveItem(CALL_BACK(itemId))		当待办事项管理员要移除一条待办事项时，你可以进行一些操作，同样只有在
@@ -83,17 +107,20 @@ function host(){
  * 		onItemChange(CALL_BACK(id,content,isMainQuest,isRecent))	当待办事项管理员要修改一条待办事项时，你可以进行一
  * 			些操作，同样只有操作返回true时修改才发生
  * 		onItemComplete(CALL_BACK(id))	当待办事项完成时，你可以进行一些操作，只有返回true时，事项完成才发生
+ * 		onAddMainQuest(CALL_BACK(CONTENT))	当我们添加了主线的时候，你可以获得主线内容，并进行一些操作，只有你的操作返回true
+ * 			的时候，主线添加才成功
  */
 var BacklogBoxManager={
-	creatNew:function(BACKLOG_ARY,MAIN_QUEST_INFO,AREA){
+	creatNew:function(BACKLOG_ARY,HAS_MAIN_QUEST,AREA){
 		var BacklogBoxManager={};
 
 		var backlogBoxAry=[];
 		var classifyAry=[{IS_MAIN_QUEST:true,IS_RECENT:true,index:0},{IS_MAIN_QUEST:true,IS_RECENT:false,index:1},{IS_MAIN_QUEST:false,IS_RECENT:true,index:2},{IS_MAIN_QUEST:false,IS_RECENT:false,index:3}];
-		var e_itemChange=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
-		var e_removeItem=function(ID){return false;};
-		var e_itemComplete=function(ID){return false;};
-		var e_addItem=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
+		var e_itemChange=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return $.Deferred();};
+		var e_removeItem=function(ID){return $.Deferred();};
+		var e_itemComplete=function(ID){return $.Deferred();};
+		var e_addItem=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return $.Deferred();};
+		var e_addMainQuest=function(CONTENT){return $.Deferred();};
 		(function(){
 			var addItemButtonArea=Div.creatNew();
 			addItemButtonArea.addClass('col-xs-1 text-right');
@@ -101,19 +128,40 @@ var BacklogBoxManager={
 			addItemButtonArea.appendTo(AREA);
 
 			var addBtn=Button.creatNew();
-			var backlogAddModal=BacklogAddModal.creatNew();
 			addBtn.addClass('btn btn-default');
 			addBtn.html("<span class=\"glyphicon glyphicon-plus\"></span>");
 			addBtn.appendTo(addItemButtonArea.ui);
-			backlogAddModal.bindModal(addBtn);
+			var backlogAddModal=BacklogAddModal.creatNew();
 			backlogAddModal.onSave(function(CONTENT,IS_MAIN_QUEST,IS_RECENT){
-				var result=e_addItem(CONTENT,IS_MAIN_QUEST,IS_RECENT);
-				if(typeof(result)=="object"){
-					var backlogItem=transformBacklogToBacklogItem(result);
-					addItemIntoBacklogBoxByClassify(classify(backlogItem.isMainQuest(),backlogItem.isRecent()),backlogItem);
-					backlogAddModal.hide();
-				}
+				var def=e_addItem(CONTENT,IS_MAIN_QUEST,IS_RECENT);
+				def.done(function(result){
+					if(typeof(result)=="object"){
+						var backlogItem=transformBacklogToBacklogItem(result);
+						addItemIntoBacklogBoxByClassify(classify(backlogItem.isMainQuest(),backlogItem.isRecent()),backlogItem);
+						backlogAddModal.hide();
+					}
+				});
+				return def;
 			});
+			var mianQuestSetModal=MainQuestSetModal.creatNew();
+			mianQuestSetModal.onSet(function(CONTENT){
+				var def=e_addMainQuest(CONTENT);
+				def.done(function(){
+					mianQuestSetModal.hide();
+					mianQuestSetModal.unbindModal(addBtn);
+					backlogAddModal.bindModal(addBtn);
+					setTimeout(function(){
+						backlogAddModal.show();
+					},650);
+				});
+				return def;
+			});
+			if(HAS_MAIN_QUEST){
+				backlogAddModal.bindModal(addBtn);
+			}
+			else{
+				mianQuestSetModal.bindModal(addBtn);
+			}
 
 			var itemArea=Div.creatNew();
 			itemArea.addClass('col-xs-10');
@@ -150,7 +198,8 @@ var BacklogBoxManager={
 		function transformBacklogToBacklogItem(BACKLOG){
 			var backlogItem=BacklogItem.creatNew(BACKLOG);
 			backlogItem.onChange(function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){
-				if(e_itemChange(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT)){
+				var def=e_itemChange(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT);
+				def.done(function(){
 					if(backlogItem.isMainQuest()==IS_MAIN_QUEST && backlogItem.isRecent()==IS_RECENT){
 
 					}
@@ -158,29 +207,22 @@ var BacklogBoxManager={
 						removeItemFromBacklogBoxById(ID);
 						addItemIntoBacklogBoxByClassify(classify(IS_MAIN_QUEST,IS_RECENT),backlogItem);
 					}
-					return true;
-				}
-				else{
-					return false;
-				}
+				});
+				return def;
 			});
 			backlogItem.onDelete(function(ID){
-				if(e_removeItem(ID)){
+				var def=e_removeItem(ID);
+				def.done(function(){
 					removeItemFromBacklogBoxById(ID);
-					return true;
-				}
-				else{
-					return false;
-				}
+				});
+				return def;
 			});
 			backlogItem.onComplete(function(ID){
-				if(e_itemComplete(ID)){
+				var def=e_itemComplete(ID);
+				def.done(function(){
 					removeItemFromBacklogBoxById(ID);
-					return true;
-				}
-				else{
-					return false;
-				}
+				});
+				return def;
 			});
 			return backlogItem;
 		}
@@ -235,7 +277,70 @@ var BacklogBoxManager={
 			e_addItem=CALL_BACK;
 		}
 
+		BacklogBoxManager.onAddMainQuest=function(CALL_BACK){
+			e_addMainQuest=CALL_BACK;
+		}
+
 		return BacklogBoxManager;
+	}
+}
+
+/**
+ * MainQuestSetModal()
+ * 		bindModal(button)
+ * 		unbindModal(button)
+ * 		onSet(CALL_BACK(content))
+ * 		show()
+ * 		hide()
+ */
+var MainQuestSetModal={
+	creatNew:function(){
+		var MainQuestSetModal={};
+
+		var modal=$("#set_mianQuest_modal");
+		var saveBtn=$("#set_mianQuest_modal_save_btn");
+		var input=$("#set_mianQuest_modal_input");
+		var e_set=function(CONTENT){return $.Deferred();};
+		(function(){
+			saveBtn.unbind().bind("click",function(){
+				e_set(input.val());
+			});
+			modal.on('show.bs.modal',function(){
+				input.val("");
+			});
+		})();
+
+		MainQuestSetModal.bindModal=function(BUTTON){
+			BUTTON.setAttribute("data-toggle","modal");
+			BUTTON.setAttribute("data-target","#set_mianQuest_modal");
+		}
+
+		MainQuestSetModal.unbindModal=function(BUTTON){
+			BUTTON.setAttribute("data-toggle","");
+			BUTTON.setAttribute("data-target","");
+		}
+
+		MainQuestSetModal.onSet=function(CALL_BACK){
+			e_set=CALL_BACK;
+		}
+
+		MainQuestSetModal.show=function(){
+			open();
+		}
+
+		function open(){
+			modal.modal("show");
+		}
+
+		MainQuestSetModal.hide=function(){
+			close();
+		}
+
+		function close(){
+			modal.modal("hide");
+		}
+
+		return MainQuestSetModal;
 	}
 }
 
@@ -257,7 +362,7 @@ var BacklogAddModal={
 		var contentTextarea=$("#backlog_add_modal_content_textarea");
 		var mainQuestCheckBox=$("#backlog_add_modal_isMainQuestCheck_checkbox");
 		var recentCheckBox=$("#backlog_add_modal_isRecentCheck_checkbox");
-		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
+		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return $.Deferred();};
 		(function(){
 			saveBtn.unbind().bind("click",function(){
 				e_save(contentTextarea.val(),getMainQuestState(),getRecentState());
@@ -529,9 +634,9 @@ var BacklogEditModal={
 		var isMainQuestCheckBox=$("#isMainQuestCheck_checkbox");
 		var isRecentCheckBox=$("#isRecentCheck_checkbox");
 		var backlogModal=$("#backlog_edit_modal");
-		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
-		var e_delete=function(){return false;};
-		var e_complete=function(){return false;};
+		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return $.Deferred();};
+		var e_delete=function(){return $.Deferred();};
+		var e_complete=function(){return $.Deferred();};
 		(function(){
 			
 		})();
@@ -559,21 +664,15 @@ var BacklogEditModal={
 			setRecentCheckBox(IS_RECENT);
 
 			saveBtn.unbind().bind("click",function(){
-				if(e_save(contentTextarea.val(),getMainQuestCheckBoxState(),getRecentCheckBoxState())){
-					
-				}
+				e_save(contentTextarea.val(),getMainQuestCheckBoxState(),getRecentCheckBoxState())
 			});
 		
 			deleteBtn.unbind().bind("click",function(){
-				if(e_delete()){
-					
-				}
+				e_delete();
 			});
 
 			completeBtn.unbind().bind("click",function(){
-				if(e_complete()){
-
-				}
+				e_complete();
 			});
 		}
 
@@ -652,43 +751,36 @@ var BacklogItem={
 
 		var backlogEditModal=BacklogEditModal.creatNew();
 		var btn=PopoverButton.creatNew("hover",BACKLOG.getContent(),"",BACKLOG.getContent());
-		var e_change=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
-		var e_delete=function(ID){return false;};
-		var e_complete=function(ID){return false;};
+		var e_change=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return $.Deferred();};
+		var e_delete=function(ID){return $.Deferred();};
+		var e_complete=function(ID){return $.Deferred();};
 		(function(){
 			backlogEditModal.bindModal(btn);
 			backlogEditModal.onSave(function(CONTENT,IS_MAIN_QUEST,IS_RECENT){
-				if(e_change(BACKLOG.getId(),CONTENT,IS_MAIN_QUEST,IS_RECENT)){
+				var def=e_change(BACKLOG.getId(),CONTENT,IS_MAIN_QUEST,IS_RECENT);
+				def.done(function(){
 					backlogEditModal.hide();
 					BACKLOG.setContent(CONTENT);
 					BACKLOG.setIsMainQuest(IS_MAIN_QUEST);
 					BACKLOG.setIsRecent(IS_RECENT);
 					btn.changeHtml(CONTENT);
 					btn.changeContent(CONTENT);
-					return true;
-				}
-				else{
-					return false;
-				}
-				
+				});
+				return def;
 			});
 			backlogEditModal.onDelete(function(){
-				if(e_delete(BACKLOG.getId())){
+				var def=e_delete(BACKLOG.getId());
+				def.done(function(){
 					backlogEditModal.hide();
-					return true;
-				}
-				else{
-					return false;
-				}
+				});
+				return def;
 			});
 			backlogEditModal.onComplete(function(){
-				if(e_complete(BACKLOG.getId())){
+				var def=e_complete(BACKLOG.getId());
+				def.done(function(){
 					backlogEditModal.hide();
-					return true;
-				}
-				else{
-					return false;
-				}
+				});
+				return def;
 			});
 
 			btn.onClickListener(function(THIS,EVENT){
