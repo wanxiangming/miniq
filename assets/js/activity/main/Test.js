@@ -22,6 +22,7 @@ function host(){
 		})
 	})();
 
+	var t=11;
 	var backlogAry=[];
 	for(var i=0; i<10; i++){
 		var backlog=Backlog.creatNew();
@@ -29,14 +30,6 @@ function host(){
 		backlog.setContent(i);
 		backlog.setIsMainQuest(rollBoolean());
 		backlog.setIsRecent(rollBoolean());
-		// var backlogItem=BacklogItem.creatNew(backlog);
-		// backlogItem.onChange(function(){
-		// 	return true;
-		// });
-		// backlogItem.onDelete(function(ID){
-		// 	backlogBox.removeItem(ID);
-		// 	return true;
-		// });
 		backlogAry.push(backlog);
 	}
 	var area=$("#backlogBoxRow");
@@ -46,6 +39,18 @@ function host(){
 	});
 	backlogBoxManager.onItemChange(function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){
 		return true;
+	});
+	backlogBoxManager.onItemComplete(function(ID){
+		return true;
+	});
+	backlogBoxManager.onAddItem(function(content,isMainQuest,isRecent){
+		var backlog=Backlog.creatNew();
+		backlog.setId(t);
+		backlog.setContent(content);
+		backlog.setIsMainQuest(isMainQuest);
+		backlog.setIsRecent(isRecent);
+		t++;
+		return backlog;
 	});
 
 	// var backlogBox=BacklogBox.creatNew(area,backlogAry);
@@ -77,60 +82,112 @@ function host(){
  * 			操作返回true时，移除才发生
  * 		onItemChange(CALL_BACK(id,content,isMainQuest,isRecent))	当待办事项管理员要修改一条待办事项时，你可以进行一
  * 			些操作，同样只有操作返回true时修改才发生
+ * 		onItemComplete(CALL_BACK(id))	当待办事项完成时，你可以进行一些操作，只有返回true时，事项完成才发生
  */
 var BacklogBoxManager={
 	creatNew:function(BACKLOG_ARY,MAIN_QUEST_INFO,AREA){
 		var BacklogBoxManager={};
 
+		var backlogBoxAry=[];
+		var classifyAry=[{IS_MAIN_QUEST:true,IS_RECENT:true,index:0},{IS_MAIN_QUEST:true,IS_RECENT:false,index:1},{IS_MAIN_QUEST:false,IS_RECENT:true,index:2},{IS_MAIN_QUEST:false,IS_RECENT:false,index:3}];
 		var e_itemChange=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
 		var e_removeItem=function(ID){return false;};
-		var backlogItemAry=[];
-		var backlogBoxAry=[];
-		var classifyAryOfBacklogItemAry=[];
+		var e_itemComplete=function(ID){return false;};
+		var e_addItem=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
 		(function(){
-			$.each(BACKLOG_ARY,function(index, el) {
-				var backlogItem=BacklogItem.creatNew(el);
-				backlogItem.onChange(function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){
-					if(e_itemChange(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT)){
-						if(backlogItem.isMainQuest()==IS_MAIN_QUEST && backlogItem.isRecent()==IS_RECENT){
+			var addItemButtonArea=Div.creatNew();
+			addItemButtonArea.addClass('col-xs-1 text-right');
+			addItemButtonArea.setAttribute("style","padding-right:0px;padding-top:20px;height:200px");
+			addItemButtonArea.appendTo(AREA);
 
-						}
-						else{
-							removeItemFromBacklogBoxById(ID);
-							backlogBoxAry[classify(IS_MAIN_QUEST,IS_RECENT)].addItem(backlogItem);
-						}
-						return true;
-					}
-					else{
-						return false;
-					}
-				});
-				backlogItem.onDelete(function(ID){
-					if(e_removeItem(ID)){
-						removeItemFromBacklogBoxById(ID);
-						return true;
-					}
-					else{
-						return false;
-					}
-				});
-				backlogItemAry.push(backlogItem);
+			var addBtn=Button.creatNew();
+			var backlogAddModal=BacklogAddModal.creatNew();
+			addBtn.addClass('btn btn-default');
+			addBtn.html("<span class=\"glyphicon glyphicon-plus\"></span>");
+			addBtn.appendTo(addItemButtonArea.ui);
+			backlogAddModal.bindModal(addBtn);
+			backlogAddModal.onSave(function(CONTENT,IS_MAIN_QUEST,IS_RECENT){
+				var result=e_addItem(CONTENT,IS_MAIN_QUEST,IS_RECENT);
+				if(typeof(result)=="object"){
+					var backlogItem=transformBacklogToBacklogItem(result);
+					addItemIntoBacklogBoxByClassify(classify(backlogItem.isMainQuest(),backlogItem.isRecent()),backlogItem);
+					backlogAddModal.hide();
+				}
 			});
 
-			for (var i = 0; i < 4; i++) {
-				var ary=[];
-				classifyAryOfBacklogItemAry.push(ary);
-			}
-			$.each(backlogItemAry,function(index,value){
-				var index=classify(value.isMainQuest(),value.isRecent());
-				classifyAryOfBacklogItemAry[index].push(value);
-			});
-			$.each(classifyAryOfBacklogItemAry,function(index,value){
-				var backlogBox=BacklogBox.creatNew(AREA,value);
+			var itemArea=Div.creatNew();
+			itemArea.addClass('col-xs-10');
+			itemArea.appendTo(AREA);
+			var backlogItemAry=transformBacklogAryToBacklogItemAry(BACKLOG_ARY);
+			var backlogItemClassifyAry=transformBacklogItemAryToBacklogItemClassifyAry(backlogItemAry);
+			$.each(backlogItemClassifyAry,function(index,value){
+				var backlogBox=BacklogBox.creatNew(itemArea.ui,value);
 				backlogBoxAry.push(backlogBox);
 			});
 			backlogBoxAry[0].flip();
 		})();
+
+		function transformBacklogItemAryToBacklogItemClassifyAry(BACKLOG_ITEM_ARY){
+			var classifyAry=[];
+			for (var i = 0; i < 4; i++) {
+				var ary=[];
+				classifyAry.push(ary);
+			}
+			$.each(BACKLOG_ITEM_ARY,function(index,value){
+				classifyAry[classify(value.isMainQuest(),value.isRecent())].push(value);
+			});
+			return classifyAry;
+		}
+
+		function transformBacklogAryToBacklogItemAry(BACKLOG_ARY){
+			var itemAry=[];
+			$.each(BACKLOG_ARY,function(index, el) {
+				itemAry.push(transformBacklogToBacklogItem(el));
+			});
+			return itemAry;
+		}
+
+		function transformBacklogToBacklogItem(BACKLOG){
+			var backlogItem=BacklogItem.creatNew(BACKLOG);
+			backlogItem.onChange(function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){
+				if(e_itemChange(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT)){
+					if(backlogItem.isMainQuest()==IS_MAIN_QUEST && backlogItem.isRecent()==IS_RECENT){
+
+					}
+					else{
+						removeItemFromBacklogBoxById(ID);
+						addItemIntoBacklogBoxByClassify(classify(IS_MAIN_QUEST,IS_RECENT),backlogItem);
+					}
+					return true;
+				}
+				else{
+					return false;
+				}
+			});
+			backlogItem.onDelete(function(ID){
+				if(e_removeItem(ID)){
+					removeItemFromBacklogBoxById(ID);
+					return true;
+				}
+				else{
+					return false;
+				}
+			});
+			backlogItem.onComplete(function(ID){
+				if(e_itemComplete(ID)){
+					removeItemFromBacklogBoxById(ID);
+					return true;
+				}
+				else{
+					return false;
+				}
+			});
+			return backlogItem;
+		}
+
+		function addItemIntoBacklogBoxByClassify(CLASSIFY,BACKLOG_ITEM){
+			backlogBoxAry[CLASSIFY].addItem(BACKLOG_ITEM);
+		}
 
 		function removeItemFromBacklogBoxById(ID){
 			$.each(backlogBoxAry,function(index,value){
@@ -170,13 +227,82 @@ var BacklogBoxManager={
 			e_removeItem=CALL_BACK;
 		}
 
-		var onAddItem=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){};
-		BacklogBoxManager.onAddItem=function(CALL_BACK){
-			onAddItem=CALL_BACK;
+		BacklogBoxManager.onItemComplete=function(CALL_BACK){
+			e_itemComplete=CALL_BACK;
 		}
 
+		BacklogBoxManager.onAddItem=function(CALL_BACK){
+			e_addItem=CALL_BACK;
+		}
 
 		return BacklogBoxManager;
+	}
+}
+
+/**
+ * 
+ *
+ * BacklogAddModal()
+ * 		bindModal(button)
+ * 		onSave(CALL_BACK(content,isMainQuest,isRecent))
+ * 		show()
+ * 		hide()
+ */
+var BacklogAddModal={
+	creatNew:function(){
+		var BacklogAddModal={};
+
+		var modal=$("#backlog_add_modal");
+		var saveBtn=$("#backlog_add_modal_save_btn");
+		var contentTextarea=$("#backlog_add_modal_content_textarea");
+		var mainQuestCheckBox=$("#backlog_add_modal_isMainQuestCheck_checkbox");
+		var recentCheckBox=$("#backlog_add_modal_isRecentCheck_checkbox");
+		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
+		(function(){
+			saveBtn.unbind().bind("click",function(){
+				e_save(contentTextarea.val(),getMainQuestState(),getRecentState());
+			});
+			modal.on('show.bs.modal',function(e){
+				contentTextarea.val("");
+				mainQuestCheckBox.iCheck("uncheck");
+				recentCheckBox.iCheck("uncheck");
+			});
+		})();
+
+		function getMainQuestState(){
+			return mainQuestCheckBox.is(":checked");
+		}
+
+		function getRecentState(){
+			return recentCheckBox.is(":checked");
+		}
+
+		BacklogAddModal.onSave=function(CALL_BACK){
+			e_save=CALL_BACK;
+		}
+
+		BacklogAddModal.bindModal=function(BUTTON){
+			BUTTON.setAttribute("data-toggle","modal");
+			BUTTON.setAttribute("data-target","#backlog_add_modal");
+		}
+
+		BacklogAddModal.show=function(){
+			open();
+		}
+
+		BacklogAddModal.hide=function(){
+			close();
+		}
+
+		function close(){
+			modal.modal('hide');
+		}
+
+		function open(){
+			modal.modal('show');
+		}
+
+		return BacklogAddModal;
 	}
 }
 
@@ -214,13 +340,7 @@ var BacklogBox={
 			basisDiv.addClass('col-xs-3');
 			basisDiv.appendTo(ROW);
 			basisDiv.ui.bind("click",function(){ 
-				// if(isTransitionEnd){
-				// 	isTransitionEnd=false;
-				// 	if(isBackHide()){
-				// 		refreshBacklogDiv();
-				// 	}
-					flipContentDiv();
-				// }
+				flipContentDiv();
 			});
 
 			contentDiv.addClass('thumbnail flip-container');
@@ -231,9 +351,6 @@ var BacklogBox={
 			flipperDiv.addClass('flipper');
 			flipperDiv.ui.bind("transitionend",function(){
 				isTransitionEnd=true;
-				// if(isBackHide()){
-				// 	refreshBacklogDiv();
-				// }
 			});
 
 			frontDiv.addClass('front');
@@ -256,7 +373,6 @@ var BacklogBox={
 				areaDiv.appendTo(backDiv.ui);
 				itemAreaAry.push(areaDiv);
 			}
-			// refreshBacklogDiv();
 		})();
 
 		function isBackHide(){
@@ -325,7 +441,19 @@ var BacklogBox={
 		}
 
 		BacklogBox.addItem=function(BACKLOGITEM){
-			itemOutsideBackDivAry.push(BACKLOGITEM);
+			if(itemInsideBackDivAryLength()<MAX_BACKLOG_SHOW_ITEM){
+				itemInsideBackDivAry.push(BACKLOGITEM);
+				hideAllShowingBacklogItemInInside();
+				showAllhidingBacklogItemInInside();
+			}
+			else{
+				itemOutsideBackDivAry.push(BACKLOGITEM);
+			}
+
+		}
+
+		function itemInsideBackDivAryLength(){
+			return itemInsideBackDivAry.length;
 		}
 
 		BacklogBox.removeItem=function(BACKLOG_ID){
@@ -358,7 +486,7 @@ var BacklogBox={
 		}
 
 		BacklogBox.flip=function(){
-			setTimeout(function() {
+			setTimeout(function() {	//如果不使用定时器，box将不会触发transitionend
 				flipContentDiv();
 			}, 1);
 		}
@@ -386,6 +514,7 @@ var BacklogBox={
  * 		initBeforShow(Content,isMainQuest,isRecent)
  * 		onSave(CALL_BACK(Content,isMainQuest,isRecent))
  * 		onDelete(CALL_BACK())
+ * 		onComplete(CALL_BACK())
  * 		show()
  * 		hide()
  */
@@ -393,18 +522,30 @@ var BacklogEditModal={
 	creatNew:function(){
 		var BacklogEditModal={};
 
+		var contentTextarea=$("#backlog_modal_content_textarea");
+		var saveBtn=$("#backlog_edit_modal_save_btn");
+		var deleteBtn=$("#backlog_edit_modal_delete_btn");
+		var completeBtn=$("#backlog_edit_modal_complete_btn");
+		var isMainQuestCheckBox=$("#isMainQuestCheck_checkbox");
+		var isRecentCheckBox=$("#isRecentCheck_checkbox");
+		var backlogModal=$("#backlog_edit_modal");
+		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
+		var e_delete=function(){return false;};
+		var e_complete=function(){return false;};
 		(function(){
 			
 		})();
 
-		var e_save=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){return false};
 		BacklogEditModal.onSave=function(CALL_BACK){
 			e_save=CALL_BACK;
 		}
 
-		var e_delete=function(){return false};
 		BacklogEditModal.onDelete=function(CALL_BACK){
 			e_delete=CALL_BACK;
+		}
+
+		BacklogEditModal.onComplete=function(CALL_BACK){
+			e_complete=CALL_BACK;
 		}
 
 		BacklogEditModal.bindModal=function(BUTTON){
@@ -412,11 +553,6 @@ var BacklogEditModal={
 			BUTTON.setAttribute("data-target","#backlog_edit_modal");
 		}
 
-		var isMainQuest;
-		var isRecent;
-		var contentTextarea=$("#backlog_modal_content_textarea");
-		var saveBtn=$("#change_log_modal_change_btn");
-		var deleteBtn=$("#change_log_modal_delete_btn");
 		BacklogEditModal.initBeforShow=function(CONTENT,IS_MAIN_QUEST,IS_RECENT){
 			contentTextarea.val(CONTENT);
 			setMainQuestCheckbox(IS_MAIN_QUEST);
@@ -433,9 +569,14 @@ var BacklogEditModal={
 					
 				}
 			});
+
+			completeBtn.unbind().bind("click",function(){
+				if(e_complete()){
+
+				}
+			});
 		}
 
-		var isMainQuestCheckBox=$("#isMainQuestCheck_checkbox");
 		function setMainQuestCheckbox(IS_MAIN_QUEST){
 			if(typeof(IS_MAIN_QUEST)=="boolean"){
 				if(IS_MAIN_QUEST)
@@ -452,7 +593,6 @@ var BacklogEditModal={
 			return isMainQuestCheckBox.is(":checked");
 		}
 
-		var isRecentCheckBox=$("#isRecentCheck_checkbox");
 		function setRecentCheckBox(IS_RECENT){
 			if(typeof(IS_RECENT)=="boolean"){
 				if(IS_RECENT)
@@ -473,7 +613,6 @@ var BacklogEditModal={
 			close();
 		}
 
-		var backlogModal=$("#backlog_edit_modal");
 		function close(){
 			backlogModal.modal('hide');
 		}
@@ -505,6 +644,7 @@ var BacklogEditModal={
  * 		onChange(CALL_BACK(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT))	当待办事项被改变时，你可以进行一些操作，当且仅当你的
  * 			操作返回true时，修改才发生
  * 		onDelete(CALL_BACK(ID))	当代办事项要被删除时，你可以进行一些操作，当且仅当你的操作返回true时，删除才发生
+ * 		onComplete(CALL_BACK(ID))	当待办事项被完成时，你可以进行一些操作，当且仅当你的操作返回true时，完成才发生
  */
 var BacklogItem={
 	creatNew:function(BACKLOG){
@@ -514,6 +654,7 @@ var BacklogItem={
 		var btn=PopoverButton.creatNew("hover",BACKLOG.getContent(),"",BACKLOG.getContent());
 		var e_change=function(ID,CONTENT,IS_MAIN_QUEST,IS_RECENT){return false;};
 		var e_delete=function(ID){return false;};
+		var e_complete=function(ID){return false;};
 		(function(){
 			backlogEditModal.bindModal(btn);
 			backlogEditModal.onSave(function(CONTENT,IS_MAIN_QUEST,IS_RECENT){
@@ -540,6 +681,16 @@ var BacklogItem={
 					return false;
 				}
 			});
+			backlogEditModal.onComplete(function(){
+				if(e_complete(BACKLOG.getId())){
+					backlogEditModal.hide();
+					return true;
+				}
+				else{
+					return false;
+				}
+			});
+
 			btn.onClickListener(function(THIS,EVENT){
 				backlogEditModal.initBeforShow(BACKLOG.getContent(),BACKLOG.isMainQuest(),BACKLOG.isRecent());
 				EVENT.stopPropagation();
@@ -554,6 +705,10 @@ var BacklogItem={
 
 		BacklogItem.onDelete=function(CALL_BACK){
 			e_delete=CALL_BACK;
+		}
+
+		BacklogItem.onComplete=function(CALL_BACK){
+			e_complete=CALL_BACK;
 		}
 		
 		BacklogItem.getId=function(){
