@@ -2,7 +2,7 @@ document.write('<script' + ' type="text/javascript" src="'+"assets/js/uitool/Ui.
 
 var Button={
 	creatNew:function(){
-		var Button=Ui.creatNew($("<button></button"));
+		var Button=Ui.creatNew($("<button></button>"));
 
 		Button.onClickListener=function(CALL_BACK){
 			Button.ui.bind("click",function(ev){

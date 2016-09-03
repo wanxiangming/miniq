@@ -3,6 +3,8 @@
 <file name="TableUser.php" server="182.92.70.93//alidata/" local="131099573270000000" remote="131099573270000000" />
 <file name="TableLog.php" server="182.92.70.93//alidata/" local="131061479132239900" remote="131061479190000000" />
 <file name="TableLink.php" server="182.92.70.93//alidata/" local="131112347080000000" remote="131112347080000000" />
-<file name="TableTable.php" server="182.92.70.93//alidata/" local="131119332914872189" remote="131119332940000000" />
+<file name="TableTable.php" server="182.92.70.93//alidata/" local="131119332940000000" remote="131119332940000000" />
 <file name="TableTransaction.php" server="182.92.70.93//alidata/" local="131099574670000000" remote="131099574670000000" />
+<file name="TableMainLine.php" server="182.92.70.93//alidata/" local="131168716140000000" remote="131168716140000000" />
+<file name="TableBacklog.php" server="182.92.70.93//alidata/" local="131169363440000000" remote="131169363440000000" />
 </dwsync>

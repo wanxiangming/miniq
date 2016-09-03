@@ -9,8 +9,8 @@ var Internet={
 		var internetType=TYPE.toUpperCase();
 		var internetData=internetType=="GET" ? DATA : JSON.stringify(DATA);
 		var internetUrl=URL;
-		var successCallBackFunction;
-		var errorCallBackFunction;
+		var successCallBackFunction=function(data){return false};
+		var errorCallBackFunction=function(XMLHttpRequest, textStatus, errorThrown){return false};
 
 		Internet.launch=function(){
 			$.ajax({
@@ -144,6 +144,49 @@ var OpenTheTable={
 	creatNew:function(TABLE_ID){
 		var OpenTheTable=Internet.creatNew(OPEN_THE_TABLE,"GET",{"tableId":TABLE_ID});
 		return OpenTheTable;
+	}
+}
+
+//---------------------------------------------------与待办事项相关--------------------------------------------------------
+var AddMainLine={
+	creatNew:function(OPEN_ID,CONTENT){
+		var AddMainLine=Internet.creatNew(ADD_MAIN_LINE,"POST",{"openId":OPEN_ID,"content":CONTENT});
+		return AddMainLine;
+	}
+}
+
+var GetInfoInUseMainLineAndUncompletedBacklog={
+	creatNew:function(OPEN_ID){
+		var GetInfoInUseMainLineAndUncompletedBacklog=Internet.creatNew(GET_INFO_IN_USE_MAIN_LINE_AND_UNCOMPLETED_BACKLOG,"GET",{"openId":OPEN_ID});
+		return GetInfoInUseMainLineAndUncompletedBacklog;
+	}
+}
+
+var AddBacklog={
+	creatNew:function(OPEN_ID,IN_USE_MIAN_LINE_ID,CONTENT,IS_MIAN_LINE,IS_RECENT){
+		var AddBacklog=Internet.creatNew(ADD_BACKLOG,"POST",{"openId":OPEN_ID,"inUseMainLineId":IN_USE_MIAN_LINE_ID,"content":CONTENT,"isMainLine":IS_MIAN_LINE,"isRecent":IS_RECENT});
+		return AddBacklog;
+	}
+}
+
+var RemoveBacklog={
+	creatNew:function(OPEN_ID,BACKLOG_ID){
+		var RemoveBacklog=Internet.creatNew(REMOVE_BACKLOG,"GET",{"openId":OPEN_ID,"backlogId":BACKLOG_ID});
+		return RemoveBacklog;
+	}
+}
+
+var ChangeBacklog={
+	creatNew:function(OPEN_ID,IN_USE_MIAN_LINE_ID,BACKLOG_ID,CONTENT,IS_MIAN_LINE,IS_RECENT){
+		var ChangeBacklog=Internet.creatNew(CHANGE_BACKLOG,"POST",{"openId":OPEN_ID,"inUseMainLineId":IN_USE_MIAN_LINE_ID,"backlogId":BACKLOG_ID,"content":CONTENT,"isMainLine":IS_MIAN_LINE,"isRecent":IS_RECENT});
+		return ChangeBacklog;
+	}
+}
+
+var CompleteBacklog={
+	creatNew:function(OPEN_ID,BACKLOG_ID){
+		var CompleteBacklog=Internet.creatNew(COMPLETE_BACKLOG,"GET",{"openId":OPEN_ID,"backlogId":BACKLOG_ID});
+		return CompleteBacklog;
 	}
 }
 

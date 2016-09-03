@@ -44,9 +44,8 @@
 							<div class="col-xs-1">ID</div>
 							<div class="col-xs-2">日程名称</div>
 							<div class="col-xs-2">状态</div>
-                            <div class="col-xs-2">所属</div>
                             <div class="col-xs-2">可见性</div>
-							<div class="col-xs-offset-2 col-xs-1">操作</div>
+							<div class="col-xs-offset-4 col-xs-1">操作</div>
 						</div>
                         <div class="row correction-row-css">
                         	<div class="col-xs-12" style="background:#d0d5da"></div>

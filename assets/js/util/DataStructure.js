@@ -1,4 +1,14 @@
-
+/**
+ * LogTable
+ * 		日程表：logTable		（数据结构）
+		日程使用者ID：logTableUserId	（字段）
+		日程表ID：logTableId		（字段）
+		日程表创建者ID：logTableCreatorId	（字段）
+		日程表别名：logTableAnotherName	（字段）
+		日程表状态：logTableState	（字段）
+		日程表可见性状态：logTableVisibilityState	（字段）
+ * 
+ */
 var LogTable={
 	creatNew:function(){
 		var LogTable={};
@@ -80,6 +90,13 @@ var LogTable={
 	}
 }
 
+/**
+ * LogTransaction
+ * 		日程事务：logTransaction	（数据结构）
+ * 		日程ID：logTransactionId	（字段）
+		日程内容：logTransactionContent	（字段）
+		日程时间：logTransactionTime	（字段）
+ */
 var LogTransaction={
 	creatNew:function(){
 		var LogTransaction=LogTable.creatNew();

@@ -21,6 +21,13 @@ CREATE_LOG_TRANSACTION=MINIQ_URL+"MysqlTransaction/AddTransaction";
 CHANGE_LOG_TRANSACTION=MINIQ_URL+"MysqlTransaction/ChangeTransaction";
 DELETE_LOG_TRANSACTION=MINIQ_URL+"MysqlTransaction/DeleteTransaction";
 
+//待办事项相关url
+ADD_MAIN_LINE=MINIQ_URL+"MysqlBacklog/AddMainLine";
+GET_INFO_IN_USE_MAIN_LINE_AND_UNCOMPLETED_BACKLOG=MINIQ_URL+"MysqlBacklog/GetInfoInUseMainLineAndUncompletedBacklog";
+ADD_BACKLOG=MINIQ_URL+"MysqlBacklog/AddBacklog";
+REMOVE_BACKLOG=MINIQ_URL+"MysqlBacklog/RemoveBacklog";
+CHANGE_BACKLOG=MINIQ_URL+"MysqlBacklog/ChangeBacklog";
+COMPLETE_BACKLOG=MINIQ_URL+"MysqlBacklog/CompleteBacklog";
 
 
 

@@ -1,6 +1,6 @@
 <?php /* @var $this Controller */ ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" style="height:100%">
 <head>
 	<title>MiniQ</title>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
@@ -16,28 +16,31 @@
     <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>animate/animate.min.css"/>
 </head>
 
-<body text-align:center>
+<body text-align:center style="height:100%">
     
     
-    <div class="container-fluid clearfix ">
-        <div class="row" style="height:150px;background:#006CA7"></div>
-    
-        <div class="row" >
-            <div class="col-xs-12 text-center " style="font-size:120px;color:#565656;">MiniQueue</div>
-        </div>
-
-        <div class="row text-center" style="font-size: 25px;">
-            <div>让你轻松安排日程</div>
-        </div>
-        <div class="row text-center" style="font-size: 25px;">
-            <div>提前规划每一个“今日有约”</div>
-        </div>
+    <div class="container-fluid clearfix " style="height:100%">
+    	<div class="row" style="height:100%;background:rgb(33, 102, 140)">
+            <div class="row" style="height:20%;"></div>
         
-        <div class="row " style="margin-top:40px">
-            <div class="col-xs-2 col-xs-offset-5 text-center">
-                <img id="loginBtn" class="btn btn-default" src=assets/image/login/bt_blue_76X24.png />       
+        	<!--灰色e6e2e2   白色fff  蓝色006CA7-->
+            <div class="row" >
+                <div class="col-xs-12 text-center " style="font-size:120px;color:#ffffff;">MiniQueue</div>
             </div>
-        </div>
+    
+            <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
+                <div>让你轻松安排日程</div>
+            </div>
+            <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
+                <div>提前规划每一个“今日有约”</div>
+            </div>
+            
+            <div class="row " style="margin-top:40px">
+                <div class="col-xs-2 col-xs-offset-5 text-center">
+                    <img id="loginBtn" class="btn btn-default btn-xs" src=assets/image/login/bt_blue_76X24.png />       
+                </div>
+            </div>
+         </div>   
     </div>
 </body>
 </html>

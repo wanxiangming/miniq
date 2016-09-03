@@ -47,10 +47,15 @@
 .table-list-text-css{
 	padding-top: 6px;
     padding-bottom: 3px;
+	color:white;
 }
 
 .deep-background-on-hover:hover{
-	background:#F5F6FA
+	background:#F5F6FA;
+}
+
+.deep-background-on-hover:hover div{
+	color:black;
 }
 
 .btn-mine1:hover{
@@ -82,7 +87,10 @@
 	overflow:auto;
 }
 
-
+a{
+    color: #FFFFFF;
+    text-decoration: none;
+}
 
 
 

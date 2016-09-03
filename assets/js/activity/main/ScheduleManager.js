@@ -164,7 +164,7 @@ var TableListBlock={
 					getIdBlock(LOG_TABLE.getLogTableId()).appendTo(div.ui);
 					getTableNameBlock(LOG_TABLE.getLogTableAnotherName()).appendTo(div.ui);
 					getTableStateBlock(LOG_TABLE.getLogTableState()).appendTo(div.ui);
-					getBelongBlock(LOG_TABLE.isMaster(LOG_TABLE)).appendTo(div.ui);
+					// getBelongBlock(LOG_TABLE.isMaster(LOG_TABLE)).appendTo(div.ui);
 					getVisibilityStateBlock(LOG_TABLE.isMaster(),LOG_TABLE.isPublicTable()).appendTo(div.ui);
 					getDropDownBlock(LOG_TABLE).appendTo(div.ui);
 
@@ -229,7 +229,7 @@ var TableListBlock={
 				function getDropDownBlock(){
 					var dropDownDiv=Div.creatNew();
 					var dropDown=DropDown.creatNew("tableDropDown"+LOG_TABLE.getLogTableId(),"<span class=\"glyphicon glyphicon-cog\"></span>");
-					dropDownDiv.addClass("col-xs-offset-2 col-xs-1");
+					dropDownDiv.addClass("col-xs-offset-4 col-xs-1");
 
 					addDropDownItem(dropDown);
 					dropDown.appendTo(dropDownDiv.ui);

@@ -86,7 +86,7 @@ var TextTranslator={
 		空格转译
 		 */
 		TextTranslator.encodeSpacing=function(TEXT){
-			return TEXT.replace(/[ ]/g,"&nbsp;");
+			return TEXT.replace(/  /g," &nbsp");
 		}
 
 		TextTranslator.decodeSpacing=function(TEXT){
