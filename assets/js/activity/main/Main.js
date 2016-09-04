@@ -436,7 +436,7 @@ var DayLog={
 			dateBtn.html(theDayTime.getChineseDay()+"&nbsp;&nbsp;&nbsp;"+theDayTime.getDate());
 			dateBtn.addClass("btn text-center col-xs-12");
 			if(isToday()){
-				dateBtn.addClass("btn-info");
+				dateBtn.addClass("btn-primary");
 			}
 			else{
 				dateBtn.addClass("btn-activity-main-dateBtn");
@@ -531,7 +531,7 @@ var LogScope={
 		var aDay=Number(86400000);
 		var dayNum=6;
 		var parentUI=PARENT_UI;
-		PARENT_UI.attr("style","height:250px;border-bottom: 2px solid #DADADA; border-left: 2px solid #DADADA; border-right: 2px solid #DADADA;");
+		PARENT_UI.attr("style","height:250px;border-bottom: 2px solid #838383; border-left: 2px solid #838383; border-right: 2px solid #838383;");
 		// PARENT_UI.attr("style","height:250px;");
 
 		LogScope.initByTime=function(FIRST_DAY_TIME){
@@ -639,7 +639,7 @@ var LogTransactionItem={
 
 		(function(){
 			btn.addClass("btn btn-default text-center col-xs-12 ");
-			btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
+			btn.setAttribute("style","text-overflow:ellipsis;overflow:hidden;border: 2px solid rgb(191, 191, 191);");
 			btn.setAttribute("data-toggle","popover");
 			btn.setAttribute("data-container","body");
 			btn.setAttribute("data-trigger","hover");
@@ -944,7 +944,7 @@ var BacklogBoxManager={
 			addItemButtonArea.appendTo(AREA);
 
 			var addBtn=Button.creatNew();
-			addBtn.addClass('btn btn-default');
+			addBtn.addClass('btn');
 			addBtn.html("<span class=\"glyphicon glyphicon-plus\"></span>");
 			addBtn.appendTo(addItemButtonArea.ui);
 			var backlogAddModal=BacklogAddModal.creatNew();
@@ -1275,7 +1275,14 @@ var BacklogBox={
 		var MAX_BACKLOG_SHOW_ITEM=4;
 		var ROLL_TIMES_OF_OUTSIDE_BACKLOG_ITEM_ARY=5;
 
+		var frontItemAry=[];
+		var currentItemAry=[];
+		var afterItemAry=[];
+
 		var basisDiv=Div.creatNew();
+		var bottomPageControlDiv=Div.creatNew();
+		var frontPageBtn=Button.creatNew();
+		var afterPageBtn=Button.creatNew();
 		var contentDiv=Div.creatNew();
 		var flipperDiv=Div.creatNew();
 		var frontDiv=Div.creatNew();
@@ -1286,25 +1293,53 @@ var BacklogBox={
 		var itemAreaAry=[];
 		var isTransitionEnd=true;
 		(function init(){
+			afterItemAry=BACKLOG_ARY;
 			itemOutsideBackDivAry=BACKLOG_ARY;
 			basisDiv.addClass('col-xs-3');
 			basisDiv.appendTo(ROW);
-			basisDiv.ui.bind("click",function(){ 
-				flipContentDiv();
-			});
 
 			contentDiv.addClass('thumbnail flip-container');
-			contentDiv.setAttribute("style","margin-top:20px;height:200px;");
+			contentDiv.setAttribute("style","margin-top:20px;margin-bottom:0px;height:200px;");
+			contentDiv.ui.bind("click",function(){ 
+				flipContentDiv();
+			});
 			contentDiv.appendTo(basisDiv.ui);
+
+			frontPageBtn.addClass('btn btn-default  btn-sm');
+			frontPageBtn.html("<span class=\"glyphicon glyphicon-chevron-left\"> </span>");
+			frontPageBtn.hide();
+			frontPageBtn.onClickListener(function(){
+				pageUp();
+				changePageBtnVisibility();
+			});
+			frontPageBtn.appendTo(bottomPageControlDiv.ui);
+			afterPageBtn.addClass('btn btn-default  btn-sm');
+			afterPageBtn.html("<span class=\"glyphicon glyphicon-chevron-right\"> </span>");
+			afterPageBtn.hide();
+			afterPageBtn.onClickListener(function(){
+				pageDown();
+				changePageBtnVisibility();
+			});
+			afterPageBtn.appendTo(bottomPageControlDiv.ui);
+			bottomPageControlDiv.addClass('col-xs-12');
+			bottomPageControlDiv.setAttribute("style","height:20px;text-align: center;");
+			bottomPageControlDiv.appendTo(basisDiv.ui);
 
 			flipperDiv.appendTo(contentDiv.ui);
 			flipperDiv.addClass('flipper');
 			flipperDiv.ui.bind("transitionend",function(){
 				isTransitionEnd=true;
+				if(isBackHide()){
+					frontPageBtn.ui.hide();
+					afterPageBtn.ui.hide();
+				}
+				else{
+					changePageBtnVisibility();
+				}
 			});
 
 			frontDiv.addClass('front');
-			frontDiv.setAttribute("style","background-color:rgb(233, 233, 233);display:table;");
+			frontDiv.setAttribute("style","background-color:rgb(33, 102, 140);display:table;");
 			frontDiv.appendTo(flipperDiv.ui);
 
 			frontDiv.addClass('btn');
@@ -1312,7 +1347,7 @@ var BacklogBox={
 			frontNumDiv.appendTo(frontDiv.ui);
 
 			backDiv.addClass('back');
-			backDiv.setAttribute("style","background:beige");
+			backDiv.setAttribute("style","background:rgb(109, 125, 133)");
 			backDiv.appendTo(flipperDiv.ui);
 
 			var headAreaDiv=Div.creatNew();
@@ -1321,7 +1356,7 @@ var BacklogBox={
 			itemAreaAry.push(headAreaDiv);
 			headAreaDiv.appendTo(backDiv.ui);
 
-			for(var i=0; i<=2; i++){
+			for(var i=0; i<3; i++){
 				var nullDiv=getNullDiv();
 				nullDiv.appendTo(backDiv.ui);
 				var areaDiv=getAreaDiv();
@@ -1329,7 +1364,103 @@ var BacklogBox={
 				itemAreaAry.push(areaDiv);
 			}
 			changeFrontNum();
+			pageDown();
 		})();
+
+		//上一页
+		function pageUp(){
+			if(frontItemAry.length > 0){
+				hideAll();
+				moveCurrentToAfter();
+				moveFrontToCurrent();
+				showAll();
+			}
+		}
+
+		//下一页
+		function pageDown(){
+			if(afterItemAry.length > 0){
+				hideAll();
+				moveCurrentToFront();
+				moveAfterToCurrent();
+				showAll();
+			}
+		}
+
+		function changePageBtnVisibility(){
+			if(isBackHide()){
+
+			}
+			else{
+				if(afterItemAry.length == 0){
+					afterPageBtn.ui.hide();
+				}
+				else{
+					afterPageBtn.ui.show();
+				}
+				if(frontItemAry.length == 0){
+					frontPageBtn.ui.hide();
+				}
+				else{
+					frontPageBtn.ui.show();
+				}
+			}
+		}
+
+		function hideAll(){
+			$.each(currentItemAry,function(index, el) {
+				el.hide();
+			});
+		}
+
+		function showAll(){
+			$.each(currentItemAry,function(index, el) {
+				el.show().appendTo(itemAreaAry[index].ui);
+			});
+		}
+
+		function moveAfterToCurrent(){
+			afterItemAry=$.grep(afterItemAry,function(value,index){
+				if(currentItemAryLength() < MAX_BACKLOG_SHOW_ITEM){
+					currentItemAry.push(value);
+					return false;
+				}
+				else{
+					return true;
+				}
+			});
+		}
+
+		function moveCurrentToAfter(){
+			currentItemAry.reverse();
+			currentItemAry=$.grep(currentItemAry,function(value,index){
+				afterItemAry.unshift(value);
+				return false;
+			});
+		}
+
+		function moveFrontToCurrent(){
+			frontItemAry=$.grep(frontItemAry,function(value,index){
+				if(currentItemAryLength() < MAX_BACKLOG_SHOW_ITEM){
+					currentItemAry.unshift(value);
+					return false;
+				}
+				else{
+					return true;
+				}
+			});
+		}
+
+		function moveCurrentToFront(){
+			currentItemAry=$.grep(currentItemAry,function(value,index){
+				frontItemAry.unshift(value);
+				return false;
+			});
+		}
+
+		function currentItemAryLength(){
+			return currentItemAry.length;
+		}
 
 		function isBackHide(){
 			return contentDiv.ui.hasClass("flip") == false;
@@ -1349,104 +1480,6 @@ var BacklogBox={
 			return div;
 		}
 
-		function refreshBacklogDiv(){
-			hideAllShowingBacklogItemInInside();
-			moveItemFromInsideToOutside();
-			rollOutsideBacklogItemAry(ROLL_TIMES_OF_OUTSIDE_BACKLOG_ITEM_ARY);
-			moveItemFromOutsideToInside();
-			showAllhidingBacklogItemInInside();
-		}
-
-		function moveItemFromOutsideToInside(){
-			itemOutsideBackDivAry=$.grep(itemOutsideBackDivAry,function(value,index){
-				if(index < MAX_BACKLOG_SHOW_ITEM){
-					itemInsideBackDivAry.push(value);
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-		}
-
-		function rollOutsideBacklogItemAry(ROLL_TIMES){
-			for(var rollTimes=0; rollTimes<ROLL_TIMES; rollTimes++){
-				itemOutsideBackDivAry.sort(function(){
-					return 0.5 - Math.random();
-				})
-			}
-		}
-
-		function changeFrontNum(){
-			var num=itemInsideBackDivAry.length+itemOutsideBackDivAry.length;
-			frontNumDiv.html(num);
-		}
-
-		function moveItemFromInsideToOutside(){
-			itemInsideBackDivAry=$.grep(itemInsideBackDivAry,function(value,index){
-				itemOutsideBackDivAry.push(value);
-				return false;
-			});
-		}
-
-		function hideAllShowingBacklogItemInInside(){
-			$.each(itemInsideBackDivAry,function(index,value){
-				value.hide();
-			});
-		}
-
-		function showAllhidingBacklogItemInInside(){
-			$.each(itemInsideBackDivAry,function(index,value){
-				value.show().appendTo(itemAreaAry[index].ui);
-			});
-		}
-
-		BacklogBox.addItem=function(BACKLOGITEM){
-			if(itemInsideBackDivAryLength()<MAX_BACKLOG_SHOW_ITEM){
-				itemInsideBackDivAry.push(BACKLOGITEM);
-				hideAllShowingBacklogItemInInside();
-				showAllhidingBacklogItemInInside();
-			}
-			else{
-				itemOutsideBackDivAry.push(BACKLOGITEM);
-			}
-			changeFrontNum();
-		}
-
-		function itemInsideBackDivAryLength(){
-			return itemInsideBackDivAry.length;
-		}
-
-		BacklogBox.removeItem=function(BACKLOG_ID){
-			removeItemOutsideBackDiv(BACKLOG_ID);
-			removeItemInsideBackDiv(BACKLOG_ID);
-			changeFrontNum();
-		}
-
-		function removeItemOutsideBackDiv(BACKLOG_ID){
-			itemOutsideBackDivAry=$.grep(itemOutsideBackDivAry,function(el,index) {
-				if(el.getId() == BACKLOG_ID){
-					el.hide();
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-		}
-
-		function removeItemInsideBackDiv(BACKLOG_ID){
-			itemInsideBackDivAry=$.grep(itemInsideBackDivAry,function(el,index) {
-				if(el.getId() == BACKLOG_ID){
-					el.hide();
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-		}
-
 		BacklogBox.flip=function(){
 			setTimeout(function() {	//如果不使用定时器，box将不会触发transitionend
 				flipContentDiv();
@@ -1456,11 +1489,73 @@ var BacklogBox={
 		function flipContentDiv(){
 			if(isTransitionEnd){
 				isTransitionEnd=false;
-				if(isBackHide()){
-					refreshBacklogDiv();
-				}
 				contentDiv.ui.toggleClass('flip');
 			}
+		}
+
+		BacklogBox.addItem=function(BACKLOG_ITEM){
+			if(currentItemAry.length < MAX_BACKLOG_SHOW_ITEM){
+				currentItemAry.push(BACKLOG_ITEM);
+				hideAll();
+				showAll();
+			}
+			else{
+				afterItemAry.push(BACKLOG_ITEM);
+			}
+			changeFrontNum();
+			changePageBtnVisibility();
+		}
+
+		BacklogBox.removeItem=function(BACKLOG_ID){
+			removeItemFromFrontItemAry(BACKLOG_ID);
+			removeItemFromCurrentItemAry(BACKLOG_ID);
+			removeItemFromAfterItemAry(BACKLOG_ID);
+			changeFrontNum();
+			changePageBtnVisibility();
+		}
+
+		function removeItemFromFrontItemAry(BACKLOG_ID){
+			frontItemAry=$.grep(frontItemAry,function(el,index) {
+				if(el.getId() == BACKLOG_ID){
+					el.hide();
+					return false;
+				}
+				else{
+					return true;
+				}
+			});
+		}
+
+		function removeItemFromCurrentItemAry(BACKLOG_ID){
+			currentItemAry=$.grep(currentItemAry,function(el,index) {
+				if(el.getId() == BACKLOG_ID){
+					el.hide();
+					return false;
+				}
+				else{
+					return true;
+				}
+			});
+			moveAfterToCurrent();
+			hideAll();
+			showAll();
+		}
+
+		function removeItemFromAfterItemAry(BACKLOG_ID){
+			afterItemAry=$.grep(afterItemAry,function(el,index) {
+				if(el.getId() == BACKLOG_ID){
+					el.hide();
+					return false;
+				}
+				else{
+					return true;
+				}
+			});
+		}
+
+		function changeFrontNum(){
+			var num=afterItemAry.length+currentItemAry.length+frontItemAry.length;
+			frontNumDiv.html(num);
 		}
 
 		return BacklogBox;

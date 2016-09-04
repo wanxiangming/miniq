@@ -3,21 +3,21 @@
 <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/icheck/icheck.min.js"></script>
 
 
-<div class="container-fluid clearfix" >
+<div class="container-fluid clearfix" style="">
     <div id="dynamicExpansionArea" class="container row"></div>
 
 
-    <div id="backlogBoxRow" class="row form-inline col-xs-12 correction-row-css">
+    <div id="backlogBoxRow" class="row form-inline col-xs-12 correction-row-css"  style="margin-top:40px;">
       
     </div> 
 
-    <div id="table" class="row text-center col-xs-12" style="margin-top:45px;">
+    <div id="table" class="row text-center col-xs-12" style="margin-top:80px;">
         <div class="col-xs-offset-1 col-xs-2"  style="padding-top:15px"></div>
 
         <div class="form-group col-xs-offset-2 col-xs-2" style="padding-top:15px">
             <div style="position:relative">
               <div id="mainTimePicker" class="input-group date form_date text-center" data-date="" data-date-format="yyyy-mm-dd" data-link-field="dtp_input1" data-link-format="yyyy-mm-dd">
-                <input id="timePickerInput" style="text-align: center;" class="form-control" size="16" type="text" value="" readonly>
+                <input id="timePickerInput" style="text-align: center;border: 2px solid #ccc;/*background: rgb(33, 102, 140);color: white;*/" class="form-control" size="16" type="text" value="" readonly>
                 <span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
               </div>
               <div id="tipScope" style="position:absolute;top:0px;width:100%;z-index:3"></div>
@@ -25,7 +25,7 @@
         </div>
     </div> 
    
-    <div class="row col-xs-12 correction-row-css">
+    <div class="row col-xs-12 correction-row-css" style="margin-bottom:100px">
         <div class="col-xs-1"></div>
         <div id="mainTable" class="row form-inline col-xs-10 correction-row-css" >
         

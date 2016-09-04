@@ -32,10 +32,10 @@
     <link type="text/css" rel="stylesheet" href="<?php echo CSS_URL; ?>main.css"/>
 </head>
 
-<body text-align:center style="background:rgb(33, 102, 140)">
+<body text-align:center ">
     
     
-<div class="row correction-row-css" style="background:#rgb(33, 102, 140)">
+<div class="row correction-row-css" style="background:rgb(33, 102, 140)">
     <div class="col-xs-offset-3 col-xs-1 text-center" style="font-size:24px;color:#FFFFFF;">MiniQueue</div>
 
     <div class="col-xs-offset-3 col-xs-5 text-center row form-inline" id="userInfo">

@@ -40,6 +40,10 @@ var Ui={
 		Ui.one=function(ACTION,CALL_BACK){
 			Ui.ui.one(ACTION,CALL_BACK);
 		}
+		
+		Ui.hide=function(){
+			Ui.ui.hide();
+		}
 
 		return Ui;
 	}	
