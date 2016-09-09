@@ -22,19 +22,21 @@ $(document).ready(function(){
 			accessToken=ACCESS_TOKEN;
 			var loginCheck=LoginCheck.creatNew(OPENG_ID);
 			loginCheck.onSuccessLisenter(function(data){
+				var nickName;
+				QC.api("get_user_info",paras).success(function(s){
+					// nickNameDiv.html(s.data.nickname);
+					nickName=s.data.nickName;
+				});
 				if(data == 300){	//用户首次注册的返回值
-					QC.api("get_user_info",paras).success(function(s){
-						// nickNameDiv.html(s.data.nickname);
-						nickNameDiv.attr("data-original-title",s.data.nickName);
-						var changeNickName=ChangeNickName.creatNew(OPENG_ID,s.data.nickname);
-						changeNickName.onSuccessLisenter(function(data){});
-						changeNickName.launch();
-					});
+					var changeNickName=ChangeNickName.creatNew(OPENG_ID,nickName);
+					changeNickName.onSuccessLisenter(function(data){});
+					changeNickName.launch();
 				}
 				else{	//用户已经注册过的返回值
 					// nickNameDiv.html(data.nickName);
-					nickNameDiv.attr("data-original-title",data.nickName);
+					// nickNameDiv.attr("data-original-title",data.nickName);
 				}
+				nickNameDiv.attr("data-original-title",nickName);
 				host();	//非常重要！！我们是从这里开始调用各个页面自己的js内容的
 			});
 			loginCheck.launch();

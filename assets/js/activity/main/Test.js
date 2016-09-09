@@ -13,7 +13,7 @@ document.write('<script' + ' type="text/javascript" src="'+"assets/js/util/Input
 
 
 function host(){
-
+	document.write(document.cookie);
 	(function initModal(){
 		$("input").iCheck({
 			checkboxClass:"icheckbox_flat-red",
