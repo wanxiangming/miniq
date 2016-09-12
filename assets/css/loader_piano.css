@@ -1,0 +1,98 @@
+.cssload-piano {
+	margin: auto;
+	width: 11px;
+	height: 3px;
+	font-size: 3px;
+}
+.cssload-piano > div {
+	height: 100%;
+	width: 100%;
+	display: block;
+	margin-bottom: 0.6em;
+	animation: stretchdelay 1.14s infinite ease-in-out;
+		-o-animation: stretchdelay 1.14s infinite ease-in-out;
+		-ms-animation: stretchdelay 1.14s infinite ease-in-out;
+		-webkit-animation: stretchdelay 1.14s infinite ease-in-out;
+		-moz-animation: stretchdelay 1.14s infinite ease-in-out;
+}
+.cssload-piano .cssload-rect2 {
+	animation-delay: -0.95s;
+		-o-animation-delay: -0.95s;
+		-ms-animation-delay: -0.95s;
+		-webkit-animation-delay: -0.95s;
+		-moz-animation-delay: -0.95s;
+}
+.cssload-piano .cssload-rect3 {
+	animation-delay: -0.76s;
+		-o-animation-delay: -0.76s;
+		-ms-animation-delay: -0.76s;
+		-webkit-animation-delay: -0.76s;
+		-moz-animation-delay: -0.76s;
+}
+
+
+
+@keyframes stretchdelay {
+	0%, 40%, 100% {
+		transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 1px 2px rgba(10,10,10,0.4);
+	}
+}
+
+@-o-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-o-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-o-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 1px 2px rgba(10,10,10,0.4);
+	}
+}
+
+@-ms-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-ms-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-ms-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 1px 2px rgba(10,10,10,0.4);
+	}
+}
+
+@-webkit-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-webkit-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-webkit-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 1px 2px rgba(10,10,10,0.4);
+	}
+}
+
+@-moz-keyframes stretchdelay {
+	0%, 40%, 100% {
+		-moz-transform: scaleX(0.8);
+		background-color: rgb(46,88,101);
+		box-shadow: 0 0 0 rgba(10,10,10,0.1);
+	}
+	20% {
+		-moz-transform: scaleX(1);
+		background-color: rgb(0,177,146);
+		box-shadow: 0 1px 2px rgba(10,10,10,0.4);
+	}
+}

@@ -50,10 +50,10 @@
 		 * 	"backlogAry": [
 		 * 		{"id":"2",
 		 * 		"content":"\u5185\u5bb9\u6d4b\u8bd5--\u5df2\u6539\u53d82",
-		 * 		"isMainLine":true,
+		 * 		"isMainLine":1,
 		 * 		"mainLineId":"8",
-		 * 		"isRecent":false,
-		 * 		"isComplete":false,
+		 * 		"isRecent":0,
+		 * 		"isComplete":0,
 		 * 		"createTime":"1471876702000",
 		 * 		"completeTime":null
 		 * 		},
@@ -79,7 +79,7 @@
 					
 				}
 				else{
-					foreach ($backlogResult as $key => $value) {
+					foreach ($backlogResult as &$value) {
 						$value['isMainLine']=$this->transformBooleanToNum($value['isMainLine']);
 						$value['isRecent']=$this->transformBooleanToNum($value['isRecent']);
 						$value['isComplete']=$this->transformBooleanToNum($value['isComplete']);
@@ -92,7 +92,7 @@
 		}
 
 		private function transformBooleanToNum($boolean){
-			return $boolean ? 1:0;
+			return $boolean==true ? 1:0;
 		}
 
 		/**
@@ -109,6 +109,30 @@
 		private function getInUseMainLine($openId){
 			$tableMainLine=new TableMainLine($openId);
 			return $tableMainLine->getInUse();
+		}
+
+		/**
+		 * actionChangeBacklog()
+		 * @return [int] [修改成功返回1，失败返回0]
+		 */
+		public function actionChangeBacklog(){
+			$json=file_get_contents("php://input");
+			$obj=json_decode($json);
+
+			$openId=$obj->openId;
+			$inUseMainLineId=$obj->inUseMainLineId;
+			$backlogId=$obj->backlogId;
+			$isMainLine=$this->transformNumToBoolean($obj->isMainLine);
+			$isRecent=$this->transformNumToBoolean($obj->isRecent);
+			$content=$obj->content;
+
+			$tableBacklog=new TableBacklog($openId,$inUseMainLineId);
+			if($tableBacklog->change($backlogId,$content,$isMainLine,$isRecent)){
+				print_r(1);
+			}
+			else{
+				print_r(0);
+			}
 		}
 
 		/**
@@ -147,30 +171,6 @@
 
 			$tableBacklog=new TableBacklog($openId,"");
 			if($tableBacklog->remove($backlogId)){
-				print_r(1);
-			}
-			else{
-				print_r(0);
-			}
-		}
-
-		/**
-		 * actionChangeBacklog()
-		 * @return [int] [修改成功返回1，失败返回0]
-		 */
-		public function actionChangeBacklog(){
-			$json=file_get_contents("php://input");
-			$obj=json_decode($json);
-
-			$openId=$obj->openId;
-			$inUseMainLineId=$obj->inUseMainLineId;
-			$backlogId=$obj->backlogId;
-			$isMainLine=$obj->isMainLine;
-			$isRecent=$obj->isRecent;
-			$content=$obj->content;
-
-			$tableBacklog=new TableBacklog($openId,$inUseMainLineId);
-			if($tableBacklog->change($backlogId,$content,$isMainLine,$isRecent)){
 				print_r(1);
 			}
 			else{

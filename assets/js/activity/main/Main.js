@@ -678,7 +678,7 @@ var LogTransactionItem={
 		function initTransactionItemUI(){
 			var time=new Date(LogTransactionItem.getLogTransactionTime());
 			btn.html("<span>"+textTranslator.encodeEnterToSpacing(LogTransactionItem.getLogTransactionContent())+"</span>");
-			setPopover(LogTransactionItem.getLogTableAnotherName(),"<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+LogTransactionItem.getLogTransactionContent());
+			setPopover(LogTransactionItem.getLogTableAnotherName(),"<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+textTranslator.encodeText(LogTransactionItem.getLogTransactionContent()));
 		}
 
 		LogTransactionItem.changeTransactionContent=function(CONTENT,TIME){
@@ -797,7 +797,7 @@ var CreateTransactionModal={
 			var mDate=MDate.creatNew(BEGINNING_TIME_OF_TODAY);
 			createTransactionModalCreateBtn.unbind().bind("click",function(){
 				var tableId=createTransactionModalTableSelect.val();
-				var content=CreateTransactionModal.encodeText(createTransactionModalContentTextarea.val());
+				var content=createTransactionModalContentTextarea.val();
 				var hour=createTransactionModalHour.html();
 				var minute=createTransactionModalMinute.html();
 				var transactionTime;
@@ -856,14 +856,14 @@ var ChangeTransactionModal={
 			changeTransactionModalHour.html(mDate.getHours());
 			changeTransactionModalMinute.html(mDate.getMinutes());
 			changeTransactionModalTableName.val(logTransaction.getLogTableAnotherName());
-			changeTransactionModalContentTextarea.val(ChangeTransactionModal.decodeText(content));
+			changeTransactionModalContentTextarea.val(content);
 			initChangeTransactionModalChangeBtn(CHANGE_SECCESS_CALL_BACK);
 			initChangeTransactionModalDeleteBtn(DELETE_SECCESS_CALL_BACK);
 		}
 
 		function initChangeTransactionModalChangeBtn(CHANGE_SECCESS_CALL_BACK){
 			changeTransactionModalChangeBtn.unbind().bind("click",function(){
-				content=ChangeTransactionModal.encodeText(changeTransactionModalContentTextarea.val());
+				content=changeTransactionModalContentTextarea.val();
 				mDate.setHours(changeTransactionModalHour.html());
 				mDate.setMinutes(changeTransactionModalMinute.html());
 				var changeLogTransaction=ChangeLogTransaction.creatNew(logTransaction.getLogTransactionId(),mDate.getTime(),content);
@@ -1981,7 +1981,7 @@ var GetInfoInUseMainLineAndUncompletedBacklogManager={
 		var GetInfoInUseMainLineAndUncompletedBacklogManager={};
 
 		var isMainLineExist=false;
-		var mainLineId=0;
+		var mainLineId=0;	//当backlog不是任何主线的任务，那么它才会是0，但此时isMaingLine数据段也是0
 		var mainLineContent="";
 		var backlogAry=[];
 		var e_questSuccess=function(){};
@@ -1990,7 +1990,7 @@ var GetInfoInUseMainLineAndUncompletedBacklogManager={
 		GetInfoInUseMainLineAndUncompletedBacklogManager.launch=function(){
 			var getInfoInUseMainLineAndUncompletedBacklog=GetInfoInUseMainLineAndUncompletedBacklog.creatNew(OPENID);
 			getInfoInUseMainLineAndUncompletedBacklog.onSuccessLisenter(function(data){
-				var mId=data['mainLine'].id;
+				var mId=data['mainLine'].id;	//如果服务器没有查询到相关数据，则返回的数组是空数组
 				if(typeof(mId) != "undefined"){
 					isMainLineExist=true;
 					mainLineId=Number(mId);
@@ -1999,8 +1999,13 @@ var GetInfoInUseMainLineAndUncompletedBacklogManager={
 						var backlog=Backlog.creatNew();
 						backlog.setId(el.id);
 						backlog.setContent(el.content);
-						backlog.setIsMainLine((Number(el.mainLineId)==mainLineId ? true:false));
-						backlog.setIsRecent(el.isRecent);
+						backlog.setIsRecent(transformNumToBoolean(el.isRecent));
+						if(transformNumToBoolean(el.isMainLine)){
+							backlog.setIsMainLine((Number(el.mainLineId)==mainLineId ? true:false));
+						}
+						else{
+							backlog.setIsMainLine(false);
+						}
 						backlogAry.push(backlog);
 					});
 				}
@@ -2010,6 +2015,10 @@ var GetInfoInUseMainLineAndUncompletedBacklogManager={
 				e_questError();
 			});
 			getInfoInUseMainLineAndUncompletedBacklog.launch();
+		}
+
+		function transformNumToBoolean(NUM){
+			return NUM==1 ? true:false;
 		}
 
 		GetInfoInUseMainLineAndUncompletedBacklogManager.onQuestSuccess=function(CALL_BACK){

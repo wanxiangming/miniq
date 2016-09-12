@@ -58,12 +58,12 @@ return array(
 		// uncomment the following to use a MySQL database
 		
 		'db'=>array(
-			'connectionString' => 'mysql:host=localhost;dbname=aliyundb',
+			'connectionString' => 'mysql:host=localhost;dbname=aliyun',
 			'emulatePrepare' => true,
 			'username' => 'root',
-			'password' => '11103a5a22',
+			'password' => '2292a1533c',
 			'charset' => 'utf8',
-			'tablePrefix'=>'mini_',
+			'tablePrefix'=>'miniq_',
 		),
 		
 		'errorHandler'=>array(

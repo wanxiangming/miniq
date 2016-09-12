@@ -148,7 +148,7 @@
 				$result->mainLineId=$this->inUseMainLineId;
 			}
 			else{
-				if($result->isMainLine==self::MAIN_LINE && $result->mainLineId==$this->inUseMainLineId){
+				if($result->isMainLine==true && $result->mainLineId==$this->inUseMainLineId){
 					$result->isMainLine=self::NOT_MAIN_LINE;
 					$result->mainLineId=NULL;
 				}
