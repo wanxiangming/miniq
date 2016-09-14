@@ -27,6 +27,7 @@
 		private function findByTableIdAndTime($tableId,$beginTime,$dayNum){
 			$timeInterval=$this->aDay*$dayNum;
 			$criteria=new CDbCriteria();
+			$criteria->order='id asc';
 			$criteria->condition='tableId=:id && time<=:finishTime && time>=:beginTime';
 			$criteria->params=array(':id'=>$tableId,':finishTime'=>$beginTime+$timeInterval,':beginTime'=>$beginTime);
 			return MysqlTransaction::model()->findAll($criteria);

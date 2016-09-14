@@ -36,7 +36,7 @@ function host(){
 				logNameInpParentCreat.addClass("has-error");
 			}
 			else{
-				var createLogTable=CreateLogTable.creatNew(logNameInpCreat.val(),openId);
+				var createLogTable=CreateLogTable.creatNew(logNameInpCreat.val());
 				createLogTable.onSuccessLisenter(function(data){
 					if(data==0){
 						$("#create_modal").modal('hide');
@@ -68,7 +68,7 @@ function host(){
 	function search(){
 		var loaderPiano=LoaderPiano.creatNew();
 		loaderPiano.appendTo(searchLoaderScope);
-		var searchTableByTableId=SearchTableByTableId.creatNew(openId,searchInput.val());
+		var searchTableByTableId=SearchTableByTableId.creatNew(searchInput.val());
 		searchTableByTableId.onSuccessLisenter(function(data){
 			loaderPiano.remove();
 			if(data==0){
@@ -81,6 +81,7 @@ function host(){
 				searchData.setLogTableName(data.tableName);
 				searchData.setLogTableState(data.tableState);
 				searchData.setIsAttention(data.isAttention);
+				searchData.setIsMine(data.isMine == 1 ? true:false);
 				TableSearchBlock.creatNew(searchData).getSearchBlock().appendTo(searchResultScope);
 			}
 		});
@@ -121,7 +122,7 @@ var TableListBlock={
 		var checkActionBtn=$("#checkAction_btn");
 		var checkActionModal=$("#checkAction_Modal");
 		var checkActionContent=$("#checkAction_Content");
-		var getLogTableAryByInternet=GetLogTableAryByInternet.creatNew(openId);
+		var getLogTableAryByInternet=GetLogTableAryByInternet.creatNew();
 
 
 		changeNickNameModal.on('show.bs.modal',function(e){
@@ -259,7 +260,7 @@ var TableListBlock={
 								createInpParentChangeNickName.addClass("has-error");
 							}
 							else{
-								var changeTableAnotherName=ChangeTableAnotherName.creatNew(openId,LOG_TABLE.getLogTableId(),logNameInpChangeNickName.val());
+								var changeTableAnotherName=ChangeTableAnotherName.creatNew(LOG_TABLE.getLogTableId(),logNameInpChangeNickName.val());
 								changeTableAnotherName.onSuccessLisenter(function(data){
 									if(data == 0){
 										changeNickNameModal.modal('hide');
@@ -285,7 +286,7 @@ var TableListBlock={
 								createInpParentChangeNickName.addClass("has-error");
 							}
 							else{
-								var changeTableName=ChangeTableName.creatNew(openId,LOG_TABLE.getLogTableId(),logNameInpChangeNickName.val());
+								var changeTableName=ChangeTableName.creatNew(LOG_TABLE.getLogTableId(),logNameInpChangeNickName.val());
 								changeTableName.onSuccessLisenter(function(data){
 									if(data == 0){
 										changeNickNameModal.modal('hide');
@@ -307,7 +308,7 @@ var TableListBlock={
 					btn.onClickListener(function(){
 						checkActionContent.html("您确定要弃用\""+LOG_TABLE.getLogTableAnotherName()+"\"吗？");
 						checkActionBtn.unbind().bind("click",function(){
-							var deprecatedTable=DeprecatedTable.creatNew(openId,LOG_TABLE.getLogTableId());
+							var deprecatedTable=DeprecatedTable.creatNew(LOG_TABLE.getLogTableId());
 							deprecatedTable.onSuccessLisenter(function(data){
 								if(data==0){
 									checkActionModal.modal('hide');
@@ -328,7 +329,7 @@ var TableListBlock={
 					btn.onClickListener(function(){
 						checkActionContent.html("您确定要取消关注\""+LOG_TABLE.getLogTableAnotherName()+"\"吗？");
 						checkActionBtn.unbind().bind("click",function(){
-							var cancelAttention=CancelAttention.creatNew(openId,LOG_TABLE.getLogTableId());
+							var cancelAttention=CancelAttention.creatNew(LOG_TABLE.getLogTableId());
 							cancelAttention.onSuccessLisenter(function(data){
 								if(data==0){
 									checkActionModal.modal('hide');
@@ -379,6 +380,7 @@ var SearchData={
 		var SearchData=LogTable.creatNew();
 
 		var isAttention;
+		var isMine;
 
 		SearchData.setIsAttention=function(IS_ATTENTION){
 			isAttention=IS_ATTENTION;
@@ -386,6 +388,14 @@ var SearchData={
 
 		SearchData.getIsAttention=function(){
 			return Number(isAttention);
+		}
+
+		SearchData.setIsMine=function(IS_MINE){
+			isMine=IS_MINE;
+		}
+
+		SearchData.isMine=function(){
+			return isMine;
 		}
 
 		return SearchData;
@@ -418,7 +428,7 @@ var TableSearchBlock={
 			logTableName=SEARCH_DATA.getLogTableName();
 			logTableState=SEARCH_DATA.getLogTableState();
 			logTableCreatorId=SEARCH_DATA.getLogTableCreatorId();
-			isMine=logTableCreatorId==openId ? true:false ;
+			isMine=SEARCH_DATA.isMine();
 			isAttention=SEARCH_DATA.getIsAttention()==1 ? true:false;
 
 			divBox.addClass("row");
@@ -508,7 +518,7 @@ var TableSearchBlock={
 		}
 
 		function onAttentionButtonClickListener(CONTENT){
-			var payAttentionToLogTable=PayAttentionToLogTable.creatNew(openId,logTableId);
+			var payAttentionToLogTable=PayAttentionToLogTable.creatNew(logTableId);
 			payAttentionToLogTable.onSuccessLisenter(function(data){
 				if(data == 1){
 					CONTENT.html("已关注");

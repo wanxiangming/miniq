@@ -9,12 +9,13 @@
 		public function actionCreateLogTable(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$creatorId=Yii::app()->request->cookies['openId']->value;
 
 			$tableTable=new TableTable();
-			$tableId=$tableTable->insertOneData($obj->creatorId,$obj->logTableName);
+			$tableId=$tableTable->insertOneData($creatorId,$obj->logTableName);
 
 			$tableLink=new TableLink();
-			$tableLink->insertOneData($obj->creatorId,$tableId,$obj->logTableName);
+			$tableLink->insertOneData($creatorId,$tableId,$obj->logTableName);
 			print_r(0);		//表示创建成功
 		}
 
@@ -30,7 +31,8 @@
 		]
 		 */
 		public function actionGetLogTableList(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			
 			$ary=array();
 			$tableLink=new TableLink();
@@ -57,11 +59,12 @@
 		public function actionChangeLogTableName(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$openId=Yii::app()->request->cookies['openId']->value;
 
 			$tableTable=new TableTable();
 			if($tableTable->changeTableName($obj->tableId,$obj->nickName)){
 				$tableLink=new TableLink();
-				if($tableLink->changeAnotherName($obj->openId,$obj->tableId,$obj->nickName)){
+				if($tableLink->changeAnotherName($openId,$obj->tableId,$obj->nickName)){
 					print_r(0);	//0表示数据操作成功
 				}
 				else{
@@ -76,9 +79,10 @@
 		public function actionChangeLogTableAnotherName(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$openId=Yii::app()->request->cookies['openId']->value;
 
 			$tableLink=new TableLink();
-			if($tableLink->changeAnotherName($obj->openId,$obj->tableId,$obj->nickName)){
+			if($tableLink->changeAnotherName($openId,$obj->tableId,$obj->nickName)){
 				print_r(0);	//0表示数据操作成功
 			}
 			else{
@@ -87,7 +91,8 @@
 		}
 
 		public function actionDeprecatedLogTable(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$tableId=$_GET['tableId'];
 
 			$tableTable=new TableTable();
@@ -106,7 +111,8 @@
 		}
 
 		public function actionCancelAttention(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$tableId=$_GET['tableId'];
 
 			$tableLink=new TableLink();
@@ -119,7 +125,8 @@
 		}
 
 		public function actionPayAttention(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$tableId=$_GET['tableId'];
 
 			$tableTable=new TableTable();
@@ -136,17 +143,26 @@
 
 		public function actionSearchTableByTableId(){
 			$tableId=$_GET['tableId'];
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 
 			$tableTable=new TableTable();
 			$tableResult=$tableTable->getById($tableId);
 			if($tableResult!=NULL && $tableResult['visibilityState']!=0){
 				$tableLink=new TableLink();
-				if($tableLink->isExist($openId,$tableId))
+				if($tableLink->isExist($openId,$tableId)){
 					$tableResult['isAttention']=1;	//已关注
-				else
+				}
+				else{
 					$tableResult['isAttention']=0;
+				}
 				
+				if($tableResult['creatorId'] == $openId){
+					$tableResult['isMine']=1;
+				}
+				else{
+					$tableResult['isMine']=0;
+				}
 				print_r(json_encode($tableResult));
 			}
 			else{

@@ -173,6 +173,7 @@
 
 		private function findAll(){
 			$criteria=new CDbCriteria();
+			$criteria->order='createTime asc';
 			$criteria->condition="userId=:userId";
 			$criteria->params=array(':userId'=>$this->userId);
 			return MysqlBacklog::model()->findAll($criteria);
@@ -185,6 +186,7 @@
 
 		private function findAllUncomplete(){
 			$criteria=new CDbCriteria();
+			$criteria->order='createTime asc';
 			$criteria->condition="userId=:userId && isComplete=:isComplete";
 			$criteria->params=array(':userId'=>$this->userId,':isComplete'=>self::UNCOMPLETE);
 			return MysqlBacklog::model()->findAll($criteria);
@@ -197,6 +199,7 @@
 
 		private function findAllComplete(){
 			$criteria=new CDbCriteria();
+			$criteria->order='createTime asc';
 			$criteria->condition="userId=:userId && isComplete=:isComplete";
 			$criteria->params=array(':userId'=>$this->userId,':isComplete'=>self::COMPLETE);
 			return MysqlBacklog::model()->findAll($criteria);

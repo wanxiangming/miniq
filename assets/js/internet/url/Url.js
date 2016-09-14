@@ -2,6 +2,9 @@ MINIQ_URL="http://www.miniq.site/?r=";
 
 //用户登陆时，做用户检查用的url
 LOGIN_CHECK=MINIQ_URL+"MysqlUser/LoginCheck";
+SET_COOKIE=MINIQ_URL+"Login/SetCookie";
+CHECK_COOKIE=MINIQ_URL+"Login/CheckCookie";
+DEL_COOKIE=MINIQ_URL+"Login/DelCookie";
 CHANGE_NICK_NAME=MINIQ_URL+"MysqlUser/ChangeNickName";
 
 //日程表相关url

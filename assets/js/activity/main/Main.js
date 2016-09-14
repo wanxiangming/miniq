@@ -18,7 +18,7 @@ function host(){
 	var theDataIsHas=[];
 	var isGetTransactionActivityComplete=true;
 	var selectData=new Date();
-	var getLogTableList=GetLogTableList.creatNew(openId);
+	var getLogTableList=GetLogTableList.creatNew();
 	var createTransactionModal=CreateTransactionModal.creatNew();
 	var changeTransactionModal=ChangeTransactionModal.creatNew();
 	var logScope=LogScope.creatNew(mainTable);
@@ -90,7 +90,7 @@ function host(){
 		var theNewDataNeedToRequest=getTheDataNeedToRequestAry();
 		if(isGetTransactionActivityComplete && theNewDataNeedToRequest.length!=0){
 			isGetTransactionActivityComplete=false;
-			var getTransactionByTimeAry=GetTransactionByTimeAry.creatNew(openId,theNewDataNeedToRequest);
+			var getTransactionByTimeAry=GetTransactionByTimeAry.creatNew(theNewDataNeedToRequest);
 			getTransactionByTimeAry.onSuccessLisenter(function(data){
 				$.each(data,function(index,value){
 					$.each(value.transactionInfo,function(transactionInfoIndex,transactionInfoValue){
@@ -173,7 +173,7 @@ function host(){
 		return newAry;
 	}
 
-	var getLogTableAryByInternet=GetLogTableAryByInternet.creatNew(openId);
+	var getLogTableAryByInternet=GetLogTableAryByInternet.creatNew();
 	getLogTableAryByInternet.launch(function(ARY){
 		logTableAry=ARY;
 		if(!createTransactionModal.hasTableSelectData()){
@@ -256,7 +256,7 @@ function host(){
 	var area=$("#backlogBoxRow");
 	var mainLineId;
 	var mainLineContent="";
-	var backlogInfoManager=GetInfoInUseMainLineAndUncompletedBacklogManager.creatNew(openId);
+	var backlogInfoManager=GetInfoInUseMainLineAndUncompletedBacklogManager.creatNew();
 	backlogInfoManager.onQuestSuccess(function(){
 		mainLineId=backlogInfoManager.getMainLineId();
 		mainLineContent=backlogInfoManager.getMainLineContent();
@@ -264,7 +264,7 @@ function host(){
 		var backlogBoxManager=BacklogBoxManager.creatNew(backlogInfoManager.getBacklogAry(),backlogInfoManager.isMainLineExist(),area);
 		backlogBoxManager.onRemoveItem(function(ID){
 			var def=$.Deferred();
-			var removeBacklog=RemoveBacklog.creatNew(openId,ID);
+			var removeBacklog=RemoveBacklog.creatNew(ID);
 			removeBacklog.onSuccessLisenter(function(data){
 				if(data == 1){
 					def.resolve();
@@ -278,7 +278,7 @@ function host(){
 		});
 		backlogBoxManager.onItemChange(function(ID,CONTENT,IS_MAIN_LINE,IS_RECENT){
 			var def=$.Deferred();
-			var changeBacklog=ChangeBacklog.creatNew(openId,mainLineId,ID,CONTENT,IS_MAIN_LINE,IS_RECENT);
+			var changeBacklog=ChangeBacklog.creatNew(mainLineId,ID,CONTENT,IS_MAIN_LINE,IS_RECENT);
 			changeBacklog.onSuccessLisenter(function(data){
 				if(data == 1){
 					def.resolve();
@@ -292,7 +292,7 @@ function host(){
 		});
 		backlogBoxManager.onItemComplete(function(ID){
 			var def=$.Deferred();
-			var completeBacklog=CompleteBacklog.creatNew(openId,ID);
+			var completeBacklog=CompleteBacklog.creatNew(ID);
 			completeBacklog.onSuccessLisenter(function(data){
 				if(data == 1){
 					def.resolve();
@@ -306,7 +306,7 @@ function host(){
 		});
 		backlogBoxManager.onAddItem(function(CONTENT,IS_MAIN_LINE,IS_RECENT){
 			var def=$.Deferred();
-			var addBacklog=AddBacklog.creatNew(openId,mainLineId,CONTENT,IS_MAIN_LINE,IS_RECENT);
+			var addBacklog=AddBacklog.creatNew(mainLineId,CONTENT,IS_MAIN_LINE,IS_RECENT);
 			addBacklog.onSuccessLisenter(function(data){
 				var backlogId=Number(data);
 				if(backlogId != -1){
@@ -323,7 +323,7 @@ function host(){
 		});
 		backlogBoxManager.onAddMainQuest(function(CONTENT){
 			var def=$.Deferred();
-			var addMainLine=AddMainLine.creatNew(openId,CONTENT);
+			var addMainLine=AddMainLine.creatNew(CONTENT);
 			addMainLine.onSuccessLisenter(function(data){
 				var mId=Number(data);
 				if(mId != -1){
@@ -1967,7 +1967,7 @@ var Backlog={
 }
 
 /**
- * GetInfoInUseMainLineAndUncompletedBacklogManager(openId)
+ * GetInfoInUseMainLineAndUncompletedBacklogManager()
  * 		launch()
  * 		isMainLineExist()
  * 		getMainLineId()
@@ -1977,7 +1977,7 @@ var Backlog={
  * 		onQuestSuccess(CALL_BACK())
  */
 var GetInfoInUseMainLineAndUncompletedBacklogManager={
-	creatNew:function(OPENID){
+	creatNew:function(){
 		var GetInfoInUseMainLineAndUncompletedBacklogManager={};
 
 		var isMainLineExist=false;
@@ -1988,7 +1988,7 @@ var GetInfoInUseMainLineAndUncompletedBacklogManager={
 		var e_questError=function(){};
 
 		GetInfoInUseMainLineAndUncompletedBacklogManager.launch=function(){
-			var getInfoInUseMainLineAndUncompletedBacklog=GetInfoInUseMainLineAndUncompletedBacklog.creatNew(OPENID);
+			var getInfoInUseMainLineAndUncompletedBacklog=GetInfoInUseMainLineAndUncompletedBacklog.creatNew();
 			getInfoInUseMainLineAndUncompletedBacklog.onSuccessLisenter(function(data){
 				var mId=data['mainLine'].id;	//如果服务器没有查询到相关数据，则返回的数组是空数组
 				if(typeof(mId) != "undefined"){

@@ -70,6 +70,7 @@
 		
 		private function findAllByUserId($userId){
 			$criteria=new CDbCriteria();
+			$criteria->order='id asc';
 			$criteria->condition='userId=:userId';
 			$criteria->params=array(':userId'=>$userId);
 			return MysqlLink::model()->findAll($criteria);

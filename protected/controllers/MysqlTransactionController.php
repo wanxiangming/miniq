@@ -8,10 +8,11 @@
 		public function actionGetTransactionByTimeAry(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$openId=Yii::app()->request->cookies['openId']->value;
 
 			$intervalDay=1;
 			$tableAry=array();
-			$tableResult=$this->getTableInfo($obj->openId);
+			$tableResult=$this->getTableInfo($openId);
 			$tableTransaction=new TableTransaction();
 			
 			if($tableResult != NULL){

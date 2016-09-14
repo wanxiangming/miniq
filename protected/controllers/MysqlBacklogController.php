@@ -36,8 +36,9 @@
 		public function actionAddMainLine(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$openId=Yii::app()->request->cookies['openId']->value;
 
-			$tableMainLine=new TableMainLine($obj->openId);
+			$tableMainLine=new TableMainLine($openId);
 			print_r($tableMainLine->add($obj->content));
 		}
 
@@ -63,7 +64,8 @@
 		 * ]
 		 */
 		public function actionGetInfoInUseMainLineAndUncompletedBacklog(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			
 			$tableMainLine=new TableMainLine($openId);
 			$mainLineResult=$tableMainLine->getInUse();
@@ -102,7 +104,8 @@
 		 * {"id":"8","content":"\u6d4b\u8bd5001"}
 		 */
 		public function actionGetInUseMainLineInfo(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			print_r(json_encode($this->getInUseMainLine($openId)));
 		}
 
@@ -119,7 +122,8 @@
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
 
-			$openId=$obj->openId;
+			//$openId=$obj->openId;
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$inUseMainLineId=$obj->inUseMainLineId;
 			$backlogId=$obj->backlogId;
 			$isMainLine=$this->transformNumToBoolean($obj->isMainLine);
@@ -143,7 +147,8 @@
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
 
-			$openId=$obj->openId;
+			//$openId=$obj->openId;
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$inUseMainLineId=$obj->inUseMainLineId;
 			$content=$obj->content;
 			$isMainLine=$this->transformNumToBoolean($obj->isMainLine);
@@ -166,7 +171,8 @@
 		 * @return [int] [移除成功返回1，失败返回0]
 		 */
 		public function actionRemoveBacklog(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$backlogId=$_GET['backlogId'];
 
 			$tableBacklog=new TableBacklog($openId,"");
@@ -183,7 +189,8 @@
 		 * @return [int] [操作成功返回1，失败返回0]
 		 */
 		public function actionCompleteBacklog(){
-			$openId=$_GET['openId'];
+			//$openId=$_GET['openId'];
+			$openId=Yii::app()->request->cookies['openId']->value;
 			$backlogId=$_GET['backlogId'];
 
 			$tableBacklog=new TableBacklog($openId,"");
