@@ -1,20 +1,4 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="ChangeNickName.js" server="182.92.70.93//alidata/" local="131099441950000000" remote="131099441950000000" />
-<file name="LoginCheck.js" server="182.92.70.93//alidata/" local="131099440430000000" remote="131099440430000000" />
-<file name="CreateLog.js" server="182.92.70.93//alidata/" local="131061436040000000" remote="131061436040000000" />
-<file name="CreateLogTable.js" server="182.92.70.93//alidata/" local="131099410850000000" remote="131099410850000000" />
-<file name="GetTableList.js" server="182.92.70.93//alidata/" local="131068341176642043" remote="131068341310000000" />
-<file name="GetLogTableList.js" server="182.92.70.93//alidata/" local="131099419410000000" remote="131099419410000000" />
-<file name="DataStructure.js" server="182.92.70.93//alidata/" local="131068430317032431" remote="131068430350000000" />
-<file name="ChangeTableName.js" server="182.92.70.93//alidata/" local="131099411880000000" remote="131099411880000000" />
-<file name="ChangeTableAnotherName.js" server="182.92.70.93//alidata/" local="131099410310000000" remote="131099410310000000" />
-<file name="DeprecatedTable.js" server="182.92.70.93//alidata/" local="131099414720000000" remote="131099414720000000" />
-<file name="CancelAttention.js" server="182.92.70.93//alidata/" local="131099418070000000" remote="131099418070000000" />
-<file name="GetLogInfo.js" server="182.92.70.93//alidata/" local="131090839480000000" remote="131090839480000000" />
-<file name="CreateLogTransaction.js" server="182.92.70.93//alidata/" local="131099428870417953" remote="131099428920000000" />
-<file name="ChangeLogTransaction.js" server="182.92.70.93//alidata/" local="131099431406043954" remote="131099431570000000" />
-<file name="DeleteLogTransaction.js" server="182.92.70.93//alidata/" local="131099435952375358" remote="131099436070000000" />
-<file name="GetTransactionByTimeAry.js" server="182.92.70.93//alidata/" local="131099426490000000" remote="131099426490000000" />
-<file name="Internet.js" server="182.92.70.93//alidata/" local="131183213152928301" remote="131183213340000000" />
+<file name="Internet.js" server="182.92.70.93//alidata/" local="131209971402720187" remote="131210017630000000" />
 </dwsync>

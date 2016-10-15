@@ -13,7 +13,7 @@ var MDate={
 		}
 
 		MDate.getTheDayBeginingTime=function(){
-			var newDate=new Date(DATE);
+			var newDate=new Date(MDate.getTime());
 			newDate.setHours(0);
 			newDate.setMinutes(0);
 			newDate.setSeconds(0);

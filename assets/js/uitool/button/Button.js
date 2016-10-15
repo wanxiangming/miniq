@@ -14,16 +14,6 @@ var Button={
 	}
 }
 
-var DropDownItemButton={
-	creatNew:function(){
-		var DropDownItemButton=Button.creatNew();
-
-		DropDownItemButton.addClass("form-control btn btn-default correction-dropdown-btn-css");
-
-		return DropDownItemButton;
-	}
-}
-
 
 
 

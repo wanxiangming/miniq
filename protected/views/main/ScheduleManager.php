@@ -7,15 +7,15 @@
 		<div class="span12 ">
 			<div class="tabbable tabs-left" id="tabs-854197">
 				<ul class="nav nav-tabs" data-tabs="tabs" role="tablist">
-					<li class="active">
+					<li >
 						<a href="#tab_search" data-toggle="tab">搜索</a>
 					</li>
-					<li >
-						<a href="#tab_manage" data-toggle="tab">管理</a>
+					<li class="active">
+						<a href="#tab_manage" data-toggle="tab">表</a>
 					</li>
 				</ul>
 				<div class="tab-content ">
-					<div class="tab-pane fade in active" id="tab_search">
+					<div class="tab-pane fade in " id="tab_search">
 						<div class="row" style="padding-top:3%;">
 							<div class="col-xs-offset-3 col-xs-6">
 								<div class="row" >
@@ -36,16 +36,16 @@
 						</div>
 					</div>
 
-					<div class="tab-pane fade in" id="tab_manage">
+					<div class="tab-pane fade in active" id="tab_manage">
 						<div class="row correction-row-css" id="tab_manage_firstRow">
 							<button type="button" class="col-xs-1 pull-right btn btn-primary" data-toggle="modal" data-target="#create_modal">创建</button>
 						</div>
 						<div class="row correction-row-css" style="padding-top:10px;padding-bottom:10px;margin-top:5px;background-color:#F3F3F3;color:#A2A2A2">
-							<div class="col-xs-1">ID</div>
-							<div class="col-xs-2">日程名称</div>
-							<div class="col-xs-2">状态</div>
-                            <div class="col-xs-2">可见性</div>
-							<div class="col-xs-offset-4 col-xs-1">操作</div>
+							<div class="col-xs-1 text-center">ID</div>
+							<div class="col-xs-2 text-center">名称</div>
+							<div class="col-xs-2 text-center">来源</div>
+                            <div class="col-xs-2 text-center">状态</div>
+							<!-- <div class="col-xs-offset-4 col-xs-1">操作</div> -->
 						</div>
                         <div class="row correction-row-css">
                         	<div class="col-xs-12" style="background:#d0d5da"></div>

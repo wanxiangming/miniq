@@ -1,4 +1,14 @@
 <?php
+	/**
+	 * TableTable()
+	 * 		insertOneData()		//返回新添加数据的ID
+	 * 		deleteOneData()		//删除成功返回true,失败返回false
+	 * 		getById()
+	 * 		changeTableName()
+	 * 		changeTableState()
+	 * 		changeTableVisibilityState()
+	 */
+
 	class TableTable{
 		public function __construct(){
 			
@@ -11,6 +21,17 @@
 			$model->createTime=time();
 			$model->save();
 			return $model->attributes['id'];
+		}
+
+		public function deleteOneData($tableId){
+			$result=$this->findById($tableId);
+			if($result != NULL){
+				$result->delete();
+				return true;
+			}
+			else{
+				return false;
+			}
 		}
 
 		public function getById($id){

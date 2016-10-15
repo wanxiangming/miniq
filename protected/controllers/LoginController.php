@@ -9,6 +9,23 @@
 		public function actionLogin(){
 			$this->renderPartial('Login');
 		}
+		
+		public function actionQc(){
+			$this->renderPartial('Qc');	
+		}
+
+		/**
+		 * (1009)2291571C2A1ED1017BADF6F93BC0DA06
+		 * (100000)67EB8F9DA303F184014F9268D8294156
+		 *
+		 */
+		public function actionLocalSetCookie(){
+			$cookie=new CHttpCookie('openId',"67EB8F9DA303F184014F9268D8294156");	
+			$cookie->expire=time()+self::MONTH;
+
+			Yii::app()->request->cookies['openId']=$cookie;
+			print_r(1);
+ 		}
 
 		public function actionSetCookie(){
 			$openId=$_GET['openId'];
@@ -22,6 +39,7 @@
 
 		public function actionDelCookie(){
 			unset(Yii::app()->request->cookies['openId']);
+			print_r(1);
 		}
 
 		public function actionCheckCookie(){
@@ -32,7 +50,7 @@
 				if($tableUser->isUserExist()){
 					$cookie->expire=time()+self::MONTH;
 					Yii::app()->request->cookies['openId']=$cookie;
-					print_r(1);
+					print_r(json_encode($tableUser->getUserInfo()));
 				}
 				else{
 					unset(Yii::app()->request->cookies['openId']);

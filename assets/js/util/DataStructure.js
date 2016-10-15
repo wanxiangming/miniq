@@ -7,6 +7,7 @@
 		日程表别名：logTableAnotherName	（字段）
 		日程表状态：logTableState	（字段）
 		日程表可见性状态：logTableVisibilityState	（字段）
+		
  * 
  */
 var LogTable={
@@ -20,6 +21,7 @@ var LogTable={
 		var logTableCreatorId;
 		var logTableState;
 		var logTableVisibilityState;
+
 
 		LogTable.setLogTableUserId=function(LOG_TABLE_USER_ID){
 			logTableUserId=LOG_TABLE_USER_ID;

@@ -7,11 +7,11 @@ document.write('<script' + ' type="text/javascript" src="'+"assets/js/uitool/but
  * 接收标题（title）
  * 接收内容（content）
  * 
- * PopoverButton(trigger)
+ * PopoverButton(trigger,html,title,content)
  * 		changeTitle(title)
  * 		changeContent(content)
  * 		changeHtml(html)
- * 		changePosition(Position)
+ * 		changePosition(Position)	//指的是popver弹出的位置，上下左右
  * 		showPopover()
  * 		hidePopover()
  * 		destroyPopover()

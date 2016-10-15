@@ -35,8 +35,7 @@
 		public function changeNickName($nickName){
 			if($this->result != NULL){
 				$this->result->nickName=$nickName;
-				$this->result->save();
-				return true;
+				return $this->result->save();
 			}
 			else
 				return false;

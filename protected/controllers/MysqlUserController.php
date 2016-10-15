@@ -25,11 +25,26 @@
 		public function actionChangeNickName(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
+			$nickName=$obj->nickName;
+			$openId=$obj->openId;
 
-			$tableUser=new TableUser($obj->openId);
-			if($tableUser->changeNickName($obj->nickName))
+			$tableUser=new TableUser($openId);
+			print_r($nickName);
+			if($tableUser->changeNickName($nickName))
 				print_r(0);		//修改昵称成功
 			else
 				print_r(301);	//修改昵称失败，该用户不存在
+		}
+
+		public function actionAlterUserInfo(){
+			$openId=Yii::app()->request->cookies['openId']->value;
+			$json=file_get_contents("php://input");
+			$obj=json_decode($json);
+			$nickName=$obj->nickName;
+
+			$tableUser=new TableUser($openId);
+			$tableUser->changeNickName($nickName);
+
+			print_r(0);
 		}
 	}

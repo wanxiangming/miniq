@@ -1,4 +1,17 @@
 <?php
+	/**
+	 * TableLink()
+	 * 		insertOneData($userId,$tableId,$anotherName)
+	 * 		getAllByUserId($userId)
+	 * 		getAllUserByTableId($tableId)
+	 * 		changeAnotherName($userId,$tableId,$anotherName)
+	 * 		deleteOne($userId,$tableId)
+	 * 		deleteAllByTableId($tableId)
+	 * 		isExist($userId,$tableId)
+	 * 		
+	 */
+
+
 	class TableLink{
 		public function __construct(){
 
@@ -28,6 +41,31 @@
 				}
 				return $allAry;
 			}
+		}
+		
+		private function findAllByUserId($userId){
+			$criteria=new CDbCriteria();
+			$criteria->order='id asc';
+			$criteria->condition='userId=:userId';
+			$criteria->params=array(':userId'=>$userId);
+			return MysqlLink::model()->findAll($criteria);
+		}
+
+		public function getAllByTableId($tableId){
+			$criteria=new CDbCriteria();
+			$criteria->order='id asc';
+			$criteria->condition='tableId=:tableId';
+			$criteria->params=array(':tableId'=>$tableId);
+			$result=MysqlLink::model()->findAll($criteria);
+			$ary=array();
+			foreach ($result as $key => $value) {
+				$singleAry=array();
+				$singleAry['userId']=$value->userId;
+				$singleAry['tableId']=$value->tableId;
+				$singleAry['anotherName']=$value->anotherName;
+				$ary[]=$singleAry;
+			}
+			return $ary;
 		}
 
 		public function changeAnotherName($userId,$tableId,$anotherName){
@@ -67,13 +105,12 @@
 			$criteria->params=array(':userId'=>$userId,':tableId'=>$tableId);
 			return MysqlLink::model()->find($criteria);
 		} 
-		
-		private function findAllByUserId($userId){
+
+		public function deleteAllByTableId($tableId){
 			$criteria=new CDbCriteria();
-			$criteria->order='id asc';
-			$criteria->condition='userId=:userId';
-			$criteria->params=array(':userId'=>$userId);
-			return MysqlLink::model()->findAll($criteria);
+			$criteria->condition="tableId=:tableId";
+			$criteria->params=array(':tableId'=>$tableId);
+			MysqlLink::model()->deleteAll($criteria);
 		}
 
 	}

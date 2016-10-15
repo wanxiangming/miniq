@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="MysqlLog.php" server="182.92.70.93//alidata/" local="131061478460197473" remote="131061478510000000" />
-<file name="MysqlUser.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="MysqlTransaction.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="MysqlLink.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="ContactForm.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="LoginForm.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="MysqlTable.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="MysqlMainLine.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
-<file name="MysqlBacklog.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131178799270000000" />
+<file name="MysqlUser.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131210015730000000" />
+<file name="MysqlTransaction.php" server="182.92.70.93//alidata/" local="131210023642171903" remote="131210023670000000" />
+<file name="MysqlLink.php" server="182.92.70.93//alidata/" local="131210039221733736" remote="131210039250000000" />
+<file name="MysqlBacklog.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131210015710000000" />
+<file name="ContactForm.php" server="182.92.70.93//alidata/" local="131194490958643003" remote="131210015710000000" />
+<file name="MysqlMainLine.php" server="182.92.70.93//alidata/" local="131195238922238556" remote="131210015720000000" />
+<file name="LoginForm.php" server="182.92.70.93//alidata/" local="131194490958798126" remote="131210015710000000" />
+<file name="MysqlTable.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131210015720000000" />
+<file name="MysqlLog.php" server="182.92.70.93//alidata/" local="131061478460197473" remote="131210015710000000" />
+<file name="MysqlTableInherit.php" server="182.92.70.93//alidata/" local="131210023295411375" remote="131210023330000000" />
+<file name="MysqlTableManagerGroup.php" server="182.92.70.93//alidata/" local="131197734210138310" remote="131210015720000000" />
 </dwsync>

@@ -7,6 +7,6 @@
 		}  
 		
 		public function tableName(){  
-			return '{{transaction}}';  
+			return '{{tabletransaction}}';  
 		} 
 	} 

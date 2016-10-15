@@ -77,6 +77,13 @@ var ChangeNickName={
 	}
 }
 
+var AlterUserInfo={
+	creatNew:function(NICK_NAME){
+		var AlterUserInfo=Internet.creatNew(ALTER_USER_INFO,"POST",{"nickName":NICK_NAME});
+		return AlterUserInfo;
+	}
+}
+
 var GetLogTableList={
 	creatNew:function(){
 		var GetLogTableList=Internet.creatNew(GET_LOG_TABLE_LIST,"GET",{});
@@ -84,10 +91,38 @@ var GetLogTableList={
 	}
 }
 
+var GetAttentionTableInfo={
+	creatNew:function(){
+		var GetAttentionTableInfo=Internet.creatNew(GET_ATTENTION_TBABLE_INFO,"GET",{});
+		return GetAttentionTableInfo;
+	}
+}
+
+var GetFollowerList={
+	creatNew:function(TABLE_ID){
+		var GetFollowerList=Internet.creatNew(GET_FOLLOWER_LIST,"GET",{"tableId":TABLE_ID});
+		return GetFollowerList;
+	}
+}
+
+var GetTableInfo={
+	creatNew:function(TABLE_ID){
+		var GetTableInfo=Internet.creatNew(GET_TABLE_INFO,"GET",{"tableId":TABLE_ID});
+		return GetTableInfo;
+	}
+}
+
 var GetTransactionByTimeAry={
 	creatNew:function(TIMEARY){
 		var GetTransactionByTimeAry=Internet.creatNew(GET_TRANSACTION_BY_TIMEARY,"POST",{"time":TIMEARY});
 		return GetTransactionByTimeAry;
+	}
+}
+
+var GetTransaction={
+	creatNew:function(TABLE_ID_ARY,TIME_ARY){
+		var GetTransaction=Internet.creatNew(GET_TRANSACTION,"POST",{"tableIdAry":TABLE_ID_ARY,"timeAry":TIME_ARY});
+		return GetTransaction;
 	}
 }
 
@@ -168,7 +203,43 @@ var OpenTheTable={
 	}
 }
 
+var Inherit={
+	creatNew:function(TABLE_ID,PARENT_TABLE_ID){
+		var Inherit=Internet.creatNew(INHERIT,"GET",{"tableId":TABLE_ID,"parentTableId":PARENT_TABLE_ID});
+		return Inherit;
+	}
+}
+
+var RelieveInherit={
+	creatNew:function(TABLE_ID,PARENT_TABLE_ID){
+		var RelieveInherit=Internet.creatNew(RELIEVE_INHERIT,"GET",{"tableId":TABLE_ID,"parentTableId":PARENT_TABLE_ID});
+		return RelieveInherit;
+	}
+}
+
+var AddManager={
+	creatNew:function(FOLLOWER_ID,TABLE_ID){
+		var AddManager=Internet.creatNew(ADD_MANAGER,"GET",{"tableId":TABLE_ID,"followerId":FOLLOWER_ID});
+		return AddManager;
+	}
+}
+
+var RepealManager={
+	creatNew:function(FOLLOWER_ID,TABLE_ID){
+		var RepealManager=Internet.creatNew(REPEAL_MANAGER,"GET",{"tableId":TABLE_ID,"followerId":FOLLOWER_ID});
+		return RepealManager;
+	}
+}
+
+
+
+
+
 //---------------------------------------------------与待办事项相关--------------------------------------------------------
+//
+//
+//
+//
 var AddMainLine={
 	creatNew:function(CONTENT){
 		var AddMainLine=Internet.creatNew(ADD_MAIN_LINE,"POST",{"content":CONTENT});

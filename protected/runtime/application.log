@@ -454,3 +454,144 @@ Stack trace:
 #5 {main}
 REQUEST_URI=/?r=MysqlTable/GetLogInfo&openId=67EB8F9DA303F184014F9268D8294156&today=1464393400
 ---
+2016/09/14 14:17:39 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "SetCookie".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('SetCookie')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('SetCookie')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Login/SetCookie')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+---
+2016/09/14 14:52:12 [error] [exception.CHttpException.404] exception 'CHttpException' with message 'The system is unable to find the requested action "chechCookie".' in /alidata/www/yii1.1.15/framework/web/CController.php:483
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(270): CController->missingAction('chechCookie')
+#1 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): CController->run('chechCookie')
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController('Login/chechCook...')
+#3 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#4 /alidata/www/miniq/index.php(14): CApplication->run()
+#5 {main}
+REQUEST_URI=/?r=Login/chechCookie&openId=67EB8F9DA303F184014F9268D8294156
+---
+2016/09/14 15:12:52 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:16)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+in /alidata/www/miniq/protected/controllers/LoginController.php (16)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:12:59 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:16)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+in /alidata/www/miniq/protected/controllers/LoginController.php (16)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:13:18 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:16)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+in /alidata/www/miniq/protected/controllers/LoginController.php (16)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:13:43 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:16)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+in /alidata/www/miniq/protected/controllers/LoginController.php (16)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:13:56 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:16)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/SetCookie&openId=67EB8F9DA303F184014F9268D8294156
+in /alidata/www/miniq/protected/controllers/LoginController.php (16)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:14:30 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:24)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/CheckCookie
+in /alidata/www/miniq/protected/controllers/LoginController.php (24)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:14:44 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:24)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/CheckCookie
+in /alidata/www/miniq/protected/controllers/LoginController.php (24)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:15:03 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:24)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/CheckCookie
+in /alidata/www/miniq/protected/controllers/LoginController.php (24)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 15:15:26 [error] [php] Use of undefined constant MONTH - assumed 'MONTH' (/alidata/www/miniq/protected/controllers/LoginController.php:24)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): LoginController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): LoginController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): LoginController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=Login/CheckCookie
+in /alidata/www/miniq/protected/controllers/LoginController.php (24)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 17:04:22 [error] [php] Undefined property: stdClass::$creatorId (/alidata/www/miniq/protected/controllers/MysqlTableController.php:15)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): MysqlTableController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): MysqlTableController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): MysqlTableController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=MysqlTable/CreateLogTable
+in /alidata/www/miniq/protected/controllers/MysqlTableController.php (15)
+in /alidata/www/miniq/index.php (14)
+2016/09/14 17:04:34 [error] [php] Undefined property: stdClass::$creatorId (/alidata/www/miniq/protected/controllers/MysqlTableController.php:15)
+Stack trace:
+#0 /alidata/www/yii1.1.15/framework/web/CController.php(286): MysqlTableController->runAction()
+#1 /alidata/www/yii1.1.15/framework/web/CController.php(265): MysqlTableController->runActionWithFilters()
+#2 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(282): MysqlTableController->run()
+#3 /alidata/www/yii1.1.15/framework/web/CWebApplication.php(141): CWebApplication->runController()
+#4 /alidata/www/yii1.1.15/framework/base/CApplication.php(180): CWebApplication->processRequest()
+#5 /alidata/www/miniq/index.php(14): CWebApplication->run()
+REQUEST_URI=/?r=MysqlTable/CreateLogTable
+in /alidata/www/miniq/protected/controllers/MysqlTableController.php (15)
+in /alidata/www/miniq/index.php (14)

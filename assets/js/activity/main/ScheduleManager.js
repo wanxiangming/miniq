@@ -14,6 +14,7 @@ function host(){
 	var searchResultScope=$("#search_result");
 	var tableListBlock=TableListBlock.creatNew();
 
+	tableListBlock.flashTableList();
 	$('a[data-toggle="tab"]').on('shown.bs.tab',function(e){
 		var target=$(e.target).attr("href");	//刚刚被打开的tab的id
 		if(target == "#tab_manage"){
@@ -142,6 +143,7 @@ var TableListBlock={
 						tableListItem.getItemUI().appendTo(tableListAnother);
 					// makeTableListItem(value);
 				});
+				$("span").tooltip();
 				Alerts.creatNew(true,"更新列表完成。",$("#tab_manage_firstRow"));
 			},function(){
 
@@ -159,15 +161,18 @@ var TableListBlock={
 				function makeTableListItem(){
 					var div=FadeDiv.creatNew();
 
-					div.addClass("row correction-row-css deep-background-on-hover");
+					div.addClass("row correction-row-css deep-background-on-hover btn col-xs-12");
 					div.setAttribute("style","padding-top:10px;padding-bottom:10px;");
+					div.ui.bind("click",function(){
+						window.location.href="?r=Table/TableInfo&tableId="+LOG_TABLE.getLogTableId();
+					});
 					
 					getIdBlock(LOG_TABLE.getLogTableId()).appendTo(div.ui);
 					getTableNameBlock(LOG_TABLE.getLogTableAnotherName()).appendTo(div.ui);
-					getTableStateBlock(LOG_TABLE.getLogTableState()).appendTo(div.ui);
+					getTableStateBlock(LOG_TABLE.isMaster()).appendTo(div.ui);
 					// getBelongBlock(LOG_TABLE.isMaster(LOG_TABLE)).appendTo(div.ui);
-					getVisibilityStateBlock(LOG_TABLE.isMaster(),LOG_TABLE.isPublicTable()).appendTo(div.ui);
-					getDropDownBlock(LOG_TABLE).appendTo(div.ui);
+					getVisibilityStateBlock(LOG_TABLE.isPublicTable()).appendTo(div.ui);
+					// getDropDownBlock(LOG_TABLE).appendTo(div.ui);
 
 					div.show();
 					return div;
@@ -190,15 +195,11 @@ var TableListBlock={
 				function getTableStateBlock(TABLE_STATE){
 					var tableStateDiv=Div.creatNew();
 					tableStateDiv.addClass("col-xs-2 table-list-text-css");
-					switch(TABLE_STATE){
-						case 1:
-							tableStateDiv.addClass("text-success");
-							tableStateDiv.html("<span class=\"glyphicon glyphicon-ok\" aria-hidden=\"true\"></span> 使用中");
-							break;
-						case 0:
-							tableStateDiv.addClass("text-danger");
-							tableStateDiv.html("<span class=\"glyphicon glyphicon-remove\" aria-hidden=\"true\"></span> 已弃用");
-							break;
+					if(TABLE_STATE){
+						tableStateDiv.html("<span class=\"glyphicon glyphicon-user\" aria-hidden=\"true\" data-toggle=\"tooltip\" data-placement=\"right\" data-original-title=\"自建\"></span>");
+					}
+					else{
+						tableStateDiv.html("<span class=\"glyphicon glyphicon-eye-open\" aria-hidden=\"true\" data-toggle=\"tooltip\" data-placement=\"right\" data-original-title=\"关注\"></span>");
 					}
 					return tableStateDiv;
 				}
@@ -215,15 +216,13 @@ var TableListBlock={
 					return belongDiv;
 				}
 
-				function getVisibilityStateBlock(IS_MASTER,IS_PUBLIC_TABLE){
+				function getVisibilityStateBlock(IS_PUBLIC_TABLE){
 					var visibilityState=Div.creatNew();
 					visibilityState.addClass("col-xs-2 table-list-text-css");
-					if(IS_MASTER){
-						if(IS_PUBLIC_TABLE)
-							visibilityState.html("公开的");
-						else
-							visibilityState.html("私有的");
-					}
+					if(IS_PUBLIC_TABLE)
+						visibilityState.html("公开的");
+					else
+						visibilityState.html("私有的");
 					return visibilityState;
 				}
 

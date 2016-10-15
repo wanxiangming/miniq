@@ -35,6 +35,49 @@
 			
 		}
 
+		private function getTableInfo($openId){
+			$ary=array();
+			$tableLink=new TableLink();
+			$linkResult=$tableLink->getAllByUserId($openId);
+			if($linkResult != NULL){
+				$tableTable=new TableTable();
+				foreach ($linkResult as $key => $value) {
+					$tableId=$value['tableId'];
+					$tableResult=$tableTable->getById($tableId);
+					if($tableResult != NULL){
+						$value['creatorId']=$tableResult['creatorId'];
+						$value['tableState']=$tableResult['tableState'];
+					}
+					$ary[]=$value;
+				}
+				return $ary;
+			}
+			else{
+				return NULL;	//该用户没有关注任何日志时返回NULL
+			}
+		}
+
+		/**
+		 * 
+		 */
+		public function actionGetTransaction(){
+			$json=file_get_contents("php://input");
+			$obj=json_decode($json);
+			$tableIdAry=$obj->tableIdAry;
+			$timeAry=$obj->timeAry;
+
+			$transactionAry=array();
+			$tableTransaction=new TableTransaction();
+			foreach ($tableIdAry as $key => $tableId) {
+				foreach ($timeAry as $ke => $time) {
+					foreach($tableTransaction->getInfoByTableIdAndTime($tableId,$time,1) as $k => $transaction){
+						$transactionAry[]=$transaction;
+					}
+				}
+			}
+			print_r(json_encode($transactionAry));
+		}
+
 		public function actionAddTransaction(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);
@@ -58,28 +101,6 @@
 			$tableTransaction=new TableTransaction();
 			$tableTransaction->deleteOneData($logTransactionId);
 			print_r(0);
-		}
-
-		private function getTableInfo($openId){
-			$ary=array();
-			$tableLink=new TableLink();
-			$linkResult=$tableLink->getAllByUserId($openId);
-			if($linkResult != NULL){
-				$tableTable=new TableTable();
-				foreach ($linkResult as $key => $value) {
-					$tableId=$value['tableId'];
-					$tableResult=$tableTable->getById($tableId);
-					if($tableResult != NULL){
-						$value['creatorId']=$tableResult['creatorId'];
-						$value['tableState']=$tableResult['tableState'];
-					}
-					$ary[]=$value;
-				}
-				return $ary;
-			}
-			else{
-				return NULL;	//该用户没有关注任何日志时返回NULL
-			}
 		}
 	}
 

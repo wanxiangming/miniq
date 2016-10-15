@@ -9,7 +9,8 @@
     <meta property="qc:admins" content="1422662147651611631457" />
    
     <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101305771" data-redirecturi="http://www.miniq.site/" charset="utf-8"></script>
-    
+<!--    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" charset="utf-8" data-callback="true"></script>
+-->    
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>jquery/jquery-2.1.4.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>jquery/jquery.json-2.4.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>jquery/jquery.mousewheel.min.js"></script>
@@ -38,11 +39,10 @@
 <div class="row correction-row-css" style="background:rgb(33, 102, 140)">
     <div class="col-xs-offset-3 col-xs-1 text-center" style="font-size:24px;color:#FFFFFF;">MiniQueue</div>
 
-    <div class="col-xs-offset-3 col-xs-5 text-center row form-inline" id="userInfo">
-    	<a href="http://www.miniq.site/?r=Main/Main" class="btn btn-defualt col-xs-1 white"><span class="glyphicon glyphicon-home"></span></a>
-        <div id="nickName" type="button" href="http://www.miniq.site/?r=Main/Test" data-toggle="tooltip" data-placement="bottom" title="加载中……" class="btn btn-defualt col-xs-1 white"><span class="glyphicon glyphicon-user"></span></div>
-        <a id="logoutBtn" class="btn btn-defualt col-xs-1 white" href="http://www.miniq.site/">退出</a>
-        <a id="scheduleManagerBtn" href="http://www.miniq.site/?r=Main/ScheduleManager" class="btn btn-defualt col-xs-1 white" >日程</a>
+    <div class="col-xs-offset-4 col-xs-4 text-left row form-inline" id="userInfo">
+    	<a href="<?php echo SITE_URL;?>?r=Main/Main" class="btn btn-defualt white"><span class="glyphicon glyphicon-home"></span></a>
+        <a id="nickName" type="button" href="<?php echo SITE_URL;?>?r=User/AccountSetting" data-toggle="tooltip" data-placement="bottom" title="加载中……" class="btn btn-defualt white"><span class="glyphicon glyphicon-user"></span></a>
+        <a id="scheduleManagerBtn" href="<?php echo SITE_URL;?>?r=Main/ScheduleManager" data-toggle="tooltip" data-placement="bottom" title="表管理" class="btn btn-defualt white" ><span class="glyphicon glyphicon-th"></span></a>
     </div>  
 </div>
 

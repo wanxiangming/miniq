@@ -2,7 +2,6 @@
 <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/icheck/skins/flat/_all.css"/>
 <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/icheck/icheck.min.js"></script>
 
-
 <div class="container-fluid clearfix" style="">
     <div id="dynamicExpansionArea" class="container row"></div>
 
@@ -27,7 +26,7 @@
    
     <div class="row col-xs-12 correction-row-css" style="margin-bottom:100px">
         <div class="col-xs-1"></div>
-        <div id="mainTable" class="row form-inline col-xs-10 correction-row-css" >
+        <div id="mainTable" class="row form-inline col-xs-10 correction-row-css panel panel-primary" style="height: 310px">
         
         </div>
     </div>        
@@ -45,7 +44,7 @@
 		  <form class="form-horizontal">
 		    <fieldset>
           <div class="row correction-row-css">
-              <label class="control-label col-xs-2" for="input01">日程名称</label>
+              <label class="control-label col-xs-2" for="input01">来源</label>
               <div class="col-xs-5 correction-clear-col-xs-padding">
                 <select id="create_log_modal_tableSelect" class="form-control"></select>
               </div>
@@ -81,7 +80,7 @@
           </div>
 
           <div class="row correction-row-css form-inline" style="margin-top:20px">
-            <label class="control-label col-xs-2" for="input01">事务内容</label>
+            <label class="control-label col-xs-2" for="input01">内容</label>
             <textarea  id="create_log_modal_content_input" type="text" class=""  style="width:260;overflow-y:visible;resize:none;font-size:15px;" rows="7" cols="54" ></textarea>
           </div>
 		   		
@@ -93,6 +92,28 @@
         <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
         <button id="create_log_modal_create_btn" type="button" class="btn btn-primary">创建</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="time_same_transaction_modal" tabindex="-1" role="dialog" aria-labelledby="checkForAction">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+     <!--  <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title">操作确认</h4>
+      </div> -->
+      <div class="modal-body">
+      <!-- <form class="form-horizontal"> -->
+        <fieldset>
+          <div id="time_same_transaction_scope"></div>
+        </fieldset>
+      <!-- </form> -->
+      </div>
+     <!--  <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <button id="backlog_check_action_modal_confirm_btn" type="button" class="btn btn-primary">确定</button>
+      </div> -->
     </div>
   </div>
 </div>
@@ -110,7 +131,7 @@
       <form class="form-horizontal">
         <fieldset>
           <div class="row correction-row-css">
-              <label class="control-label col-xs-2" for="input01">日程名称</label>
+              <label class="control-label col-xs-2" for="input01">来源</label>
               <div class="col-xs-5 correction-clear-col-xs-padding">
                 <input id="change_log_transaction_modal_tableName" class="form-control" readonly></input>
               </div>
@@ -146,7 +167,7 @@
           </div>
 
           <div class="row correction-row-css form-inline" style="margin-top:20px">
-            <label class="control-label col-xs-2" for="input01">事务内容</label>
+            <label class="control-label col-xs-2" for="input01">内容</label>
             <textarea  id="change_log_modal_content_input" type="text" class=""  style="width:260;overflow-y:visible;resize:none;font-size:15px;" rows="7" cols="54" ></textarea>
           </div>
           
@@ -201,7 +222,7 @@
         <fieldset>
 
           <div id="backlog_edit_modal_content_row" class="row correction-row-css" style="margin-top:20px;position:relative;">
-            <label class="control-label col-xs-2" for="input01">事务内容</label>
+            <label class="control-label col-xs-2" for="input01">内容</label>
             <div class="col-xs-8">
                 <textarea  id="backlog_edit_modal_content_textarea" type="text" class="form-control"  style="overflow-y:visible;resize:none;font-size:15px;" rows="7" ></textarea>
             </div>
@@ -247,7 +268,7 @@
         <fieldset>
 
           <div id="backlog_add_modal_content_row" class="row correction-row-css" style="margin-top:20px;position:relative;">
-            <label class="control-label col-xs-2" for="input01">事务内容</label>
+            <label class="control-label col-xs-2" for="input01">内容</label>
             <div class="col-xs-8">
                 <textarea  id="backlog_add_modal_content_textarea" type="text" class="form-control"  style="overflow-y:visible;resize:none;font-size:15px;" rows="7" ></textarea>
             </div>
@@ -340,5 +361,4 @@
     </div>
   </div>
 </div>
-
 

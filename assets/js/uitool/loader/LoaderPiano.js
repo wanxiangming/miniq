@@ -8,7 +8,7 @@ var LoaderPiano={
 		var div2=Div.creatNew();
 		var div3=Div.creatNew();
 
-		LoaderPiano.addClass("cssload-piano");
+		LoaderPiano.addClass("cssload-piano hide");
 		div1.addClass("cssload-rect1");
 		div2.addClass("cssload-rect2");
 		div3.addClass("cssload-rect3");

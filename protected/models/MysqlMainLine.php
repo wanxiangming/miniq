@@ -7,7 +7,7 @@
 		}  
 		
 		public function tableName(){  
-			return '{{mainLine}}';  
+			return '{{backlogMainLine}}';  
 		} 
 
 		public function rules(){

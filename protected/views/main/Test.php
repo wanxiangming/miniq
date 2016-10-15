@@ -5,7 +5,15 @@
 <div class="container-fluid clearfix" >
 	<!-- <div class="col-xs-offset-1 col-xs-10"> -->
 		<div id="backlogBoxRow" class="row form-inline" >
-			
+       <div id="div1" style="background-color: #B64343;width: 200px;height: 200px;float:left;"></div>
+       <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+       <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+       <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+       <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+       <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+			 <div id="div2" style="background-color: #297FA0;width: 200px;height: 200px;float:left;"></div>
+       <div id="div1" style="background-color: #B64343;width: 200px;height: 200px;float:left;"></div>
+       <button id="btn">点我</button>
 		</div>
 	<!-- </div> -->
 </div>

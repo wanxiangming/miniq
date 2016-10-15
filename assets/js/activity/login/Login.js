@@ -4,12 +4,16 @@ $(document).ready(function(){
 	var login=$("#loginBtn");
 	var paras = {};
 	
-	QC.Login({
-		btnId:"loginBtn"
-	});
+	// QC.Login({
+	// 	btnId:"loginBtn"
+	// });
 	
-	login.click(function(){
-		QC.Login.showPopup();
+	// login.click(function(){
+	// 	QC.Login.showPopup();
+	// });
+	
+	login.click(function(event) {
+		window.location.href="?r=Login/Qc"; 
 	});
 
 	QC.api("get_user_info",paras).success(function(s){

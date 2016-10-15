@@ -8,20 +8,18 @@
 
 		public function getInfoByTableIdAndTime($tableId,$beginTime,$dayNum){
 			$result=$this->findByTableIdAndTime($tableId,$beginTime,$dayNum);
+			$allAry=array();
 			if(!empty($result)){
-				$allAry=array();
 				foreach ($result as $key => $value) {
 					$singleAry=array();
 					$singleAry['id']=$value->id;
 					$singleAry['content']=$value->content;
 					$singleAry['time']=$value->time;
+					$singleAry['tableId']=$tableId;
 					$allAry[]=$singleAry;
 				}
-				return $allAry;
 			}
-			else{
-				return NULL;
-			}
+			return $allAry;
 		}
 
 		private function findByTableIdAndTime($tableId,$beginTime,$dayNum){
