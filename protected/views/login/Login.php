@@ -29,10 +29,10 @@
             </div>
     
             <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
-                <div>让你轻松安排日程</div>
+                <div>帮助人们高效的传播通知</div>
             </div>
             <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
-                <div>提前规划每一个“今日有约”</div>
+                <div>是我们的进步方向</div>
             </div>
             
             <div class="row " style="margin-top:40px">

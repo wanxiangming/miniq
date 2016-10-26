@@ -4,13 +4,12 @@
 	 * MysqlTableController()
 	 * 		actionCreateLogTable()
 	 * 		
-	 * 		actionGetLogTableList()		//弃用
+	 * 		actionGetLogTableList()	
 	 * 		actionGetAttentonTableInfo()
 	 * 		actionGetFollowerList()
 	 * 		actionGetTableInfo()
 	 * 		
 	 * 		actionChangeLogTableName()
-	 * 		actionChangeLogTableAnotherName()	//弃用
 	 * 		
 	 * 		actionDeprecatedLogTable()
 	 * 		actionCancelAttention()
@@ -47,7 +46,7 @@
 			$tableId=$tableTable->insertOneData($creatorId,$obj->logTableName);
 
 			$tableLink=new TableLink();
-			$tableLink->insertOneData($creatorId,$tableId,$obj->logTableName);
+			$tableLink->insertOneData($creatorId,$tableId);
 			print_r(0);		//表示创建成功
 		}
 
@@ -56,9 +55,12 @@
 		  {
 		    "userId": "67EB8F9DA303F184014F9268D8294156", 
 		    "tableId": "100009", 
-		    "anotherName": "34070202班", 
+		    "tableName": "34070202班", 
 		    "creatorId": "67EB8F9DA303F184014F9268D8294156", 
 		    "tableState": "1"
+		  },
+		  {
+	
 		  }
 		]
 		 */
@@ -74,6 +76,7 @@
 					$tableId=$value['tableId'];
 					$tableResult=$tableTable->getById($tableId);
 					if($tableResult != NULL){
+						$value['tableName']=$tableResult['tableName'];
 						$value['creatorId']=$tableResult['creatorId'];
 						$value['tableState']=$tableResult['tableState'];
 						$value['visibilityState']=$tableResult['visibilityState'];
@@ -155,6 +158,22 @@
 			}
 		}
 
+		/**
+		 * {
+			  "tableId": "", 
+			  "tableName": "", 
+			  "isCreator": , 
+			  "isPublic": "", 
+			  "isAttention": , 
+			  "parentTableAry": [
+			    {
+			      "tableId": "", 
+			      "tableName": ""
+			    }
+			  ], 
+			  "childTableAry": [ ]
+			}
+		 */
 		public function actionGetTableInfo(){
 			$openId=Yii::app()->request->cookies['openId']->value;
 			$tableId=$_GET['tableId'];
@@ -211,6 +230,17 @@
 			}
 		}
 
+		/**
+		 *  [
+			  {
+			    "followerName": "万相明", 
+			    "followerId": "100000", 
+			    "isManager": false, 
+			    "isCreator": true
+			  }
+			]
+		 */
+
 		public function actionGetFollowerList(){
 			$tableId=$_GET['tableId'];
 			$result=array();
@@ -254,32 +284,10 @@
 
 			$tableTable=new TableTable();
 			if($tableTable->changeTableName($obj->tableId,$obj->nickName)){
-				$tableLink=new TableLink();
-				if($tableLink->changeAnotherName($openId,$obj->tableId,$obj->nickName)){
-					print_r(0);	//0表示数据操作成功
-				}
-				else{
-					print_r(1);	//1表示anotherName修改失败
-				}
-			}
-			else{
-				print_r(2);	//2表示tableName修改失败
-			}
-		}
-
-
-		//弃用了！！！！！！！！！！！！！！！！！！！！！！！！！！
-		public function actionChangeLogTableAnotherName(){
-			$json=file_get_contents("php://input");
-			$obj=json_decode($json);
-			$openId=Yii::app()->request->cookies['openId']->value;
-
-			$tableLink=new TableLink();
-			if($tableLink->changeAnotherName($openId,$obj->tableId,$obj->nickName)){
 				print_r(0);	//0表示数据操作成功
 			}
 			else{
-				print_r(1);	//1表示anotherName修改失败
+				print_r(2);	//2表示tableName修改失败
 			}
 		}
 
@@ -289,6 +297,7 @@
 		 *		2，将该表的继承链移除，包括它和父表的继承关系，以及它和子表的继承关系
 		 *		3，移除该表的所有管理员
 		 *  	4，将该表的Table数据移除
+		 *  	5，删除该表所有transaction
 		 * 
 		 * actionDeprecatedLogTable()
 		 * @return [type] [description]
@@ -308,6 +317,9 @@
 
 				$tableTableManagerGroup=new TableTableManagerGroup();
 				$tableTableManagerGroup->removeAll($tableId);
+
+				$tableTransaction=new TableTransaction();
+				$tableTransaction->removeAllByTableId($tableId);
 			}
 			print_r(1);
 		}
@@ -336,7 +348,7 @@
 			$tableResult=$tableTable->getById($tableId);
 			if($tableResult != NULL){
 				$tableLink=new TableLink();
-				$tableLink->insertOneData($openId,$tableId,$tableResult['tableName']);
+				$tableLink->insertOneData($openId,$tableId);
 				print_r(1);	//1表示关注成功
 			}
 			else{

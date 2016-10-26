@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="LoginController.php" server="182.92.70.93//alidata/" local="131209986925515363" remote="131210044110000000" />
-<file name="MainController.php" server="182.92.70.93//alidata/" local="131203935651622052" remote="131210044110000000" />
-<file name="MysqlUserController.php" server="182.92.70.93//alidata/" local="131208363232504080" remote="131210044120000000" />
-<file name="MysqlTransactionController.php" server="182.92.70.93//alidata/" local="131208324208849316" remote="131210044120000000" />
-<file name="MysqlTableController.php" server="182.92.70.93//alidata/" local="131210043593841978" remote="131210044110000000" />
-<file name="MysqlBacklogController.php" server="182.92.70.93//alidata/" local="131196939498423257" remote="131210044110000000" />
-<file name="MysqlTableManagerGroupController.php" server="182.92.70.93//alidata/" local="131209980544508094" remote="131210044110000000" />
-<file name="TableController.php" server="182.92.70.93//alidata/" local="131203935610578529" remote="131210044120000000" />
-<file name="UserController.php" server="182.92.70.93//alidata/" local="131208346957550609" remote="131210044120000000" />
+<file name="LoginController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MainController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MysqlUserController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MysqlTransactionController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MysqlTableController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MysqlBacklogController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="MysqlTableManagerGroupController.php" server="182.92.70.93//alidata/" local="131219565220000000" remote="131219565220000000" />
+<file name="TableController.php" server="182.92.70.93//alidata/" local="131219565230000000" remote="131219565230000000" />
+<file name="UserController.php" server="182.92.70.93//alidata/" local="131219565230000000" remote="131219565230000000" />
+<file name="TestController.php" server="182.92.70.93//alidata/" local="131219565230000000" remote="131219565230000000" />
 </dwsync>

@@ -2,6 +2,9 @@
 openId="";
 accessToken="";
 
+function minclude(){
+	
+}
 
 $(document).ready(function(){
 	var paras={};

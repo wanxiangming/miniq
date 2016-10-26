@@ -1,5 +1,4 @@
 
-
 var Internet={
 	creatNew:function(URL,TYPE,DATA){
 		var Internet={};
@@ -147,17 +146,17 @@ var DeleteLogTransaction={
 	}
 }
 
+var BatchAddTransaction={
+	creatNew:function(TRANSACTION_ARY){
+		var BatchAddTransaction=Internet.creatNew(BATCH_ADD_TRANSACTION,"POST",{"transactionAry":TRANSACTION_ARY});
+		return BatchAddTransaction;
+	}
+}
+
 var SearchTableByTableId={
 	creatNew:function(TABLE_ID){
 		var SearchTableByTableId=Internet.creatNew(SEARCH_TABLE_BY_TABLE_ID,"GET",{"tableId":TABLE_ID});
 		return SearchTableByTableId;
-	}
-}
-
-var ChangeTableAnotherName={
-	creatNew:function(TABLE_ID,NICK_NAME){
-		var ChangeTableAnotherName=Internet.creatNew(CHANGE_TABLE_ANOTHER_NAME,"POST",{"tableId":TABLE_ID,"nickName":NICK_NAME});
-		return ChangeTableAnotherName;
 	}
 }
 
@@ -230,119 +229,4 @@ var RepealManager={
 		return RepealManager;
 	}
 }
-
-
-
-
-
-//---------------------------------------------------与待办事项相关--------------------------------------------------------
-//
-//
-//
-//
-var AddMainLine={
-	creatNew:function(CONTENT){
-		var AddMainLine=Internet.creatNew(ADD_MAIN_LINE,"POST",{"content":CONTENT});
-		return AddMainLine;
-	}
-}
-
-var GetInfoInUseMainLineAndUncompletedBacklog={
-	creatNew:function(){
-		var GetInfoInUseMainLineAndUncompletedBacklog=Internet.creatNew(GET_INFO_IN_USE_MAIN_LINE_AND_UNCOMPLETED_BACKLOG,"GET",{});
-		return GetInfoInUseMainLineAndUncompletedBacklog;
-	}
-}
-
-var AddBacklog={
-	creatNew:function(IN_USE_MIAN_LINE_ID,CONTENT,IS_MIAN_LINE,IS_RECENT){
-		var AddBacklog=Internet.creatNew(ADD_BACKLOG,"POST",{"inUseMainLineId":IN_USE_MIAN_LINE_ID,"content":CONTENT,"isMainLine":IS_MIAN_LINE,"isRecent":IS_RECENT});
-		return AddBacklog;
-	}
-}
-
-var RemoveBacklog={
-	creatNew:function(BACKLOG_ID){
-		var RemoveBacklog=Internet.creatNew(REMOVE_BACKLOG,"GET",{"backlogId":BACKLOG_ID});
-		return RemoveBacklog;
-	}
-}
-
-var ChangeBacklog={
-	creatNew:function(IN_USE_MIAN_LINE_ID,BACKLOG_ID,CONTENT,IS_MIAN_LINE,IS_RECENT){
-		var ChangeBacklog=Internet.creatNew(CHANGE_BACKLOG,"POST",{"inUseMainLineId":IN_USE_MIAN_LINE_ID,"backlogId":BACKLOG_ID,"content":CONTENT,"isMainLine":IS_MIAN_LINE,"isRecent":IS_RECENT});
-		return ChangeBacklog;
-	}
-}
-
-var CompleteBacklog={
-	creatNew:function(BACKLOG_ID){
-		var CompleteBacklog=Internet.creatNew(COMPLETE_BACKLOG,"GET",{"backlogId":BACKLOG_ID});
-		return CompleteBacklog;
-	}
-}
-
-
-
-
-
-
-
-var GetLogTableAryByInternet={
-	creatNew:function(){
-		var GetLogTableAryByInternet={};
-
-		var getLogTableList=GetLogTableList.creatNew();
-		
-
-		GetLogTableAryByInternet.launch=function(HAS_TABLE_CALL_BACK,NO_TABLE_CALL_BACK){
-			getLogTableList.onSuccessLisenter(function(data){
-				if(data == 0){
-					NO_TABLE_CALL_BACK();
-				}
-				else{
-					var logTableAry=[];
-					$.each(data,function(index,item){
-						var logTable=LogTable.creatNew();
-						logTable.setLogTableUserId(item.userId);
-						logTable.setLogTableId(item.tableId);
-						logTable.setLogTableAnotherName(item.anotherName);
-						logTable.setLogTableCreatorId(item.creatorId);
-						logTable.setLogTableState(item.tableState);
-						logTable.setLogTableVisibilityState(item.visibilityState);
-						logTableAry.push(logTable);
-					});
-					HAS_TABLE_CALL_BACK(logTableAry);
-				}
-			});
-			getLogTableList.launch();
-		}
-		
-
-		return GetLogTableAryByInternet;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

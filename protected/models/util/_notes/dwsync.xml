@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <dwsync>
-<file name="TableLink.php" server="182.92.70.93//alidata/" local="131209133873016237" remote="131210015740000000" />
-<file name="TableUser.php" server="182.92.70.93//alidata/" local="131208164868180190" remote="131210015760000000" />
-<file name="TableTransaction.php" server="182.92.70.93//alidata/" local="131202114959247154" remote="131210015750000000" />
-<file name="TableTable.php" server="182.92.70.93//alidata/" local="131208053109897569" remote="131210015740000000" />
-<file name="TableMainLine.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131210015740000000" />
-<file name="TableBacklog.php" server="182.92.70.93//alidata/" local="131183225310446565" remote="131210015730000000" />
-<file name="TableLog.php" server="182.92.70.93//alidata/" local="131061479132239900" remote="131210015740000000" />
-<file name="TableTableInherit.php" server="182.92.70.93//alidata/" local="131201980001086134" remote="131210015750000000" />
-<file name="TableTableManagerGroup.php" server="182.92.70.93//alidata/" local="131197783643978522" remote="131210015750000000" />
+<file name="TableLink.php" server="182.92.70.93//alidata/" local="131214380968284004" remote="131218421840000000" />
+<file name="TableUser.php" server="182.92.70.93//alidata/" local="131208164868180190" remote="131218421850000000" />
+<file name="TableTransaction.php" server="182.92.70.93//alidata/" local="131214295683251943" remote="131218421850000000" />
+<file name="TableTable.php" server="182.92.70.93//alidata/" local="131214386538229170" remote="131218421850000000" />
+<file name="TableMainLine.php" server="182.92.70.93//alidata/" local="131178799270000000" remote="131218421850000000" />
+<file name="TableBacklog.php" server="182.92.70.93//alidata/" local="131183225310446565" remote="131218421840000000" />
+<file name="TableLog.php" server="182.92.70.93//alidata/" local="131061479132239900" remote="131218421840000000" />
+<file name="TableTableInherit.php" server="182.92.70.93//alidata/" local="131201980001086134" remote="131218421850000000" />
+<file name="TableTableManagerGroup.php" server="182.92.70.93//alidata/" local="131197783643978522" remote="131218421850000000" />
 </dwsync>

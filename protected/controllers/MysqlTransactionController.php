@@ -86,6 +86,18 @@
 			print_r($tableTransaction->insertOneData($obj->tableId,$obj->time,$obj->content));
 		}
 
+		public function actionBatchAddTransaction(){
+			$json=file_get_contents("php://input");
+			$obj=json_decode($json);
+			$transactionAry=$obj->transactionAry;
+
+			$tableTransaction=new TableTransaction();
+			foreach ($transactionAry as $key => $value) {
+				$tableTransaction->insertOneData($value->tableId,$value->time,$value->content);
+			}
+			print_r(0);
+		}
+
 		public function actionChangeTransaction(){
 			$json=file_get_contents("php://input");
 			$obj=json_decode($json);

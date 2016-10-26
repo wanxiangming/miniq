@@ -3,6 +3,7 @@
 	 * TableTable()
 	 * 		insertOneData()		//返回新添加数据的ID
 	 * 		deleteOneData()		//删除成功返回true,失败返回false
+	 * 		isCreator($tableId,$openId)
 	 * 		getById()
 	 * 		changeTableName()
 	 * 		changeTableState()
@@ -34,6 +35,9 @@
 			}
 		}
 
+		/**
+		 *	[id,creatorId,createTime,tableName,visibilityState] 
+		 */
 		public function getById($id){
 			$result=$this->findById($id);
 			
@@ -46,9 +50,24 @@
 				$ary['creatorId']=$result->creatorId;
 				$ary['createTime']=$result->createTime;
 				$ary['tableName']=$result->tableName;
-				$ary['tableState']=$result->tableState;
+				$ary['tableState']=$result->tableState;	//弃用
 				$ary['visibilityState']=$result->visibilityState;
 				return $ary;
+			}
+		}
+
+		public function isCreator($tableId,$openId){
+			$result=$this->findById($tableId);
+			if($result == NULL){
+				return false;
+			}
+			else{
+				if($result->creatorId == $openId){
+					return true;
+				}
+				else{
+					return false;
+				}
 			}
 		}
 

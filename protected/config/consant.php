@@ -11,6 +11,9 @@
 	// 连接js的地址
 	define('JS_URL',SITE_URL.'assets/js/');
 	
+	// 链接image的地址
+	define('IMAGE_URL',SITE_URL.'assets/image/');
+	
 	// 链接前端opensource的地址
 	define('FRONT_OPEN_SOURCE_URL',SITE_URL.'assets/opensource/');
 	

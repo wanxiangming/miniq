@@ -1,4 +1,4 @@
-<script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>activity/user/AccountSetting.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>activity/user/AccountSetting/AccountSetting.js"></script>
 
 <?php 
 	$creatorId=Yii::app()->request->cookies['openId']->value;

@@ -64,6 +64,13 @@
 			$criteria->params=array(':id'=>$id);
 			return MysqlTransaction::model()->find($criteria);
 		}
+
+		public function removeAllByTableId($tableId){
+			$criteria=new CDbCriteria();
+			$criteria->condition='tableId=:tableId';
+			$criteria->params=array(':tableId'=>$tableId);
+			MysqlTransaction::model()->deleteAll($criteria);
+		}
 	}
 
 

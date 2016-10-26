@@ -2,9 +2,8 @@
 	/**
 	 * TableLink()
 	 * 		insertOneData($userId,$tableId,$anotherName)
-	 * 		getAllByUserId($userId)
+	 * 		getAllByUserId($userId)		//没数据返回NULL，有数据返回数组
 	 * 		getAllUserByTableId($tableId)
-	 * 		changeAnotherName($userId,$tableId,$anotherName)
 	 * 		deleteOne($userId,$tableId)
 	 * 		deleteAllByTableId($tableId)
 	 * 		isExist($userId,$tableId)
@@ -17,14 +16,20 @@
 
 		}
 
-		public function insertOneData($userId,$tableId,$anotherName){
+		public function insertOneData($userId,$tableId){
 			$model=new MysqlLink();
 			$model->userId=$userId;
 			$model->tableId=$tableId; 
-			$model->anotherName=$anotherName;
 			$model->save();
 		}
 
+		/**
+		 * getAllByUserId($userId)
+		 * 		[
+		 * 			[userId,tableId],
+		 * 			[]
+		 * 		]
+		 */
 		public function getAllByUserId($userId){
 			$result=$this->findAllByUserId($userId);
 			$allAry=array();
@@ -36,7 +41,6 @@
 					$singleAry=array();
 					$singleAry['userId']=$value->userId;
 					$singleAry['tableId']=$value->tableId;
-					$singleAry['anotherName']=$value->anotherName;
 					$allAry[]=$singleAry;
 				}
 				return $allAry;
@@ -62,22 +66,9 @@
 				$singleAry=array();
 				$singleAry['userId']=$value->userId;
 				$singleAry['tableId']=$value->tableId;
-				$singleAry['anotherName']=$value->anotherName;
 				$ary[]=$singleAry;
 			}
 			return $ary;
-		}
-
-		public function changeAnotherName($userId,$tableId,$anotherName){
-			$result=$this->findByUserIdAndTableId($userId,$tableId);
-			if($result == NULL){
-				return false;
-			}
-			else{
-				$result->anotherName=$anotherName;
-				$result->save();
-				return true;
-			}
 		}
 
 		public function deleteOne($userId,$tableId){
