@@ -28,6 +28,7 @@
 		public function insertOneData(){
 			$model=new MysqlUser();
 			$model->openId=$this->openId;
+			$model->nickName=substr($this->openId,0,6);
 			$model->registerTime=time();
 			$model->save();
 		}

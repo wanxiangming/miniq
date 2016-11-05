@@ -1,456 +1,578 @@
 
 
 minclude("DaylogManager");
-minclude("AttentionTableInfoManager");
-minclude("CreateTransactionModal");
-minclude("ChangeTransactionModal");
-
-var createTransactionModal=null;
-var changeTransactionModal=null;
-
-function host(){
-	var mainTable=$("#mainTable");
-	createTransactionModal=CreateTransactionModal.creatNew();
-	changeTransactionModal=ChangeTransactionModal.creatNew();
-
-	var changeModal=TransactionModal.creatNew();
-	var changeTransactionModalHourUpBtn=$("#change_log_modal_hour_up_btn");
-	var changeTransactionModalHourDownBtn=$("#change_log_modal_hour_down_btn");
-	var changeTransactionModalMinuteUpBtn=$("#change_log_modal_minute_up_btn");
-	var changeTransactionModalMinuteDownBtn=$("#change_log_modal_minute_down_btn");
-	var changeTransactionModalHour=$("#change_log_modal_hour");
-	var changeTransactionModalMinute=$("#change_log_modal_minute");
-	changeModal.hourBind(changeTransactionModalHour,changeTransactionModalHourDownBtn,changeTransactionModalHourUpBtn);
-	changeModal.minuteBind(changeTransactionModalMinute,changeTransactionModalMinuteDownBtn,changeTransactionModalMinuteUpBtn);
-
-
-	var createModal=TransactionModal.creatNew();
-	var createTransactionModalTableSelect=$("#create_log_modal_tableSelect");
-	var createTransactionModalHourUpBtn=$("#create_log_modal_hour_up_btn");
-	var createTransactionModalHourDownBtn=$("#create_log_modal_hour_down_btn");
-	var createTransactionModalMinuteUpBtn=$("#create_log_modal_minute_up_btn");
-	var createTransactionModalMinuteDownBtn=$("#create_log_modal_minute_down_btn");
-	var createTransactionModalHour=$("#create_log_modal_hour");
-	var createTransactionModalMinute=$("#create_log_modal_minute");
-	createModal.hourBind(createTransactionModalHour,createTransactionModalHourDownBtn,createTransactionModalHourUpBtn);
-	createModal.minuteBind(createTransactionModalMinute,createTransactionModalMinuteDownBtn,createTransactionModalMinuteUpBtn);
-
-	var attentionTableInfoManager=AttentionTableInfoManager.creatNew();
-	attentionTableInfoManager.onSuccess(function(){
-		var attentionTableAry=attentionTableInfoManager.getAttentionTableAry();
-		$.each(attentionTableAry,function(index,value){
-			if(value.isManager()){
-				createTransactionModalTableSelect.append("<option value="+value.getTableId()+">"+value.getTableName()+"</option>");
-			}
-		});
-
-		var daylogManager=DaylogManager.creatNew(mainTable);
-		daylogManager.whatINeed(function(TIME_ARY){
-			var def=$.Deferred();
-			var allTableIdAry=attentionTableInfoManager.getAllTableIdAry();
-			var getTransaction=GetTransaction.creatNew(allTableIdAry,TIME_ARY);
-			getTransaction.onSuccessLisenter(function(DATA){
-				var transactionDataStructureAry=[];
-				$.each(DATA,function(index, el) {
-					var transaction=Transaction.creatNew();
-					transaction.setTransactionId(el.id);
-					transaction.setTableId(el.tableId);
-					transaction.setContent(el.content);
-					transaction.setTime(el.time);
-					transactionDataStructureAry.push(TransactionDataStructure.creatNew(attentionTableAry,transaction));
-
-				});
-				def.resolve(transactionDataStructureAry);
-			});
-			getTransaction.launch();
-			return def;
-		});
-		daylogManager.onCreate(function(TABLE_ID,CONTENT,TIME){
-			var def=$.Deferred();
-			var createLogTransaction=CreateLogTransaction.creatNew(TABLE_ID,TIME,CONTENT);
-			createLogTransaction.onSuccessLisenter(function(data){
-				var transaction=Transaction.creatNew();
-				transaction.setTransactionId(data);
-				transaction.setTableId(TABLE_ID);
-				transaction.setContent(CONTENT);
-				transaction.setTime(TIME);
-				def.resolve(TransactionDataStructure.creatNew(attentionTableAry,transaction));
-			});
-			createLogTransaction.onErrorLisenter(function(){
-				def.reject();
-			});
-			createLogTransaction.launch();
-			return def;
-		});
-		daylogManager.onChange(function(TRANSACTION_ID,CONTENT,TIME){
-			var def=$.Deferred();
-			var changeLogTransaction=ChangeLogTransaction.creatNew(TRANSACTION_ID,TIME,CONTENT);
-			changeLogTransaction.onSuccessLisenter(function(data){
-				if(data == 0){
-					def.resolve();
-				}
-			});
-			changeLogTransaction.onErrorLisenter(function(){
-				def.reject();
-			});
-			changeLogTransaction.launch();
-			return def;
-		});
-		daylogManager.onDelete(function(TRANSACTION_ID){
-			var def=$.Deferred();
-			var deleteLogTransaction=DeleteLogTransaction.creatNew(TRANSACTION_ID);
-			deleteLogTransaction.onSuccessLisenter(function(data){
-				if(data == 0){
-					def.resolve();
-				}
-			});
-			deleteLogTransaction.onErrorLisenter(function(){
-				def.reject();
-			});
-			deleteLogTransaction.launch();
-			return def;
-		});
-	});
-	attentionTableInfoManager.launch();
-
-}
-
-
-var TransactionModal={
-	creatNew:function(){
-		var TransactionModal={};
-
-		TransactionModal.hourBind=function(HOUR,HOUR_UP,HOUR_DOWN){
-			HOUR_UP.bind("click",function(){
-				HOUR.html(hourUp(HOUR.html()));
-			});
-			HOUR_DOWN.bind("click",function(){
-				HOUR.html(hourDown(HOUR.html()));
-			});
-		}
-
-		TransactionModal.minuteBind=function(MINUTE,MINUTE_UP,MINUTE_DOWN){
-			MINUTE_UP.bind("click",function(){
-				MINUTE.html(minuteUp(MINUTE.html()));
-			});
-			MINUTE_DOWN.bind("click",function(){
-				MINUTE.html(minuteDown(MINUTE.html()));
-			});
-		}
-
-		function hourUp(HOUR){
-			HOUR=Number(HOUR);
-			if(HOUR < 23)
-				return HOUR+1;
-			else
-				return HOUR;
-		}
-
-		function hourDown(HOUR){
-			HOUR=Number(HOUR);
-			if(HOUR > 0)
-				return HOUR-1;
-			else 
-				return HOUR;
-		}
-
-		function minuteUp(MINUTE){
-			var MINUTE=Number(MINUTE);
-			if(MINUTE < 50)
-				return MINUTE+10;
-			else
-				return MINUTE;
-		}
-
-		function minuteDown(MINUTE){
-			var MINUTE=Number(MINUTE);
-			if(MINUTE > 0)
-				return MINUTE-10;
-			else
-				return MINUTE;
-		}
-		
-		return TransactionModal;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+minclude("AttentionTableAryManager");
+minclude("MPagination");
+minclude("HistoryItem");
+minclude("HistoryPage");
+minclude("HistoryPageManager");
 minclude("Table");
 minclude("AttentionTable");
 minclude("Transaction");
 minclude("TransactionDataStructure");
-minclude("Daylog");
+minclude("InputController");
+minclude("TextTranslator");
+minclude("TransactionItem");
+minclude("TimeSameTransactionItem");
 minclude("LoaderPiano");
+minclude("InputControl");
+
+
+function host(){
+
+	// console.log(tableInheritLinkAry);
+	// console.log(attentionTableAryNET);
+	var attentionTableAryManager=AttentionTableAryManager.creatNew();
+	$.each(attentionTableAryNET,function(index, el) {
+		var attentionTable=AttentionTable.creatNew();
+		attentionTable.setTableId(el.tableId);
+		attentionTable.setTableName(el.tableName);
+		attentionTable.setIsManager(el.isManager);
+		$.each(el.inheritTableAry,function(ind, value) {
+			var table=Table.creatNew();
+			table.setTableId(value.tableId);
+			table.setTableName(value.tableName);
+			attentionTable.addParentTable(table);
+		});
+		attentionTable.setInheritAry(tableInheritLinkAry[index]);
+		attentionTableAryManager.addAttentionTable(attentionTable);
+	});
+
+	var attentionTableAry=attentionTableAryManager.getAttentionTableAry();
+	var allTableIdAry=attentionTableAryManager.getAllTableIdAry();
+	var mainTable=$("#mainTable");
+	var daylogManager=DaylogManager.creatNew(mainTable);
+	var transactionItemAryAry=[];
+	var createTime=new Date();
+	var isInfoModalShow=false;
+	var isTimeSameModalShow=false;
+
+	//--------------------------------------------------------------------------------------------
+
+	//初始化createTransactionIC
+	var createTransactionModalContentTextarea=$("#create_log_modal_content_input");
+	var createTransactionIC=InputController.creatNew(createTransactionModalContentTextarea,1000);
+	createTransactionIC.onChange(function(){
+		var createTransactionModalcontentRow=$("#create_transaction_content_row");
+		createTransactionModalContentLength.html(createTransactionIC.getRemainLength()+"字");
+		if(createTransactionIC.verify()){
+			createTransactionModalcontentRow.removeClass('has-error');
+		}
+		else{
+			createTransactionModalcontentRow.addClass('has-error');
+		}
+	});
+
+	//获取所有未来的transaction，并制作成TransacctionItem，push到transactionItemAryAry中
+	var getTransaction=GetTransaction.creatNew(allTableIdAry);
+	getTransaction.onSuccessLisenter(function(DATA){
+		$.each(DATA,function(index, el) {
+			var transactionItem=createTransactionItem(el.id,el.tableId,el.content,el.time);
+			insertTransactionItem(transactionItem);
+		});
+		refreshDaylogManager();
+	});
+	getTransaction.launch();
+
+	// "+" 按钮的初始化
+	var createTransactionModalContentLength=$("#transaction_create_input_length");
+	var addTransactionBtn=$("#addTransactionBtn");
+	addTransactionBtn.attr("data-toggle","modal");
+	addTransactionBtn.attr("data-target","#create_transaction_modal");
+	addTransactionBtn.bind("click",function(){
+		createTransactionIC.empty();
+		createTransactionModalContentLength.html("1000字");
+	});
+
+	//初始化CreateTransactionModal中的TableSelect列表
+	var createTransactionModalTableSelect=$("#create_log_modal_tableSelect");
+	$.each(attentionTableAry,function(index,value){
+		if(value.isManager()){
+			createTransactionModalTableSelect.append("<option value="+value.getTableId()+">"+value.getTableName()+"</option>");
+		}
+	});
+
+	//设置CreateTransactionModal中的"创建"按钮被点击时的响应
+	var createTransactionModalLoaderScope=$("#create_transaction_modal_loader_scope");
+	var createTransactionModalLoader=LoaderPiano.creatNew();
+	createTransactionModalLoader.appendTo(createTransactionModalLoaderScope);
+	createTransactionModalLoader.hide();
+	var createTransactionModalCreateBtn=$("#create_log_modal_create_btn");
+	createTransactionModalCreateBtn.bind("click",function(){
+		var createTransactionModal=$("#create_transaction_modal");
+		if(createTransactionIC.verify()){
+			var content=createTransactionIC.getContent();
+			var time=createTime.getTime();
+			var tableId=createTransactionModalTableSelect.val();
+			var createTransactionNET=CreateTransaction.creatNew(tableId,time,content);
+			createTransactionNET.onSuccessLisenter(function(data){
+				if(data > 0){
+					var transactionItem=createTransactionItem(data,tableId,content,time);
+					insertTransactionItem(transactionItem);
+					refreshDaylogManager();
+					createTransactionModalLoader.hide();
+					createTransactionModal.modal('hide');
+				}
+			});
+			createTransactionNET.launch();
+			createTransactionModalLoader.show();
+		}
+		else{
+			//do nothing if varification failed 
+		}
+	});
+
+
+	//TimmPicker初始化
+	var timePicker=$("#timePicker");
+	timePicker.datetimepicker({
+		startDate:createTime,
+		autoclose:true,
+		todayBtn:true,
+		todayHighlight:true,
+		language:'zh-CN',
+		format:'yyyy-mm-dd hh:ii'
+	});
+	timePicker.datetimepicker("update",createTime);
+	timePicker.on("changeDate",function(ev){
+		createTime=ev.date;
+	});
+
+	function refreshDaylogManager(){
+		if(!isTimeSameModalShow && !isInfoModalShow){
+			var timeSameTransactionScopeInModal=$("#time_same_transaction_scope");
+			var timeSameTransactionModal=$("#time_same_transaction_modal");
+			daylogManager.clear();
+			$.each(transactionItemAryAry,function(index, el) {
+				if(el.length > 1){
+					var timeSameTransactionItem=TimeSameTransactionItem.creatNew(el);
+					timeSameTransactionItem.setAttribute("data-toggle","modal");
+					timeSameTransactionItem.setAttribute("data-target","#time_same_transaction_modal");
+					timeSameTransactionItem.onClick(function(){
+						//当timeSameTransaction被点击的时候，将其内容添加到modal的相应位置中
+						//并把TimeSameModal的显示标志改为true
+						isTimeSameModalShow=true;
+						$.each(el,function(index, vel) {
+							vel.show();
+							vel.appendTo(timeSameTransactionScopeInModal);
+						});
+
+						//重置timeSameModal隐藏时的行为
+						//timeSameTransactionModal被隐藏的时候，把添加到其中的Item也隐藏
+						timeSameTransactionModal.on("hide.bs.modal",function(){
+							isTimeSameModalShow=false;
+							$.each(el,function(index, vel) {
+								vel.hide();
+							});
+							refreshDaylogManager();
+						});
+					});
+					daylogManager.addTransactionItem(timeSameTransactionItem);
+				}
+				else{
+					daylogManager.addTransactionItem(el[0]);
+				}
+			});
+			daylogManager.refreshUI();
+		}
+	
+	}
+
+	function insertTransactionItem(transactionItem){
+		var isExist=false;
+		$.each(transactionItemAryAry,function(index, el) {
+			if(el[0].getTransactionTime() == transactionItem.getTransactionTime()){
+				el.push(transactionItem);
+				isExist=true;
+			}
+		});
+		if(!isExist){
+			var transactionItemAry=[];
+			transactionItemAry.push(transactionItem);
+			transactionItemAryAry.push(transactionItemAry);
+		}
+	}
+
+	function removeTransactionItem(TRANSACTION_ID){
+		var aryAry=[];
+		$.each(transactionItemAryAry,function(index, el) {
+			var ary=[];
+			$.each(el,function(ind, vel) {
+				if(vel.getTransactionId() != TRANSACTION_ID){
+					ary.push(vel);
+				}
+				else{
+					vel.hide();
+				}
+			});
+			if(ary.length>0){
+				aryAry.push(ary);
+			}
+		});
+		transactionItemAryAry=aryAry;
+	}
+
+
+	function createTransactionItem(ID,TABLE_ID,CONTENT,TIME){
+		var transaction=Transaction.creatNew();
+		transaction.setTransactionId(ID);
+		transaction.setTableId(TABLE_ID);
+		transaction.setContent(CONTENT);
+		transaction.setTime(TIME);
+		var transactionDataStructure=TransactionDataStructure.creatNew(attentionTableAry,transaction);
+		var transactionItem=TransactionItem.creatNew(transactionDataStructure);
+		transactionItem.setAttribute("data-toggle","modal");
+		transactionItem.setAttribute("data-target","#transaction_info_modal");
+		transactionItem.onClick(function(){
+			initTransactionInfoModal(ID,transactionDataStructure.sourceSTR(),transactionDataStructure.pathSTR(),TIME,CONTENT,transactionDataStructure.isManager());
+		});
+		return transactionItem;
+	}
+
+	//TransactionInfoModal的初始化
+	var e_withdrawal=function(){};
+	var confirmBtn=$("#checkAction_btn");
+	var confirmModal=$("#checkAction_Modal");
+	var confirmModalLoaderScope=$("#confirmModalLoaderScope");
+	var confirmLoader=LoaderPiano.creatNew();
+	confirmLoader.hide();
+	confirmLoader.appendTo(confirmModalLoaderScope);
+	confirmBtn.bind("click",function(){
+		e_withdrawal();
+	});
+	function initTransactionInfoModal(ID,SOURCE_NODE_NAME,PATH,TIME,CONTENT,IS_SHOW_WITHDRAWAL_BTN){
+		// console.log(TIME);
+		isInfoModalShow=true;
+		var transactionInfoModal=$("#transaction_info_modal");
+		var transactionSourceNode=$("#transaction_info_modal_source");
+		var transactionPath=$("#transaction_info_modal_path");
+		var transactionTime=$("#transaction_info_modal_time");
+		var transactionContent=$("#transaction_info_modal_content");
+		var withdrawalBtn=$("#transaction_info_modal_withdrawal");
+
+		transactionSourceNode.html(SOURCE_NODE_NAME);
+		transactionPath.html(PATH);
+		var date=new Date(Number(TIME));
+		var year=date.getFullYear();
+		var month=date.getMonth()+1;
+		var dateD=date.getDate();
+		var hour=date.getHours();
+		var minute=date.getMinutes();
+		transactionTime.html(year+"-"+month+"-"+dateD+"  "+hour+":"+minute);
+		transactionContent.html(TextTranslator.creatNew().encodeText(CONTENT));
+		if(IS_SHOW_WITHDRAWAL_BTN){
+			//初始化撤销按钮
+			e_withdrawal=function(){
+				var deleteTransaction=DeleteTransaction.creatNew(ID);
+				deleteTransaction.onSuccessLisenter(function(data){
+					if(data==0){
+						confirmLoader.hide();
+						confirmModal.modal("hide");
+						transactionInfoModal.modal('hide');
+						removeTransactionItem(ID);
+						refreshDaylogManager();
+					}
+				});
+				deleteTransaction.launch();
+				confirmLoader.show();
+			}
+			withdrawalBtn.removeClass('hide');
+		}
+		else{
+			withdrawalBtn.addClass('hide');
+		}
+
+		transactionInfoModal.on("hide.bs.modal",function(){
+			isInfoModalShow=false;
+		});
+	}
+
+
+	//历史清单的初始化
+	var pagination=$("#pagination");
+	var historyList=$("#history-list");
+	if(0 < historyCountOfTransaction){
+		var historyPageManager=HistoryPageManager.creatNew();
+		var mPagination=MPagination.creatNew(pagination,historyCountOfTransaction,20);
+		var getHistoryTransaction=GetHistoryTransaction.creatNew(allTableIdAry,1);
+		getHistoryTransaction.onSuccessLisenter(function(data){
+			var historyPage=makeHistoryPage(data,1);
+			historyPage.appendTo(historyList);
+			historyPageManager.addPage(historyPage);
+		});
+		getHistoryTransaction.launch();
+
+		mPagination.onPageChange(function(PAGES){
+			// console.log(PAGES);
+			if(historyPageManager.isPageExist(PAGES)){
+				$.each(historyPageManager.getPageAry(),function(index, el) {
+					el.hide();
+				}); 
+				historyPageManager.getPage(PAGES).show();
+			}
+			else{
+				var getHistoryTransactionNET=GetHistoryTransaction.creatNew(allTableIdAry,PAGES);
+				getHistoryTransactionNET.onSuccessLisenter(function(data){
+					$.each(historyPageManager.getPageAry(),function(index, el) {
+						el.hide();
+					}); 
+					var historyPage=makeHistoryPage(data,PAGES);
+					historyPage.appendTo(historyList);
+					historyPageManager.addPage(historyPage);
+				});
+				getHistoryTransactionNET.launch();
+			}
+		});
+	}
+
+	function makeHistoryPage(DATA,PAGES){
+		var historyPage=HistoryPage.creatNew(PAGES);
+		$.each(DATA,function(index, el) {
+			var transaction=Transaction.creatNew();
+			transaction.setTransactionId(el.id);
+			transaction.setTableId(el.tableId);
+			transaction.setContent(el.content);
+			transaction.setTime(el.time);
+			var transactionDataStructure=TransactionDataStructure.creatNew(attentionTableAry,transaction);
+			var historyItem=HistoryItem.creatNew(transactionDataStructure);
+			historyItem.setAttribute("data-toggle","modal");
+			historyItem.setAttribute("data-target","#transaction_info_modal");
+			historyItem.ui.bind("click",function(){
+				initTransactionInfoModal(el.id,transactionDataStructure.sourceSTR(),transactionDataStructure.pathSTR(),el.time,el.content,false);
+			});
+			historyPage.addHistoryItem(historyItem);
+		});
+		return historyPage;
+	}
+
+
+
+
+	//filterInput的测试代码
+	var filter=$("#filterInput");
+	var inputController=InputController.creatNew(filter,20);
+	inputController.onChange(function(){
+		var content=inputController.getContent();
+		var str=/\*(.+)|\^(.+)/;
+		var resultAry=content.match(str);
+		// console.log(resultAry);
+		// console.log("节点名称是："+resultAry[1]);
+	});
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	// daylogManager.whatINeed(function(TIME_ARY){
+	// 	var def=$.Deferred();
+	// 	
+	// 	
+	// 	return def;
+	// });
+	// daylogManager.onCreate(function(TABLE_ID,CONTENT,TIME){
+	// 	var def=$.Deferred();
+	// 	var createLogTransaction=CreateLogTransaction.creatNew(TABLE_ID,TIME,CONTENT);
+	// 	createLogTransaction.onSuccessLisenter(function(data){
+	// 		var transaction=Transaction.creatNew();
+	// 		transaction.setTransactionId(data);
+	// 		transaction.setTableId(TABLE_ID);
+	// 		transaction.setContent(CONTENT);
+	// 		transaction.setTime(TIME);
+	// 		def.resolve(TransactionDataStructure.creatNew(attentionTableAry,transaction));
+	// 	});
+	// 	createLogTransaction.onErrorLisenter(function(){
+	// 		def.reject();
+	// 	});
+	// 	createLogTransaction.launch();
+	// 	return def;
+	// });
+	// daylogManager.onChange(function(TRANSACTION_ID,CONTENT,TIME){
+	// 	var def=$.Deferred();
+	// 	var changeLogTransaction=ChangeLogTransaction.creatNew(TRANSACTION_ID,TIME,CONTENT);
+	// 	changeLogTransaction.onSuccessLisenter(function(data){
+	// 		if(data == 0){
+	// 			def.resolve();
+	// 		}
+	// 	});
+	// 	changeLogTransaction.onErrorLisenter(function(){
+	// 		def.reject();
+	// 	});
+	// 	changeLogTransaction.launch();
+	// 	return def;
+	// });
+	// daylogManager.onDelete(function(TRANSACTION_ID){
+	// 	var def=$.Deferred();
+	// 	var deleteLogTransaction=DeleteLogTransaction.creatNew(TRANSACTION_ID);
+	// 	deleteLogTransaction.onSuccessLisenter(function(data){
+	// 		if(data == 0){
+	// 			def.resolve();
+	// 		}
+	// 	});
+	// 	deleteLogTransaction.onErrorLisenter(function(){
+	// 		def.reject();
+	// 	});
+	// 	deleteLogTransaction.launch();
+	// 	return def;
+	// });
+
+
+
+
+
+minclude("Daylog");
+minclude("MDate");
+minclude("Div");
 /**
- * 它维护一个TransactionDataStructure池，当一个TransactionDataStructure被add到了一个Daylog中去，这个TransactionDataStructure就从池中移除，
- * 它从网络上获取到的这些TransactionDataStructure并不一定有Daylog可以去（因为适合这个TransactionDataStructure的Daylog可能还不存在），它们会
- * 暂时待在池中，直到被某个Daylog收走
- * 
- * 它会维护一个Daylog池，用户改变scopArea的时候，它会hide掉正在显示的，然后去池中找对应的Daylog，如果没有则创建新的Daylog，然后将对应的Daylog在相应的位置show出来
- * 定时器每执行一次，获取正在显示的Daylog的dayFlag，去已加载成功dayFlag数组中查询，如果没有，说明它还没有从网络上获取数据，这时将这个dayFlag添加到needRequestAry中
- * 所有正在显示的Daylog都查询完后，发起网络请求，获取到数据后将needRequestAry中的数据添加到已加载成功dayFlag数组中
- * 
- * 它持有页面上的scopArea，由它来组织Daylog的位置
- * 
- * 它会告诉外界它需要什么数据，让外界去网络上获取
- * 
- * 当外界告诉他根据tableId过滤信息的时候，它会去遍历自己的DaylogAry，对每一个都执行过滤
- *
- * 它会在进行网络请求的时候，进入loading状态，网络请求成功后回到loadingComplete状态。（包括获取数据和onCreate，onDelete，onChange，inSimplModal)
- *
- * outSimplModal的情况下：
- * 		当日志滑动出现有数据集时，它会阻止滚动，并发起网络请求，从网络上获取足够的数据，获取结束再开启滚动，并将数据组织好显示出来
- *   	Daylog获取到数据可以根据filt的情况给它或者它里面的transaction打上visible标记
- * 
  * DaylogManager(SCOPE)
- * 		whatINeed(CALL_BACK(timeAry))	//当它请求一些数据时，你可以做一些事，返回Deferred对象，以及TransacitonDataStructure对象数组
- * 		
- * 	    //nextMonth(CALL_BACK(time))
- * 	    //lastMonth(CALL_BACK(time))
- * 	    
- * 		onCreate(CALL_BACK(tableId,content,time))		//当transaction被创建的时候，你可以做一些事情，返回Deferred对象，以及TransacitonDataStructure对象
- * 		onDelete(CALL_BACK(transactionId))				//当transaction被删除的时候，你可以做一些事情，返回Deferred对象
- * 		onChange(CALL_BACK(transactionId,content,time))	//当transaction被修改的时候，你可以做一些事情，返回Deferred对象
- *
- * 		//精简模式先放一放，以后再做！！！
- * 		inSimplModal()	//进入精简模式，也就是不显示空白日的模式，精简模式会获取过去一年以及未来一年内的所有数据，并制作成精简显示版
- * 		outSimplModal()	//退出精简模式
- * 		
- * 		filtByDay(day)					//只显示某天的信息，如每个周的星期一（星期1）
- * 		filtByDate(date)				//只显示某日期的信息，如每月的3号（3日）
- * 		filtByContent(string)			//只显示内容包含某个特定字符串的transaction
- * 		filtByTableId(tableIdAry)		//只显示特定日程的transaction
- * 		filtByTableName(tableAnotherNameAry)	//只显示特定日程的transaction
- * 		clearFilt()						//移除filt限制
+ * 		addTransactionItem(TransactionItem transactionItem)
+ * 		removeTransactionItem(int TransactionId)
+ * 		refreshUI()		//让DaylogMangaer根据TransactionItem数据自动调整UI
+ * 		rewind()		//重置显示区间
  */
 var DaylogManager={
 	creatNew:function(SCOPE){
 		var DaylogManager={};
 
 		var div=Div.creatNew();
-		var daylogScopeList=[];
-		var loadCompleteDayFlagAry=[];
+		var daylogScopeAry=[];
 		var daylogAry=[];
-		var dayNum=6;
-		var oneDayMS=Number(86400000);
-		var timePicker=$("#mainTimePicker");
-		var timePickerInput=$("#timePickerInput");
-		var loaderScope=$("#loaderScope");
-		var loaderPiano=LoaderPiano.creatNew();
+		var firstScopeNum=1;
+		var lastScopeNum=6;
+		var transactionItemAryAry=[];
 
-		var e_internetQuest=function(dayFlagAry){return $.Deferred();};
-		var e_change=function(transactionId,content,time){return $.Deferred();};
-		var e_create=function(tableId,content,time){return $.Deferred();};
-		var e_delete=function(transactionId){return $.Deferred();};
 		(function(){
-			loaderPiano.appendTo(loaderScope);
-			setDaylogScope();
-			onScopeChangeRefreshUI()
-			timePicker.datetimepicker({
-				language:'zh-CN',
-				weekStart: 1,
-		        todayBtn:  1,
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				minView: 2,
-				forceParse: 0,
-				initialDate:new Date()
-		    }).on('changeDate',function(ev){
-		    	refreshDayFlag(ev.date);
-		    	onScopeChangeRefreshUI(ev.date);
-		    });
-		    timePicker.datetimepicker('update',new Date());
 
-	    	SCOPE.bind('mousewheel',scrollMainTable);
-			timePicker.bind('mousewheel',scrollMainTable);
+		})();
 
-			var isInternetQuestEnd=true;
-			setInterval(function(){
-				if(isInternetQuestEnd){
-					var currentDayFlagAry=[];
-					var questDayFlagAry=[];
-					daylogScopeIterator(function(index,el){
-						currentDayFlagAry.push(Number(el.getAttribute("dayFlag")));
-					});
-					$.each(currentDayFlagAry,function(index, el) {
-						if($.inArray(el,loadCompleteDayFlagAry) < 0){
-							questDayFlagAry.push(el);
-						}
-					});
-					if(questDayFlagAry.length > 0){
-						loaderPiano.show();
-						var def=e_internetQuest(questDayFlagAry);
-						isInternetQuestEnd=false;
-						def.done(function(TRANSACTION_DATA_STRUCTURE_ARY){
-							setTimeout(function(){
-								loaderPiano.hide();
-							},500);
-							
-							$.each(TRANSACTION_DATA_STRUCTURE_ARY,function(index, el) {
-								$.each(daylogAry,function(index, daylogel) {
-									if(daylogel.getDayFlag() <= el.getTime()  &&  el.getTime() <= (daylogel.getDayFlag()+oneDayMS)){
-										daylogel.addTransaction(el);
-									}
-								});
-							});
-							loadCompleteDayFlagAry=loadCompleteDayFlagAry.concat(questDayFlagAry);
-							isInternetQuestEnd=true;
-						});
-					} 
-				}
-			},800);
-			// div.setAttribute("style","height:310px;");
+		DaylogManager.rewind=function(){
+			firstScopeNum=1;
+			lastScopeNum=6;
+		}
+
+		//使daylogManager根据transactionItemAryAry自动调整UI
+		DaylogManager.refreshUI=function(){
+			sortDaylog();
+
+			div=Div.creatNew();
 			div.addClass('panel-body');
 			div.appendTo(SCOPE);
-		})();
-		
-		function scrollMainTable(event,delta){
-			var dl=delta > 0 ? false:true;
-			if(dl){
-				nextDay();
-			}
-			else{
-				lastDay();
-			}
-			timePicker.datetimepicker('update',new Date(Number(daylogScopeList[0].getAttribute("dayFlag"))));
-			onScopeChangeRefreshUI();
-			return false;
-		}
-
-		function nextDay(){
-			daylogScopeIterator(function(index,el){
-				mDate=MDate.creatNew(Number(el.getAttribute("dayFlag")));
-				mDate.setDate(Number(mDate.getDate())+1);
-				el.setAttribute("dayFlag",mDate.getDayFlag());
+			$.each(daylogAry,function(index,value){
+				var logScope=Div.creatNew();
+				logScope.setAttribute("style","height:280px;overflow-y: auto;");
+				logScope.addClass("col-xs-2 correction-clear-col-xs-padding");
+				logScope.appendTo(div.ui);
+				daylogScopeAry.push(logScope);
+				value.appendTo(logScope.ui);
 			});
-		}
-
-		function lastDay(){
-			daylogScopeIterator(function(index,el){
-				mDate=MDate.creatNew(Number(el.getAttribute("dayFlag")));
-				mDate.setDate(Number(mDate.getDate())-1);
-				el.setAttribute("dayFlag",mDate.getDayFlag());
-			});
-		}
-
-		function onScopeChangeRefreshUI(){
-			$.each(daylogAry,function(index,value) {
-				value.hide();
-			});
-
-			daylogScopeIterator(function(ind,el){
-				var dayFlag=Number(el.getAttribute("dayFlag"));
-				var isExist=false;
-				$.each(daylogAry,function(index, daylogel) {
-					if(daylogel.getDayFlag() == dayFlag){
-						daylogel.show().appendTo(el.ui);
-						isExist=true;
+			changeDaylogScopeVisibility();
+			if(6 < daylogScopeAry.length){
+				SCOPE.unbind().bind('mousewheel',function(event,delta){
+					var dl=delta > 0 ? false:true;
+					if(dl){
+						next();
 					}
+					else{
+						last();
+					}
+					return false;
 				});
-				if(!isExist){
-					var daylog=creatDaylog(dayFlag);
-					daylog.show().appendTo(el.ui);
-					daylogAry.push(daylog);
+			}
+		}
+
+		DaylogManager.clear=function(){
+			daylogScopeAry=[];
+			daylogAry=[];
+			div.addClass('hide');
+		}
+
+		function next(){
+			if(lastScopeNum < daylogScopeAry.length){
+				firstScopeNum++;
+				lastScopeNum++;
+				changeDaylogScopeVisibility();
+			}
+		}
+
+		function last(){
+			if(1 < firstScopeNum){
+				firstScopeNum--;
+				lastScopeNum--;
+				changeDaylogScopeVisibility();
+			}
+		}
+
+		DaylogManager.addTransactionItem=function(TRANSACTION_ITEM){
+			var isExist=false;
+			var mDate=MDate.creatNew(TRANSACTION_ITEM.getTransactionTime());
+			$.each(daylogAry,function(index, el) {
+				if(el.getDayFlag() == mDate.getDayFlag()){
+					el.addTransaction(TRANSACTION_ITEM);
+					isExist=true;
+				}
+			});
+			if(!isExist){
+				var daylog=Daylog.creatNew(mDate.getDayFlag());
+				daylog.addTransaction(TRANSACTION_ITEM);
+				daylogAry.push(daylog);
+			}
+		}
+
+		function changeDaylogScopeVisibility(){
+			var index=1;
+			$.each(daylogScopeAry,function(ind, el) {
+				if(firstScopeNum <= index && index <= lastScopeNum){
+					el.removeClass('hide');
+				}
+				else{
+					el.addClass('hide');
+				}
+				index++;
+			});
+		}
+
+		function sortDaylog(){
+			daylogAry.sort(function(valueA,valueB){
+				if(valueA.getDayFlag() <= valueB.getDayFlag()){
+					return -1;
+				}
+				else{
+					return 1;
 				}
 			});
 		}
 
-		function creatDaylog(DAY_FLAG){
-			var daylog=Daylog.creatNew(DAY_FLAG);
-			daylog.onCreate(function(TABLE_ID,CONTENT,TIME){
-				var def=e_create(TABLE_ID,CONTENT,TIME);
-				def.done(function(TRANSACTION_DATA_STRUCTURE){
-					// daylog.addTransaction(TRANSACTION_DATA_STRUCTURE);逻辑上不通，都已经是daylog告诉你它创建了一个新的transaction了
-					// 你怎么还给它再添加一次？
-				});
-				return def;
-			});
-			daylog.onDelete(function(TRANSACTION_ID){
-				var def=e_delete(TRANSACTION_ID);
-				def.done(function(){
-
-				});
-				return def;
-			});
-			daylog.onChange(function(TRANSACTION_ID,CONTENT,TIME){
-				var def=e_change(TRANSACTION_ID,CONTENT,TIME);
-				def.done(function(){
-
-				});
-				return def;
-			});
-			return daylog;
-		}
-
-		function refreshDayFlag(TIME){
-			var mDate=MDate.creatNew(TIME);
-			daylogScopeIterator(function(ind,el){
-				el.setAttribute("dayFlag",mDate.getDayFlag());
-				mDate.setDate(Number(mDate.getDate())+1);
-			});
-		}
-
-		function daylogScopeIterator(CALL_BACK){
-			$.each(daylogScopeList,function(index, el) {
-				CALL_BACK(index,el);
-			});
-		}
-
-		function setDaylogScope(THE_BEGINING_DATE){
-			var mDate=MDate.creatNew(new Date());
-			for(i=0; i<dayNum; i++){
-				var logScope=Div.creatNew();
-				logScope.setAttribute("style","height:280px;overflow-y: auto;");
-				logScope.setAttribute("dayFlag",mDate.getDayFlag());
-				logScope.addClass("col-xs-2");
-				logScope.appendTo(div.ui);
-				daylogScopeList.push(logScope);
-				mDate.setDate(Number(mDate.getDate())+1);
-			}
-		}
-
-		DaylogManager.onCreate=function(CALL_BACK){
-			e_create=CALL_BACK;
-		}
-
-		DaylogManager.onChange=function(CALL_BACK){
-			e_change=CALL_BACK;
-		}
-
-		DaylogManager.onDelete=function(CALL_BACK){
-			e_delete=CALL_BACK;
-		}
-
-		DaylogManager.whatINeed=function(CALL_BACK){
-			e_internetQuest=CALL_BACK;
-		}
+		// DaylogManager.addTransactionItem=function(TRANSACTION_ITEM){
+		// 	var isExist=false;
+		// 	$.each(transactionItemAryAry,function(index, el) {
+		// 		if(el[0].getTransactionTime() == TRANSACTION_ITEM.getTransactionTime()){
+		// 			el.push(TRANSACTION_ITEM);
+		// 			isExist=true;
+		// 		}
+		// 	});
+		// 	if(!isExist){
+		// 		var transactionItemAry=[];
+		// 		transactionItemAry.push(TRANSACTION_ITEM);
+		// 		transactionItemAryAry.push(transactionItemAry);
+		// 	}
+		// }
 
 		return DaylogManager;
 	}
@@ -460,49 +582,28 @@ var DaylogManager={
 minclude("Table");
 minclude("AttentionTable");
 /**
- * AttentionTableInfoManager()
- * 		launch()
- * 		onSuccess()
- * 		onError()
+ * AttentionTableAryManager()
+ * 		addAttentionTable(AttentionTable)
  * 		getAllTableIdAry()		//返回的是你关注的表以及这些表的所有父表的tableId数组
  * 		getAttentionTableAry()	//返回的是AttetionTable对象的数组
  */
-var AttentionTableInfoManager={
+var AttentionTableAryManager={
 	creatNew:function(){
-		var AttentionTableInfoManager={};
+		var AttentionTableAryManager={};
 
-		var e_success=function(){};
-		var e_error=function(){};
 		var attentionTableAry=[];
 		var allTableIdAry=[];
 
-		AttentionTableInfoManager.launch=function(){
-			var getAttentionTableInfo=GetAttentionTableInfo.creatNew();
-			getAttentionTableInfo.onSuccessLisenter(function(DATA){
-				$.each(DATA,function(index, el) {
-					var parentTableAry=[];
-					$.each(el.parentTableInfoAry,function(index, value) {
-						var table=Table.creatNew();
-						table.setTableId(value.tableId);
-						table.setTableName(value.tableName);
-						parentTableAry.push(table);
-						addTableId(value.tableId);
-					});
-					var attentionTable=AttentionTable.creatNew();
-					attentionTable.setTableId(el.tableId);
-					attentionTable.setTableName(el.tableName);
-					attentionTable.setIsManager(el.isManager);
-					attentionTable.setParentTableAry(parentTableAry);
-					attentionTableAry.push(attentionTable);
-					addTableId(el.tableId);
-				});
-				//消除allTableIdAry中的重复项
-				e_success();
+		(function(){
+
+		})();
+
+		AttentionTableAryManager.addAttentionTable=function(ATTENTION_TABLE){
+			attentionTableAry.push(ATTENTION_TABLE);
+			addTableId(ATTENTION_TABLE.getTableId());
+			ATTENTION_TABLE.parentTableIterator(function(TABLE){
+				addTableId(TABLE.getTableId());
 			});
-			getAttentionTableInfo.onErrorLisenter(function(){
-				e_error();
-			});
-			getAttentionTableInfo.launch();
 		}
 
 		function addTableId(TABLE_ID){
@@ -511,260 +612,223 @@ var AttentionTableInfoManager={
 			}
 		}
 
-		AttentionTableInfoManager.getAllTableIdAry=function(){
+		AttentionTableAryManager.getAllTableIdAry=function(){
 			return allTableIdAry;
 		}
 
-		AttentionTableInfoManager.getAttentionTableAry=function(){
+		AttentionTableAryManager.getAttentionTableAry=function(){
 			return attentionTableAry;
 		}
 
-		AttentionTableInfoManager.onSuccess=function(CALL_BACK){
-			e_success=CALL_BACK;
-		}
 
-		AttentionTableInfoManager.onError=function(CALL_BACK){
-			e_error=CALL_BACK;
-		}
-
-
-		return AttentionTableInfoManager;
+		return AttentionTableAryManager;
 	}
 }
 
 
-minclude("MDate");
-minclude("InputController");
 /**
- * 它的table选择列表在获取服务器数据的时候初始化
- * 
- * CreateTransactionModal()
- * 		bindModal(button)
- * 		initBeforeShow(beginTimeOfToday)
- * 		onModalhide()
- * 		onCreate(CALL_BACK(tableId,content,time))	//当transaction被创建时，你可以做一些事情，返回Deferred对象
+ * MPagination(Element element,int totalItems,int itemsPerPage)
+ * 		onPageChange(CALL_BACK(int pages,Event event))
+ */
+
+var MPagination={
+	creatNew:function(ELEMENT,TOTAL_ITEMS,ITEMS_PER_PAGE){
+		var MPagination={};
+
+		var paginationScope=ELEMENT;
+		var totalItems=TOTAL_ITEMS;
+		var itemsPerPage=ITEMS_PER_PAGE;
+		var totalPages=Math.ceil(TOTAL_ITEMS/ITEMS_PER_PAGE);
+		var e_pageChange=function(PAGES){};
+
+		(function(){
+			paginationScope.twbsPagination({
+				totalPages:totalPages,
+				visiblePages:10,
+				nextClass:"hide",
+				prevClass:"hide",
+				firstClass:"hide",
+				lastClass:"hide",
+				onPageClick:function(EVENT,PAGES){
+					e_pageChange(PAGES);
+				}
+			});
+		})();
+
+		MPagination.onPageChange=function(CALL_BACK){
+			e_pageChange=CALL_BACK;
+		}
+
+		return MPagination;
+	}
+}
+
+
+
+
+minclude("Div");
+/**
+ * HistoryItem(TransactionDataStructure transactionDataStructure)
+ * 		onClick(CALL_BACK(TransactionDataStructure transactionDataStructure))
+ */
+var HistoryItem={
+	creatNew:function(TRANSACTION_DATA_STRUCTURE){
+		var HistoryItem=Div.creatNew();
+
+		var transactionDataStructure=TRANSACTION_DATA_STRUCTURE;
+		var contentDiv=Div.creatNew();
+		var timeDiv=Div.creatNew();
+		var e_click=function(TransactionDataStructure){};
+
+		(function(){
+			HistoryItem.addClass('col-xs-12 btn deep-background-on-hover');
+			HistoryItem.ui.bind("click",function(){
+				e_click(transactionDataStructure);
+			});
+
+			contentDiv.addClass('col-xs-9 text-left');
+			contentDiv.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
+			contentDiv.html(transactionDataStructure.getFirstRowContent());
+			contentDiv.appendTo(HistoryItem.ui);
+
+			timeDiv.addClass('col-xs-3 text-right');
+			timeDiv.setAttribute("style","color:darkgrey");
+			timeDiv.html(getTimeString());
+			timeDiv.appendTo(HistoryItem.ui);
+		})();
+
+		function getTimeString(){
+			var string="";
+			var date=new Date(transactionDataStructure.getTime());
+			var thatYear=date.getFullYear();
+			var thatMonth=date.getMonth()+1;
+			var thatDate=date.getDate();
+
+			// var todayDate=new Date();
+			// var thisYear=todayDate.getFullYear();
+			// var thisMonth=todayDate.getMonth();
+			// var thisDate=todayDate.getDate();
+			
+			// if(thatYear < thisYear){
+			// 	string+=thatYear+"-"+thatMonth+"-"+thatDate;
+			// }
+			// else if(thatMonth < thisMonth){
+			// 	// string+=thatMonth+"-"+thatDate;
+			// 	string+=thatYear+"-"+thatMonth+"-"+thatDate;
+			// }
+			// else{
+			// 	string+=thatDate+" 日";
+			// }
+			string+=thatYear+"-"+thatMonth+"-"+thatDate;
+			return string;
+		}
+
+		HistoryItem.onClick=function(CALL_BACK){
+			e_click=CALL_BACK;
+		}
+
+		return HistoryItem;
+	}
+}
+
+
+
+minclude("Div");
+/**
+ * HistoryPage(int page)
+ * 		getPage()
+ * 		addHistoryItem(HistoryItem historyItem)
  * 		show()
  * 		hide()
  */
-var CreateTransactionModal={
-	creatNew:function(){
-		var CreateTransactionModal={};
+var HistoryPage={
+	creatNew:function(PAGE){
+		var HistoryPage=Div.creatNew();
 
-		var createTransactionModal=$("#create_log_transaction_modal");
-		var createTransactionModalTableSelect=$("#create_log_modal_tableSelect");
-		var createTransactionModalHourUpBtn=$("#create_log_modal_hour_up_btn");
-		var createTransactionModalHourDownBtn=$("#create_log_modal_hour_down_btn");
-		var createTransactionModalMinuteUpBtn=$("#create_log_modal_minute_up_btn");
-		var createTransactionModalMinuteDownBtn=$("#create_log_modal_minute_down_btn");
-		var createTransactionModalHour=$("#create_log_modal_hour");
-		var createTransactionModalMinute=$("#create_log_modal_minute");
-		var createTransactionModalContentTextarea=$("#create_log_modal_content_input");
-		var createTransactionModalContentLength=$("#transaction_create_input_length");
-		var createTransactionModalCreateBtn=$("#create_log_modal_create_btn");
-		var contentRow=$("#create_transaction_content_row");
-		var inputController=InputController.creatNew(createTransactionModalContentTextarea,1000);
-
-		var e_create=function(TABLE_ID,CONTENT,TIME){return $.Deferred();};
-		var e_onModalHide=function(){};
+		var leftPage=Div.creatNew();
+		var rightPage=Div.creatNew();
+		var page=PAGE;
+		var itemNum=0;
 
 		(function(){
-			inputController.onChange(function(){
-				setContentTextareaLengthHtml(inputController.getRemainLength());
-				if(inputController.verify()){
-					contentOk();
-				}
-				else{
-					contentError();
-				}
-			});
-
-			createTransactionModal.on("hidden.bs.modal",function(e){
-				inputController.empty();
-				e_onModalHide();
-			});
+			leftPage.addClass('col-xs-6');
+			leftPage.appendTo(HistoryPage.ui)
+			rightPage.addClass('col-xs-6');
+			rightPage.appendTo(HistoryPage.ui)
+			HistoryPage.addClass('col-xs-12');
 		})();
 
-		function contentOk(){
-			contentRow.removeClass('has-error');
+		HistoryPage.addHistoryItem=function(HISTORY_ITEM){
+			if(itemNum < 10){
+				HISTORY_ITEM.appendTo(leftPage.ui);
+			}
+			else{
+				HISTORY_ITEM.appendTo(rightPage.ui);
+			}
+			itemNum++;
 		}
 
-		function contentError(){
-			contentRow.addClass('has-error');
+		HistoryPage.show=function(){
+			HistoryPage.removeClass('hide');
 		}
 
-		function setContentTextareaLengthHtml(REMAIN_LENGTH){
-			createTransactionModalContentLength.html(REMAIN_LENGTH+"字");
+		HistoryPage.hide=function(){
+			HistoryPage.addClass('hide');
 		}
 
-
-		CreateTransactionModal.initBeforeShow=function(BEGINNING_TIME_OF_TODAY){
-			createTransactionModalCreateBtn.unbind().bind("click",function(){	//when the modal open,it will to alter action of create button
-				var tableId=createTransactionModalTableSelect.val();
-				var content=createTransactionModalContentTextarea.val();
-				var hour=createTransactionModalHour.html();
-				var minute=createTransactionModalMinute.html();
-				var mDate=MDate.creatNew(BEGINNING_TIME_OF_TODAY);
-				mDate.setHours(hour);
-				mDate.setMinutes(minute);
-				var transactionTime=mDate.getTime();
-
-				if(inputController.verify()){
-					var def=e_create(tableId,content,transactionTime);
-					def.done(function(){
-						closeModal();
-					});
-				}
-				else{
-					//do nothing if varification failed 
-				}
-			});
+		HistoryPage.getPage=function(){
+			return page;
 		}
 
-		CreateTransactionModal.onModalhide=function(CALL_BACK){
-			e_onModalHide=CALL_BACK;
-		}
-
-		CreateTransactionModal.hide=function(){
-			closeModal();
-		}
-
-		function closeModal(){
-			createTransactionModal.modal('hide');
-		}
-
-		CreateTransactionModal.show=function(){
-			openModal();
-		}
-
-		function openModal(){
-			createTransactionModal.modal('show');
-		}
-
-		CreateTransactionModal.onCreate=function(CALL_BACK){
-			e_create=CALL_BACK;
-		}
-
-		CreateTransactionModal.bindModal=function(BUTTON){
-			BUTTON.attr("data-toggle","modal");
-			BUTTON.attr("data-target","#create_log_transaction_modal");
-		}
-
-		return CreateTransactionModal;
+		return HistoryPage;
 	}
 }
 
-
-minclude("MDate");
 /**
- * ChangeTransactionModal()
- * 		bindModal(BUTTON)
- * 		initBeforeShow(time,content,tableName)
- * 		onChange(CALL_BACK(content,time))
- * 		onDelete(CALL_BACK())
- * 		show()
- *   	hide()
+ * HistoryPageManager()
+ * 		isPageExist(int page)	//return boolean
+ * 		addPage(HistoryPage historyPage)
+ * 		getPage(int page)		//return HistoryPage
+ * 		getPageAry()			//return array of HistoryPage
  */
-var ChangeTransactionModal={
+var HistoryPageManager={
 	creatNew:function(){
-		var ChangeTransactionModal={};
+		var HistoryPageManager={};
 
-		var changeTransactionModal=$("#change_log_transaction_modal");
-		var changeTransactionModalTableName=$("#change_log_transaction_modal_tableName");
-		var changeTransactionModalHour=$("#change_log_modal_hour");
-		var changeTransactionModalMinute=$("#change_log_modal_minute");
-		var changeTransactionModalContentTextarea=$("#change_log_modal_content_input");
-		var changeTransactionModalChangeBtn=$("#change_log_modal_change_btn");
-		var changeTransactionModalDeleteBtn=$("#change_log_modal_delete_btn");
-		var changeTransactionModalDeleteCheckModalConfirmBtn=$("#checkAction_btn");
-		var changeTransactionModalActionConfirmModal=$("#checkAction_Modal");
-		var contentRow=$("#change_transaction_content_row");
-		var changeTransactionModalContentLength=$("#transaction_change_input_length");
-		var inputController=InputController.creatNew(changeTransactionModalContentTextarea,1000);
-		var mDate;
-		var content;
+		var historyPageAry=[];
 
-		var e_change=function(CONTENT,TIME){return $.Deferred();};
-		var e_delete=function(){return $.Deferred();};
-		(function(){
-			inputController.onChange(function(){
-				setContentTextareaLengthHtml(inputController.getRemainLength());
-				if(inputController.verify()){
-					contentOk();
-				}
-				else{
-					contentError();
+		HistoryPageManager.isPageExist=function(PAGE){
+			var isPageExist=false;
+			$.each(historyPageAry,function(index, el) {
+				if(el.getPage() == PAGE){
+					isPageExist=true;
 				}
 			});
-
-			changeTransactionModal.on("hidden.bs.modal",function(e){
-				inputController.empty();
-			});
-		})();
-
-		function contentOk(){
-			contentRow.removeClass('has-error');
+			return isPageExist;
 		}
 
-		function contentError(){
-			contentRow.addClass('has-error');
+		HistoryPageManager.addPage=function(HISTORY_PAGE){
+			historyPageAry.push(HISTORY_PAGE);
 		}
 
-		ChangeTransactionModal.initBeforeShow=function(TIME,CONTENT,TABLE_NAME){
-			mDate=MDate.creatNew(TIME);
-			content=CONTENT;
-			changeTransactionModalHour.html(mDate.getHours());
-			changeTransactionModalMinute.html(mDate.getMinutes());
-			changeTransactionModalTableName.val(TABLE_NAME);
-			inputController.setContent(content);
-			setContentTextareaLengthHtml(inputController.getRemainLength());
-
-			changeTransactionModalChangeBtn.unbind().bind('click',function(){
-				mDate.setHours(changeTransactionModalHour.html());
-				mDate.setMinutes(changeTransactionModalMinute.html());
-				if(inputController.verify()){
-					e_change(inputController.getContent(),mDate.getTime());
-				}
-				else{
-					// do nothing if varification failed
+		HistoryPageManager.getPage=function(PAGE){
+			var historyPage=null;
+			$.each(historyPageAry,function(index, el) {
+				if(el.getPage() == PAGE){
+					historyPage=el;
 				}
 			});
-
-			changeTransactionModalDeleteCheckModalConfirmBtn.unbind().bind('click',function(){
-				var def=e_delete();
-				def.done(function(){
-					changeTransactionModalActionConfirmModal.modal("hide");
-				});
-			});
+			return historyPage;
 		}
 
-		function setContentTextareaLengthHtml(REMAIN_LENGTH){
-			changeTransactionModalContentLength.html(REMAIN_LENGTH+"字");
+		HistoryPageManager.getPageAry=function(){
+			return historyPageAry;
 		}
 
-		ChangeTransactionModal.bindModal=function(BUTTON){
-			BUTTON.attr("data-toggle","modal");
-			BUTTON.attr("data-target","#change_log_transaction_modal");
-		}
-
-		ChangeTransactionModal.onChange=function(CALL_BACK){
-			e_change=CALL_BACK;
-		}
-
-		ChangeTransactionModal.onDelete=function(CALL_BACK){
-			e_delete=CALL_BACK;
-		}
-
-		ChangeTransactionModal.show=function(){
-			changeTransactionModal.modal("show");
-		}
-
-		ChangeTransactionModal.hide=function(){
-			changeTransactionModal.modal("hide");
-		}
-
-		return ChangeTransactionModal;
+		return HistoryPageManager;
 	}
 }
+
 
 /**
  *	table的创建者这种信息不应该告诉其他人，所以它的相关操作应该被隐藏在服务器中
@@ -815,10 +879,16 @@ minclude("Table");
  * 
  * AttentionTable()
  * 		setIsManager(boolean)
- * 		isManager()
+ * 		isManager()				//manager要弃用，因为以后凡是attention的table，就是manager
  *
+ * 		setInheritAry(array inheritAry)	//inherit是一个以子表为key，父表为value的数组
  * 		setParentTableAry(Table_Ary)
- * 		findParentTable(tableId)	//有则返回Table对象，没有返回null
+ * 		
+ * 		addParentTable(Table)
+ * 		parentTableIterator(CALL_BACL(Table))	//父表的迭代器
+ * 		findParentTable(int tableId)	//有则返回Table对象，没有返回null
+ * 		entrance(int tableId)			//有则返回Table对象，没有返回null,用tableId去InheritAry中找，
+ *
  *
  * 		来自父：
  * 		setTableId(id)
@@ -832,20 +902,62 @@ var AttentionTable={
 
 		var parentTableAry=[];
 		var isManager;
+		var inheritAry;
 
 		AttentionTable.setIsManager=function(BOOLEAN){
 			isManager=BOOLEAN;
 		}
 
+		AttentionTable.setInheritAry=function(INHERIT_ARY){
+			inheritAry=INHERIT_ARY;
+		}
+
 		AttentionTable.isManager=function(){
-			return isManager;
+			return true;
 		}
 
 		AttentionTable.setParentTableAry=function(PARENT_TABLE_ARY){
 			parentTableAry=PARENT_TABLE_ARY;
 		}
 
+		AttentionTable.addParentTable=function(TABLE){
+			parentTableAry.push(TABLE);
+		}
+
+		AttentionTable.parentTableIterator=function(CALL_BACL){
+			$.each(parentTableAry,function(index, el) {
+				CALL_BACL(el);
+			});
+		}
+
 		AttentionTable.findParentTable=function(TABLE_ID){
+			return findParentTable(TABLE_ID);
+		}
+
+		AttentionTable.entrance=function(TABLE_ID){
+			var tableId=Number(TABLE_ID);
+			if(tableId == AttentionTable.getTableId()){	//如果该tableId就是这个attentionTable的ID，说明不存在入口，此时应该返回null
+				return null;
+			}
+			else{
+				var key=true;
+				var result;
+				while(key){
+					result=findKey(tableId);
+					if(result == AttentionTable.getTableId()){
+						//tableId是入口
+						key=false;
+					}
+					else{
+						tableId=result;
+					}
+				}
+				//用tableId去找到table
+				return findParentTable(tableId);
+			}	
+		}
+
+		function findParentTable(TABLE_ID){
 			var table=null;
 			$.each(parentTableAry,function(index, el) {
 				if(el.getTableId() == TABLE_ID){
@@ -853,6 +965,17 @@ var AttentionTable={
 				}
 			});
 			return table;
+		}
+
+		function findKey(VALUE){
+			var key=null;
+			$.each(inheritAry,function(index, el) {
+				if(el[1] == VALUE){
+					key=el[0];
+				}
+			});
+			
+			return key;
 		}
 
 		return AttentionTable;
@@ -869,6 +992,7 @@ var AttentionTable={
  *
  * 		setContent();
  * 		getContent();
+ * 		getFirstRowContent()
  * 		
  * 		setTime();
  * 		getTime();
@@ -906,6 +1030,16 @@ var Transaction={
 			return content;
 		}
 
+		Transaction.getFirstRowContent=function(){
+			var newContent=content;
+			var reg=/(.)+/;
+			var stringAry=content.match(reg);
+			if(stringAry != null){
+				newContent=stringAry[0];
+			}
+			return newContent;
+		}
+
 		Transaction.setTime=function(TIME){
 			time=Number(TIME);
 		}
@@ -930,12 +1064,15 @@ var Transaction={
  * 	ID？
  * 
  * TransactionDataStructure(attentionTableAry,transaction)
- * 		isDirectAttention()
+ * 		//isDirectAttention()
  * 		isManager()
- * 		getChildTableName()
- * 		getChildTableId()
- * 		getParentTableName()
- * 		getParentTableId()
+ * 		//getChildTableName()
+ * 		//getChildTableId()
+ * 		//getParentTableName()
+ * 		//getParentTableId()
+ *
+ * 		sourceSTR()
+ * 		pathSTR()
  *
  * 		来自父：
  * 		setTransactionId();
@@ -946,6 +1083,7 @@ var Transaction={
  *
  * 		setContent();
  * 		getContent();
+ * 		getFirstRowContent()
  * 		
  * 		setTime();
  * 		getTime();
@@ -960,15 +1098,21 @@ var TransactionDataStructure={
 		var childTableName;
 		var childTableId;
 		var parentTableName;
+
 		var parentTableId;
+
+		var sourceSTR;
+		var pathSTR;
 
 		(function(){
 			$.each(attentionTableAry,function(index, el) {
 				if(el.getTableId() == TransactionDataStructure.getTableId()){
 					isDirectAttention=true;
-					isManager=el.isManager();
+					isManager=true;
 					childTableName=el.getTableName();
 					childTableId=el.getTableId();
+					sourceSTR=el.getTableName();
+					pathSTR=el.getTableName();
 				}
 			});
 			if(!isDirectAttention){
@@ -979,14 +1123,26 @@ var TransactionDataStructure={
 						parentTableId=result.getTableId();
 						childTableName=el.getTableName();
 						childTableId=el.getTableId();
+
+						sourceSTR=result.getTableName();
+						// pathSTR=el.getTableName()+" << "+el.entrance(TransactionDataStructure.getTableId()).getTableName();
+						pathSTR=el.getTableName()+" <span class=\"glyphicon glyphicon-arrow-left\"></span> "+el.entrance(TransactionDataStructure.getTableId()).getTableName();
 					}
 				});
 			}
 		})();
 
-		TransactionDataStructure.isDirectAttention=function(){
-			return isDirectAttention;
+		TransactionDataStructure.sourceSTR=function(){
+			return sourceSTR;
 		}
+
+		TransactionDataStructure.pathSTR=function(){
+			return pathSTR;
+		}
+
+		// TransactionDataStructure.isDirectAttention=function(){
+		// 	return isDirectAttention;
+		// }
 
 		TransactionDataStructure.isManager=function(){
 			return isManager;
@@ -1013,987 +1169,78 @@ var TransactionDataStructure={
 }
 
 
-minclude("DateItem");
-minclude("TransactionItem");
-minclude("TransactionItemContainer");
-minclude("Div");
+
 /**
- * 每一个Daylog都有一个DayFlag，是它的唯一标识
- * 
- * 它维护两个池，一个是TransactionItem池，一个是TransacctionItemContainer池，
- * TransactionItem触发onChange的时候，它把TransactionItem从原 TransacctionItemContainer中移除，然后根据其time，看是否已存在time一样
- * 的TransacctionItemContainer，存在则add给它，不存在则创建一个新的TransacctionItemContainer，并add给它
- * 
- * 它持有当天的所有TransactionItem，并相应他们的on……事件
- * 
- * Daylog(DayFlag)
- * 		show()	//show和hide并不会影响它的可见性，如果它是不可见的，那么你调用show方法它也不会出现
- * 		hide()
- *
- * 		addTransaction(TransactionDataStructure)	//
- * 		getDayFlag()	//获取它的唯一标识
- * 		
- * 		setVisible(boolean)	//设置其可见性
- * 		isVisible()			//你可以通过这个函数获取到它的可见性
- * 		isUiEmpty()			//用来判断目前该daylog的transaction列表“看起来”是否是空的，也就是说进过filt后它没有东西可以显示，那么也会判定为是empty
- * 		
- * 		filtByContent(string)			//你可以告诉它只显示content包含某个字符串的transaction
- * 		filtByTableId(tableId)			//只显示指定日程的transaction
- * 		filtByTableAnotherName(tableAnotherName)	//只显示指定日程的transaction
- * 		clearFilt()						//移除filt限制
- * 		
- * 		onCreate(CALL_BACK(tableId,content,time))		//当用户创建transaction的时候，你可以做一些事情，返回Deferred对象，包含TransacitonDataStructure对象
- * 		onDelete(CALL_BACK(transactionId))				//当用户删除transaction的时候，你可以做一些事情，返回Deferred对象
- * 		onChange(CALL_BACK(transactionId,content,time))	//当用户修改transaction的时候，你可以做一些事情，返回Deferred对象
+ * InputController(input,maxLength)
+ * 		onChange(CALL_BACK())
+ * 		verify()	验证输入框中的内容是否符合长度要求.......，符合返回true，不符合返回false
+ * 		setContent()	设置输入框内容
+ * 		getContent()	
+ * 		getRemainLength()	获取输入框合法输入内容所剩长度
+ * 		empty()		清空输入框内容
  */
-var Daylog={
-	creatNew:function(DAY_FLAG){
-		var Daylog={};
-		
-		var div=Div.creatNew();
-		var dateScope=Div.creatNew();
-		var transactionScope=Div.creatNew();
-		var isVisible=true;
-		var dayFlag=Number(DAY_FLAG);
-		var dateItem=DateItem.creatNew(dayFlag);
-		var transactionItemContainerAry=[];
-		var transactionItemAry=[];
-		var e_createTransaction=function(tableId,content,time){return $.Deferred();};	
-		var e_deleteTransaction=function(transactionId){return $.Deferred();};
-		var e_changeTransaction=function(transactionId,content,time){return $.Deferred();};
+var InputController={
+	creatNew:function(INPUT,MAX_LENGTH){
+		var InputController={};
+
+		var input=INPUT;
+		var CONTENT_LENGTH_MAX=MAX_LENGTH;
+		var CONTENT_LENGTH_MIN=1;
+		var e_change=function(){};
 		(function(){
-			dateScope.appendTo(div.ui);
-			transactionScope.appendTo(div.ui);
-			dateItem.onCreate(function(TABLE_ID,CONTENT,TIME){
-				var def=e_createTransaction(TABLE_ID,CONTENT,TIME);
-				def.done(function(TRANSACTION_DATA_STRUCTURE){
-					addTransaction(TRANSACTION_DATA_STRUCTURE);
-				});
-				return def;
-			});
-			dateItem.show().appendTo(dateScope.ui);
-		})();
-
-		Daylog.setVisible=function(BOOLEAN){
-			isVisible=BOOLEAN;
-			if(!isVisible){
-				hide();
-			}
-		}
-
-		Daylog.isVisible=function(){
-			return isVisible;
-		}
-
-		Daylog.isUiEmpty=function(){
-			var isUiEmpty=true;
-			$.each(transactionItemAry,function(index, el) {
-				if(el.isVisible()){
-					isUiEmpty=false;
-				}
-			});
-			return isUiEmpty;
-		}
-
-		Daylog.show=function(){
-			if(isVisible){
-				show();
-			}
-			return div.ui;
-		}
-
-		function show(){
-			div.removeClass('hide');
-		}
-
-		Daylog.hide=function(){
-			hide();
-		}	
-
-		function hide(){
-			div.addClass('hide');
-		}
-
-		Daylog.getDayFlag=function(){
-			return dayFlag;
-		}
-
-		Daylog.addTransaction=function(TRANSACTION_DATA_STRUCTURE){
-			addTransaction(TRANSACTION_DATA_STRUCTURE);
-		}
-
-		function addTransaction(TRANSACTION_DATA_STRUCTURE){
-			var transactionItem=TransactionItem.creatNew(TRANSACTION_DATA_STRUCTURE);
-			transactionItem.onChange(function(CONTENT,TIME){
-				var def=e_changeTransaction(transactionItem.getTransactionId(),CONTENT,TIME);
-				def.done(function(){
-					if(TIME != transactionItem.getTransactionTime()){
-						transactionItem.hide();
-						removeItemFromContainer(transactionItem.getTransactionId());
-						addItemToContainer(transactionItem,TIME);
-					}
-					else{
-						setTimeout(function(){
-							refreshContainerUI();
-						},200);
-					}
-				});
-				return def;
-			});
-			transactionItem.onDelete(function(){
-				var def=e_deleteTransaction(transactionItem.getTransactionId());
-				def.done(function(){
-					transactionItem.setVisible(false);
-					removeItemFromContainer(transactionItem.getTransactionId());
-					removeItemFromTransactionAry(transactionItem.getTransactionId());
-				});
-				return def;
-			});
-			transactionItemAry.push(transactionItem);
-			addItemToContainer(transactionItem,transactionItem.getTransactionTime());
-		}
-
-		function removeItemFromTransactionAry(ID){
-			transactionItemAry=$.grep(transactionItemAry,function(value,index){
-				if(value.getTransactionId()==ID){
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-		}
-
-		function removeItemFromContainer(TRANSACTION_ID){
-			$.each(transactionItemContainerAry,function(index, el) {
-				el.removeTransactionItem(TRANSACTION_ID);
-			});
-		}
-
-		function refreshContainerUI(){
-			$.each(transactionItemContainerAry,function(index, el) {
-				el.refreshUI();
-			});
-		}
-
-		//这个函数有待优化
-		function addItemToContainer(TRANSACTION_ITEM,TIME){
-			var isExist=false;
-			$.each(transactionItemContainerAry,function(index, el) {
-				if(el.getTime() == TIME){
-					el.addTransactionItem(TRANSACTION_ITEM);
-					isExist=true;
-				}
-			});
-			if(!isExist){
-				var transactionItemContainer=TransactionItemContainer.creatNew(TIME);
-				transactionItemContainer.addTransactionItem(TRANSACTION_ITEM);
-				transactionItemContainerAry.push(transactionItemContainer);
-				sortContainer();
-				$.each(transactionItemContainerAry,function(index, el) {
-					el.show().appendTo(transactionScope.ui);
-				});
-			}
-		}
-
-		function sortContainer(){
-			transactionItemContainerAry.sort(function(valueA,valueB){
-				if(valueA.getTime() <= valueB.getTime()){
-					return -1;
-				}
-				else{
-					return 1;
-				}
-			});
-		}
-
-		function isTransactionItemContainerExist(TIME){
-			var isExist=false;
-			$.each(transactionItemContainerAry,function(index, el) {
-				if(el.getTime() == TIME){
-					isExist=true;
-				}
-			});
-			return isExist;
-		}
-
-		Daylog.onCreate=function(CALL_BACK){
-			e_createTransaction=CALL_BACK;
-		}
-
-		Daylog.onDelete=function(CALL_BACK){
-			e_deleteTransaction=CALL_BACK;
-		}
-
-		Daylog.onChange=function(CALL_BACK){
-			e_changeTransaction=CALL_BACK;
-		}
-
-		Daylog.filtByContent=function(CONTENT){
-			$.each(transactionItemAry,function(index, el) {
-				if(el.getTransactionContent().indexOf(CONTENT) > 0){
-					el.setVisible(true);
-					el.show();
-				}
-			});
-		}
-
-		Daylog.filtByTableId=function(TABLE_ID_ARY){
-
-		}
-
-		Daylog.filtByTableName=function(){
-
-		}
-
-		Daylog.clearFilt=function(){
-
-		}
-
-
-		return Daylog;
-	}
-}
-
-
-
-minclude("Div");
-
-var LoaderPiano={
-	creatNew:function(){
-		var LoaderPiano=Div.creatNew();
-
-		var div1=Div.creatNew();
-		var div2=Div.creatNew();
-		var div3=Div.creatNew();
-
-		LoaderPiano.addClass("cssload-piano hide");
-		div1.addClass("cssload-rect1");
-		div2.addClass("cssload-rect2");
-		div3.addClass("cssload-rect3");
-		div1.appendTo(LoaderPiano.ui);
-		div2.appendTo(LoaderPiano.ui);
-		div3.appendTo(LoaderPiano.ui);
-
-		LoaderPiano.hide=function(){
-			LoaderPiano.addClass('hide');
-		}
-
-		LoaderPiano.show=function(){
-			LoaderPiano.removeClass('hide');
-		}
-
-		return LoaderPiano;
-	}
-}
-
-minclude("MDate");
-minclude("Div");
-minclude("Button");
-// minclude("CreateTransactionModal");
-/**
- * 有两种显示模式，一种是显示年月日，一种是星期和日期
- * 它会根据日期自动调整自己的样式（也就是显示“今天”）
- * 
- * DateItem(dayFlag)
- * 		show()
- * 		hide()
- * 		onCreate(CALL_BACK(tableId,content,time))	//当transaction被创建的时候，你可以做一些事情，返回Deferred对象
- * 		changeUiToYMD()
- * 		changeUiToDD()
- */
-var DateItem={
-	creatNew:function(DAY_FLAG){
-		var DateItem={};
-
-		var dayFlag=DAY_FLAG;
-		var theMDate=MDate.creatNew(DAY_FLAG);
-		var scope=Div.creatNew();
-		var dateBtn=Button.creatNew();
-		var e_create=function(TABLE_ID,CONTENT,TIME){return $.Deferred();};
-		var e_modalClose=function(){};
-		(function(){
-			initDateBtn();
-			createTransactionModal.bindModal(dateBtn.ui);
-			dateBtn.onClickListener(function(){
-				createTransactionModal.onCreate(function(TABLE_ID,CONTENT,TIME){
-					var def=e_create(TABLE_ID,CONTENT,TIME);
-					def.done(function(){
-						createTransactionModal.hide();
-					});
-					return def;
-				});
-				createTransactionModal.initBeforeShow(dayFlag);
+			input.bind("input propertychange",function(){
+				e_change();
 			});
 		})();
 
-		function initDateBtn(){
-			dateBtn.addClass("btn text-center col-xs-12");
-			dateBtn.appendTo(scope.ui);
-			if(isToday()){
-				dateBtn.addClass("btn-primary");
+		InputController.getRemainLength=function(){
+			return getRemainLength();
+		}
+
+		function getRemainLength(){
+			return CONTENT_LENGTH_MAX-getLength();
+		}
+
+		InputController.verify=function(){
+			return thisVerify();
+		}
+
+		function thisVerify(){
+			if(CONTENT_LENGTH_MIN<=getLength() && getLength()<=CONTENT_LENGTH_MAX){
+				return true;
 			}
 			else{
-				dateBtn.addClass("btn-activity-main-dateBtn");
+				return false;
 			}
-			changeUiToDD();
 		}
 
-		function isToday(){
-			var todayFlag=MDate.creatNew(new Date()).getDayFlag();
-			return dayFlag == todayFlag;
+		function getLength(){
+			return Number(getContent().length);
 		}
 
-		DateItem.onCreate=function(CALL_BACK){
-			e_create=CALL_BACK;
+		InputController.getContent=function(){
+			return getContent();
 		}
 
-		DateItem.changeUiToDD=function(){
-			changeUiToDD();
+		function getContent(){
+			return input.val();
 		}
 
-		function changeUiToDD(){
-			dateBtn.html(theMDate.getChineseDay()+"&nbsp;&nbsp;&nbsp;"+theMDate.getDate());
-		}
-
-		DateItem.changeUiToYMD=function(){
-			changeUiToYMD();
-		}
-
-		function changeUiToYMD(){
-			dateBtn.html(theMDate.getFullYear()+"年"+theMDate.getDate()+"月"+theMDate.getDay()+"日");
-		}
-
-		DateItem.show=function(){
-			show();
-			return scope.ui;
-		}
-
-		function show(){
-			scope.removeClass('hide');
-		}
-
-		DateItem.hide=function(){
-			hide();
-		}
-
-		function hide(){
-			scope.addClass('hide');
-		}
-
-		DateItem.onModalClose=function(CALL_BACK){
-			e_modalClose=CALL_BACK;
-		}
-		
-
-		return DateItem;
-	}
-}
-
-
-minclude("PopoverButton");
-minclude("TextTranslator");
-minclude("Div");
-minclude("Button");
-/**
- *	对transaction的show操作并不会改变它的可见性，
- * 
- * TransactionItem(TransactionDataStructure)
- * 		show()
- * 		hide()
- *
- * 		getTransactionId()
- * 		getTransactionTime()
- * 		getTransactionContent()
- * 		getTransactionTableId()
- * 		
- * 		isDirectAttention()
- * 		getChildTableName()
- * 		getChildTableId()
- * 		getParentTableName()
- * 		getParentTableId()
- * 		
- * 		setVisible(boolean)	//告诉它，它是否应该可见
- * 		isVisible()			//你可以通过这个方法得知它的可见性
- * 		
- * 		onChange(CALL_BACK(Content,Time))	//当transaction变化时，你可以做一些事情，返回Deferred对象
- * 		onDelete(CALL_BACK())					//当transaction被删除时，你可以做一些事情，返回Deferred对象
- */		
- 
-var TransactionItem={
-	creatNew:function(TRANSACTION_DATA_STRUCTURE){
-		var TransactionItem={};
-
-		var transaction=TRANSACTION_DATA_STRUCTURE;
-		var isVisible=true;
-		var textTranslator=TextTranslator.creatNew();
-		var div=Div.creatNew();
-		var btn=null;
-		var e_change=function(content,time){return $.Deferred();};
-		var e_delete=function(){return $.Deferred();};
-		(function(){
-			btn=PopoverButton.creatNew("hover",popverHtml(),popverTitle(),popverContent());
-			btn.appendTo(div.ui);
-			div.addClass('clear-fix');
-
-			if(transaction.isManager()){
-				changeTransactionModal.bindModal(btn.ui);
-				btn.onClickListener(function(){
-					changeTransactionModal.onChange(function(CONTENT,TIME){
-						var def=e_change(CONTENT,TIME);
-						def.done(function(){
-							transaction.setContent(CONTENT);
-							transaction.setTime(TIME);
-							changeTransactionModal.hide();
-							btn.changeHtml(popverHtml());
-							btn.changeContent(popverContent());
-						});
-						return def;
-					});
-					changeTransactionModal.onDelete(function(){
-						var def=e_delete();
-						def.done(function(){
-							changeTransactionModal.hide();
-						});
-						return def;
-					});
-					changeTransactionModal.initBeforeShow(transaction.getTime(),transaction.getContent(),transaction.getChildTableName());
-				});
-			}
-			else{
-				btn.onClickListener(function(){
-					btn.addClass("wobble animated");
-				});
-				btn.ui.on("animationend",function(){
-					btn.removeClass("wobble animated");
-				});
-			}
-		})();
-
-		function popverHtml(){
-			var content="";
-			var transactionContent=transaction.getContent();
-			var reg=/(.)+/;
-			var stringAry=transactionContent.match(reg);
-			if(stringAry != null){
-				content=stringAry[0];
-			}
-			return content;
-		}
-
-		function popverContent(){
-			var time=new Date(transaction.getTime());
-			var content="<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+textTranslator.encodeText(transaction.getContent());
-			return content;
-		}
-
-		function popverTitle(){
-			var title="";
-			if(transaction.isDirectAttention()){
-				title="<strong>"+transaction.getChildTableName()+"</strong>";
-			}
-			else{
-				title="<strong>"+transaction.getChildTableName()+" << "+transaction.getParentTableName()+"</strong>";
-			}
-			return title;
-		}
-
-		TransactionItem.onChange=function(CALL_BACK){
+		InputController.onChange=function(CALL_BACK){
 			e_change=CALL_BACK;
 		}
 
-		TransactionItem.onDelete=function(CALL_BACK){
-			e_delete=CALL_BACK;
+		InputController.setContent=function(CONTENT){
+			input.val(CONTENT);
 		}
 
-		TransactionItem.setVisible=function(BOOLEAN){
-			isVisible=BOOLEAN;
-			if(!isVisible){
-				hideItem();
-			}
+		InputController.empty=function(){
+			input.val("");
 		}
 
-		TransactionItem.isVisible=function(){
-			return isVisible;
-		}
-
-		TransactionItem.show=function(){
-			if(isVisible){
-				showItem();
-			}
-			return div.ui;
-		}
-
-		function showItem(){
-			div.removeClass('hide');
-		}
-
-		TransactionItem.hide=function(){
-			hideItem();
-		}
-
-		function hideItem(){
-			div.addClass("hide");
-		}
-
-		TransactionItem.getTransactionId=function(){
-			return transaction.getTransactionId();
-		}
-
-		TransactionItem.getTransactionTime=function(){
-			return transaction.getTime();
-		}
-
-		TransactionItem.getTransactionContent=function(){
-			return transaction.getContent();
-		}
-
-		TransactionItem.getTransactionTableId=function(){
-			return transaction.getTableId();
-		}
-
-		TransactionItem.isDirectAttention=function(){
-			return transaction.isDirectAttention();
-		}
-
-		TransactionItem.getChildTableId=function(){
-			return transaction.getChildTableId();
-		}
-
-		TransactionItem.getChildTableName=function(){
-			return transaction.getChildTableName();
-		}
-
-		TransactionItem.getParentTableId=function(){
-			return transaction.getParentTableId();
-		}
-
-		TransactionItem.getParentTableName=function(){
-			return transaction.getParentTableName();
-		}
-
-		return TransactionItem;
+		return InputController;
 	}
 }
-
-
-minclude("Div");
-minclude("TimeSameTransactionItem");
-/**
- *	它会根据自己所持有的transactionItem的可见性来改变自己的样子（也就是在transactionItem和timeSameTransaction之间切换，甚至在所有Item不可见的情况下隐藏自己）
- * 
- * TransactionItemContainer(time)
- * 		show()	//它会变成可见的，并返回给你一个元素节点
- * 		hide()
- * 		getTime()
- * 		addTransactionItem(TransactionItem)
- * 		removeTransactionItem(transactionId)
- */
-var TransactionItemContainer={
-	creatNew:function(TIME){
-		var TransactionItemContainer={};
-
-		var div=Div.creatNew();
-		var transactionItemAry=[];
-		var time=TIME;
-		var timeSameTransactionItem=TimeSameTransactionItem.creatNew(time);
-
-		(function(){
-			timeSameTransactionItem.show().appendTo(div.ui);
-		})();
-
-		TransactionItemContainer.show=function(){
-			show();
-			return div.ui;
-		}
-
-		function show(){
-			div.removeClass('hide');
-		}
-
-		TransactionItemContainer.hide=function(){
-			hide();
-		}
-
-		function hide(){
-			div.addClass('hide');
-		}
-
-		TransactionItemContainer.getTime=function(){
-			return time;
-		}
-
-		TransactionItemContainer.addTransactionItem=function(TRANSACTION_ITEM){
-			timeSameTransactionItem.addItem(TRANSACTION_ITEM);
-			transactionItemAry.push(TRANSACTION_ITEM);
-			if(transactionItemAry.length == 1){
-				transactionItemAry[0].show().appendTo(div.ui);
-			}
-			if(transactionItemAry.length > 1){
-				transactionItemAry[0].hide();
-			}
-		}
-
-		TransactionItemContainer.removeTransactionItem=function(TRANSACTION_ITEM_ID){
-			timeSameTransactionItem.removeItem(TRANSACTION_ITEM_ID);
-			transactionItemAry=$.grep(transactionItemAry,function(value,index){
-				if(value.getTransactionId() == TRANSACTION_ITEM_ID){
-					value.hide();
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-			if(transactionItemAry.length == 1){
-				transactionItemAry[0].show().appendTo(div.ui);
-			}
-		}
-
-		TransactionItemContainer.refreshUI=function(){
-			timeSameTransactionItem.refreshUI();
-		}
-
-
-		return TransactionItemContainer;
-	}
-}
-
-
-minclude("Ui");
-
-var Div={
-	creatNew:function(){
-		var Div=Ui.creatNew($("<div></div>"));
-
-		return Div;
-	}	
-}
-
-var HorizontalSlipDiv={
-	creatNew:function(){
-		var HorizontalSlipDiv=Div.creatNew();
-
-		HorizontalSlipDiv.addClass("animated bounceInRight hide");
-
-		HorizontalSlipDiv.show=function(){
-			HorizontalSlipDiv.removeClass('hide');
-		}
-
-		HorizontalSlipDiv.slipRemove=function(){
-			HorizontalSlipDiv.addClass("bounceOutLeft");
-			HorizontalSlipDiv.one('animationend',function(){
-				HorizontalSlipDiv.remove();
-			});
-		}
-
-		return HorizontalSlipDiv;
-	}
-}
-
-var FlipYDiv={
-	creatNew:function(){
-		var FlipYDiv=Div.creatNew();
-
-		FlipYDiv.addClass("animated flipInY hide");
-
-		FlipYDiv.show=function(){
-			FlipYDiv.removeClass('hide');
-		}
-
-		FlipYDiv.flipRemove=function(){
-			FlipYDiv.addClass("flipOutY");
-			FlipYDiv.one('animationend',function(){
-				FlipYDiv.remove();
-			});
-		}
-
-		return FlipYDiv;
-	}
-}
-
-var FadeDiv={
-	creatNew:function(){
-		var FadeDiv=Div.creatNew();
-
-		FadeDiv.addClass("fadeIn animated correction-animated-css hide");
-		
-		FadeDiv.show=function(){
-			FadeDiv.removeClass('hide');
-		}
-
-		FadeDiv.fadeRemove=function(){
-			FadeDiv.addClass("fadeOut");
-			FadeDiv.one("animationend",function(){
-				FadeDiv.remove();
-			});
-		}
-
-		return FadeDiv;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var MDate={
-	creatNew:function(DATE){
-		var MDate=new Date(DATE);
-
-		MDate.getTimeSeconds=function(){
-			return secondsTime(MDate);
-		}
-
-		//该函数已弃用
-		MDate.getTheDayBeginingTimeSeconds=function(){
-			return secondsTime(MDate.getTheDayBeginingTime());
-		}
-
-		MDate.getTheDayBeginingTime=function(){
-			var newDate=new Date(MDate.getTime());
-			newDate.setHours(0);
-			newDate.setMinutes(0);
-			newDate.setSeconds(0);
-			newDate.setMilliseconds(0);
-			return newDate;
-		}
-
-		MDate.getChineseDay=function(){
-			return turnToChineseDay(MDate.getDay());
-		}
-
-		MDate.getDayFlag=function(){
-			return MDate.getTheDayBeginingTime().getTime();
-		}
-
-		function secondsTime(D){
-			return Math.floor(D.getTime()/1000);
-		}
-
-		function turnToChineseDay(DAY){
-			switch(DAY){
-				case 1:
-					return "星期一";
-
-				case 2:
-					return "星期二";
-
-				case 3:
-					return "星期三";
-
-				case 4:
-					return "星期四";
-
-				case 5:
-					return "星期五";
-
-				case 6:
-					return "星期六";
-
-				case 0:
-					return "星期天";
-			}
-		}
-
-		return MDate;
-	}
-}
-
-
-minclude("Ui");
-
-var Button={
-	creatNew:function(){
-		var Button=Ui.creatNew($("<button></button>"));
-
-		Button.onClickListener=function(CALL_BACK){
-			Button.ui.bind("click",function(ev){
-				CALL_BACK($(this),ev);
-			});
-		}
-
-		return Button;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Ui={
-	creatNew:function(UI){
-		var Ui={};
-
-		Ui.ui=UI;
-
-		Ui.addClass=function(PROP){
-			Ui.ui.addClass(PROP);
-		}
-
-		Ui.removeClass=function(PROP){
-			Ui.ui.removeClass(PROP);
-		}
-
-		Ui.html=function(HTML){
-			Ui.ui.html(HTML);
-		}
-		
-		Ui.addHtml=function(HTML){
-			var html=Ui.ui.html();
-			Ui.ui.html(html+HTML)
-		}
-
-		Ui.appendTo=function(SCOPE){
-			Ui.ui.appendTo(SCOPE);
-		}
-
-		Ui.remove=function(){
-			Ui.ui.remove();
-		}
-
-		Ui.setAttribute=function(NAME,VALUE){
-			Ui.ui.attr(NAME,VALUE);
-		}
-		
-		Ui.getAttribute=function(NAME){
-			return Ui.ui.attr(NAME);
-		}
-
-		Ui.one=function(ACTION,CALL_BACK){
-			Ui.ui.one(ACTION,CALL_BACK);
-		}
-		
-		Ui.hide=function(){
-			Ui.ui.hide();
-		}
-
-		return Ui;
-	}	
-}
-
-
-minclude("Button");
-
-/**
- * 这个按钮可以显示弹出框
- *
- * 它接收触发器选择，参数内容和bootstrap所要求的一致
- * 接收标题（title）
- * 接收内容（content）
- * 
- * PopoverButton(trigger,html,title,content)
- * 		changeTitle(title)
- * 		changeContent(content)
- * 		changeHtml(html)
- * 		changePosition(Position)	//指的是popver弹出的位置，上下左右
- * 		showPopover()
- * 		hidePopover()
- * 		destroyPopover()
- */
-
-var PopoverButton={
-	creatNew:function(TRIGGER,HTML,TITLE,CONTENT){
-		var PopoverButton=Button.creatNew();
-
-		(function(){
-			PopoverButton.addClass("btn btn-default text-center col-xs-12 ");
-			PopoverButton.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
-			PopoverButton.setAttribute("data-toggle","popover");
-			PopoverButton.setAttribute("data-container","body");
-			PopoverButton.html(HTML);
-			PopoverButton.setAttribute("data-trigger",TRIGGER);
-			PopoverButton.setAttribute("data-original-title",TITLE);
-			PopoverButton.setAttribute("data-content",CONTENT);
-			PopoverButton.setAttribute("data-html","true");
-			PopoverButton.ui.popover();
-		})();
-
-		PopoverButton.changeHtml=function(Html){
-			PopoverButton.html(Html);
-		}
-
-		PopoverButton.changeTitle=function(Title){
-			PopoverButton.setAttribute("data-original-title",Title);
-		}
-
-		PopoverButton.changeContent=function(CONTENT){
-			PopoverButton.setAttribute("data-content",CONTENT);
-		}
-
-		PopoverButton.changePosition=function(Position){
-			PopoverButton.setAttribute("data-placement",Position);
-		}
-
-		PopoverButton.destroyPopover=function(){
-			destroyPop();
-		}
-
-		function destroyPop(){
-			PopoverButton.ui.popover('destroy');
-		}
-
-		PopoverButton.hidePopover=function(){
-			hidePop();
-		}
-
-		function hidePop(){
-			PopoverButton.ui.popover('hide');
-		}
-
-		PopoverButton.showPopover=function(){
-			showPop();
-		}
-
-		function showPop(){
-			PopoverButton.ui.popover('show');
-		}
-
-		return PopoverButton;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 var TextTranslator={
@@ -2105,85 +1352,149 @@ var TextTranslator={
 	}
 }
 
+
+minclude("PopoverButton");
+minclude("TextTranslator");
+minclude("Div");
+/**
+ *	对transaction的show操作并不会改变它的可见性，
+ * 
+ * TransactionItem(TransactionDataStructure)
+ * 		show()
+ * 		hide()
+ *
+ * 		onClick(CALL_BACK())
+ *
+ * 		getTransactionId()
+ * 		getTransactionTime()
+ * 		getTransactionContent()
+ * 		getSource()
+ * 		getPath()
+ */		
+var TransactionItem={
+	creatNew:function(TRANSACTION_DATA_STRUCTURE){
+		var TransactionItem=Div.creatNew();
+
+		var transaction=TRANSACTION_DATA_STRUCTURE;
+		var isVisible=true;
+		var textTranslator=TextTranslator.creatNew();
+		var e_click=function(IS_MANAGER){};
+		(function(){
+			var btn=PopoverButton.creatNew("hover",popverHtml(),popverTitle(),popverContent());
+			btn.onClickListener(function(){
+				e_click();
+			});
+			btn.appendTo(TransactionItem.ui);
+			TransactionItem.addClass('clear-fix');
+		})();
+
+		function popverHtml(){
+			var content="";
+			var transactionContent=transaction.getContent();
+			var reg=/(.)+/;
+			var stringAry=transactionContent.match(reg);
+			if(stringAry != null){
+				content=stringAry[0];
+			}
+			return content;
+		}
+
+		function popverContent(){
+			var time=new Date(transaction.getTime());
+			var content="<strong>"+time.getHours()+":"+time.getMinutes()+"</strong>"+"<br/>"+textTranslator.encodeText(transaction.getContent());
+			return content;
+		}
+
+		function popverTitle(){
+			var title=transaction.sourceSTR();
+			return title;
+		}
+
+		TransactionItem.show=function(){
+			showItem();
+		}
+
+		function showItem(){
+			TransactionItem.removeClass('hide');
+		}
+
+		TransactionItem.hide=function(){
+			hideItem();
+		}
+
+		function hideItem(){
+			TransactionItem.addClass("hide");
+		}
+
+		TransactionItem.getTransactionId=function(){
+			return transaction.getTransactionId();
+		}
+
+		TransactionItem.getTransactionTime=function(){
+			return transaction.getTime();
+		}
+
+		TransactionItem.getTransactionContent=function(){
+			return transaction.getContent();
+		}
+
+		TransactionItem.getPath=function(){
+			return transaction.pathSTR();
+		}
+
+		TransactionItem.getSource=function(){
+			return transaction.sourceSTR();
+		}
+
+		TransactionItem.onClick=function(CALL_BACK){
+			e_click=CALL_BACK;
+		}
+
+		return TransactionItem;
+	}
+}
+
+
 minclude("MDate");
 minclude("Div");
-minclude("Button");
-minclude("TimeSameTransactionModal");
 minclude("PopoverButton");
 minclude("TextTranslator");
 /**
  * 
- * TimeSameTransactionItem(time)
+ * TimeSameTransactionItem(array TransactionItem)
  * 		show()	//它会变成可见的，并返回给你一个元素节点
  * 		hide()
- * 		addItem()
- * 		removeItem()
- * 		refreshUI()
+ * 		onClick(CALL_BACK())
+ * 		getTransactionTime()
  */
 var TimeSameTransactionItem={
-	creatNew:function(TIME,TRANSACTION_ITEM_ARY){
-		var TimeSameTransactionItem={};
+	creatNew:function(TRANSACTION_ITEM_ARY){
+		var TimeSameTransactionItem=Div.creatNew();
 
-		var div=Div.creatNew();
-		var mDate=MDate.creatNew(TIME);
+		var transactionItemAry=TRANSACTION_ITEM_ARY;
+		var mDate;
 		var btn=null;
-		var modal=null;
-		var transactionItemAry=[];
-
+		var e_click=function(){};
 		(function(){
-			btn=PopoverButton.creatNew("hover","","","");
-			modal=TimeSameTransactionModal.creatNew();
-			modal.bindModal(btn.ui);
-			btn.appendTo(div.ui);
+			$.each(transactionItemAry,function(index, el) {
+				mDate=MDate.creatNew(el.getTransactionTime());
+			});
+
+			btn=PopoverButton.creatNew("hover",popverHtml(),"",popverContent());
+			btn.appendTo(TimeSameTransactionItem.ui);
 			btn.onClickListener(function(){
-				modal.initBeforeShow(transactionItemAry);
+				e_click();
 			});
 		})();
 
-		TimeSameTransactionItem.addItem=function(TRANSACTION_ITEM){
-			transactionItemAry.push(TRANSACTION_ITEM);
-			refreshPopver();
-		}
-
-		TimeSameTransactionItem.removeItem=function(TRANSACTION_ITEM_ID){
-			transactionItemAry=$.grep(transactionItemAry,function(val,index){
-				if(val.getTransactionId() == TRANSACTION_ITEM_ID){
-					return false;
-				}
-				else{
-					return true;
-				}
-			});
-			refreshPopver();
-		}
-
-		TimeSameTransactionItem.refreshUI=function(){
-			refreshPopver();
-		}
-
-		function refreshPopver(){
-			if(transactionItemAry.length < 2){
-				modal.hide();
-				hide();
-			}
-			else{
-				btn.changeHtml(popverHtml(transactionItemAry));
-				btn.changeContent(popverContent(transactionItemAry));
-				show();
-			}
-		}
-
-		function popverContent(TRANSACTION_ITEM_ARY){
+		function popverContent(){
 			var textTranslator=TextTranslator.creatNew();
 			var content="";
-			$.each(TRANSACTION_ITEM_ARY,function(index, el) {
-				content+="</br>";
-				if(el.isDirectAttention()){
-					content+="<strong>"+el.getChildTableName()+"</strong></br>";
+			$.each(transactionItemAry,function(index, el) {
+				if(index!=0){
+					content+="</br>";
 				}
-				else{
-					content+="<strong>"+el.getChildTableName()+" << "+el.getParentTableName()+"</strong></br>";
-				}
+				content+="<strong>"+el.getSource()+"</strong></br>";
 				if(el.getTransactionContent().length > 100){
 					content+=textTranslator.encodeText(el.getTransactionContent()).substring(0,101)+"……";
 				}
@@ -2192,21 +1503,19 @@ var TimeSameTransactionItem={
 				}
 				content+="</br>";
 			});
-			content+="</br>";
 			return content;
 		}
 
-		function popverHtml(TRANSACTION_ITEM_ARY){
-			return mDate.getHours()+":"+mDate.getMinutes()+"&nbsp&nbsp"+"<span class=badge>"+TRANSACTION_ITEM_ARY.length+"</span>";
+		function popverHtml(){
+			return mDate.getHours()+":"+mDate.getMinutes()+"&nbsp&nbsp"+"<span class=badge>"+transactionItemAry.length+"</span>";
 		}
 
 		TimeSameTransactionItem.show=function(){
 			show();
-			return div.ui;
 		}
 
 		function show(){
-			div.removeClass('hide');
+			TimeSameTransactionItem.removeClass('hide');
 		}
 
 		TimeSameTransactionItem.hide=function(){
@@ -2214,7 +1523,15 @@ var TimeSameTransactionItem={
 		}
 
 		function hide(){
-			div.addClass('hide');
+			TimeSameTransactionItem.addClass('hide');
+		}
+
+		TimeSameTransactionItem.onClick=function(CALL_BACK){
+			e_click=CALL_BACK;
+		}
+
+		TimeSameTransactionItem.getTransactionTime=function(){
+			return transactionItemAry[0].getTransactionTime();
 		}
 
 		return TimeSameTransactionItem;
@@ -2223,171 +1540,436 @@ var TimeSameTransactionItem={
 
 
 minclude("Div");
-/**
- * TimeSameTransactionModal()
- * 		bindModal(Button)
- * 		initBeforeShow(TransactionItemAry)	//接收TransactionItem对象数组
- * 		show()
- * 		hide()
- */
 
-var TimeSameTransactionModal={
+var LoaderPiano={
 	creatNew:function(){
-		var TimeSameTransactionModal={};
+		var LoaderPiano=Div.creatNew();
 
-		var modal=$("#time_same_transaction_modal");
-		var scope=$("#time_same_transaction_scope");
+		var div1=Div.creatNew();
+		var div2=Div.creatNew();
+		var div3=Div.creatNew();
 
-		TimeSameTransactionModal.initBeforeShow=function(TRANSACTION_ITEM_ARY){
-			var arae=Div.creatNew();
-			arae.addClass('col-xs-offset-1 col-xs-10');
-			arae.appendTo(scope);
-			$.each(TRANSACTION_ITEM_ARY,function(index, el) {
-				var div1=Div.creatNew();
-				div1.setAttribute("style","height:10px");
-				div1.appendTo(arae.ui);
-				el.show().appendTo(arae.ui);
-				var div2=Div.creatNew();
-				div2.setAttribute("style","height:10px");
-				div2.appendTo(arae.ui);
-			});
-			modal.on("hidden.bs.modal",function(){
-				arae.addClass('hide');
-			});
+		LoaderPiano.addClass("cssload-piano hide");
+		div1.addClass("cssload-rect1");
+		div2.addClass("cssload-rect2");
+		div3.addClass("cssload-rect3");
+		div1.appendTo(LoaderPiano.ui);
+		div2.appendTo(LoaderPiano.ui);
+		div3.appendTo(LoaderPiano.ui);
+
+		LoaderPiano.hide=function(){
+			LoaderPiano.addClass('hide');
 		}
 
-		TimeSameTransactionModal.bindModal=function(BUTTON){
-			BUTTON.attr("data-toggle","modal");
-			BUTTON.attr("data-target","#time_same_transaction_modal");
+		LoaderPiano.show=function(){
+			LoaderPiano.removeClass('hide');
 		}
 
-		TimeSameTransactionModal.show=function(){
-			modal.modal('show');
-		}
-
-		TimeSameTransactionModal.hide=function(){
-			// TODO 
-			// 解决modal被意外关闭的问题
-			// modal.modal('hide');
-		}
-
-		return TimeSameTransactionModal;
+		return LoaderPiano;
 	}
 }
 
-
+minclude("DateItem");
+minclude("Div");
 /**
- * InputController(input,maxLength)
- * 		onChange(CALL_BACK())
- * 		verify()	验证输入框中的内容是否符合长度要求.......，符合返回true，不符合返回false
- * 		setContent()	设置输入框内容
- * 		getContent()	
- * 		getRemainLength()	获取输入框合法输入内容所剩长度
- * 		empty()		清空输入框内容
+ * 每一个Daylog都有一个DayFlag，是它的唯一标识
+ * 
+ * 它维护两个池，一个是TransactionItem池，一个是TransacctionItemContainer池，
+ * TransactionItem触发onChange的时候，它把TransactionItem从原 TransacctionItemContainer中移除，然后根据其time，看是否已存在time一样
+ * 的TransacctionItemContainer，存在则add给它，不存在则创建一个新的TransacctionItemContainer，并add给它
+ * 
+ * 它持有当天的所有TransactionItem，并相应他们的on……事件
+ * 
+ * Daylog(DayFlag)
+ * 		addTransaction(TransactionItem transactionItem)	//
+ * 		getDayFlag()	//获取它的唯一标识
+ * 		
  */
-var InputController={
-	creatNew:function(INPUT,MAX_LENGTH){
-		var InputController={};
-
-		var input=INPUT;
-		var CONTENT_LENGTH_MAX=MAX_LENGTH;
-		var CONTENT_LENGTH_MIN=1;
-		var e_change=function(CONTENT,REMAIN_LENGTH){};
+var Daylog={
+	creatNew:function(DAY_FLAG){
+		var Daylog=Div.creatNew();
+		
+		// var div=Div.creatNew();
+		var dateScope=Div.creatNew();
+		var transactionScope=Div.creatNew();
+		var isVisible=true;
+		var dayFlag=Number(DAY_FLAG);
+		var dateItem=DateItem.creatNew(dayFlag);
+		var transactionItemAry=[];
 		(function(){
-			input.bind("input propertychange",function(){
-				e_change(getContent(),getRemainLength());
-			});
+			dateScope.appendTo(Daylog.ui);
+			transactionScope.appendTo(Daylog.ui);
+			dateItem.appendTo(dateScope.ui);
 		})();
 
-		InputController.getRemainLength=function(){
-			return getRemainLength();
+		Daylog.getDayFlag=function(){
+			return dayFlag;
 		}
 
-		function getRemainLength(){
-			return CONTENT_LENGTH_MAX-getLength();
+		Daylog.addTransaction=function(TRANSACTION_ITEM){
+			transactionItemAry.push(TRANSACTION_ITEM);
+			sortItem();
+			$.each(transactionItemAry,function(index, el) {
+				el.hide();
+				el.appendTo(transactionScope.ui);
+				el.show();
+			});
 		}
 
-		InputController.verify=function(){
-			return thisVerify();
+		function sortItem(){
+			transactionItemAry.sort(function(valueA,valueB){
+				if(valueA.getTransactionTime() <= valueB.getTransactionTime()){
+					return -1;
+				}
+				else{
+					return 1;
+				}
+			});
 		}
 
-		function thisVerify(){
-			if(CONTENT_LENGTH_MIN<=getLength() && getLength()<=CONTENT_LENGTH_MAX){
-				return true;
+		return Daylog;
+	}
+}
+
+
+var MDate={
+	creatNew:function(DATE){
+		var MDate=new Date(DATE);
+
+		MDate.getTimeSeconds=function(){
+			return secondsTime(MDate);
+		}
+
+		//该函数已弃用
+		MDate.getTheDayBeginingTimeSeconds=function(){
+			return secondsTime(MDate.getTheDayBeginingTime());
+		}
+
+		MDate.getTheDayBeginingTime=function(){
+			var newDate=new Date(MDate.getTime());
+			newDate.setHours(0);
+			newDate.setMinutes(0);
+			newDate.setSeconds(0);
+			newDate.setMilliseconds(0);
+			return newDate;
+		}
+
+		MDate.getChineseDay=function(){
+			return turnToChineseDay(MDate.getDay());
+		}
+
+		MDate.getDayFlag=function(){
+			return MDate.getTheDayBeginingTime().getTime();
+		}
+
+		function secondsTime(D){
+			return Math.floor(D.getTime()/1000);
+		}
+
+		function turnToChineseDay(DAY){
+			switch(DAY){
+				case 1:
+					return "星期一";
+
+				case 2:
+					return "星期二";
+
+				case 3:
+					return "星期三";
+
+				case 4:
+					return "星期四";
+
+				case 5:
+					return "星期五";
+
+				case 6:
+					return "星期六";
+
+				case 0:
+					return "星期天";
+			}
+		}
+
+		return MDate;
+	}
+}
+
+
+minclude("Ui");
+
+var Div={
+	creatNew:function(){
+		var Div=Ui.creatNew($("<div></div>"));
+
+		return Div;
+	}	
+}
+
+
+minclude("MDate");
+minclude("Div");
+minclude("Button");
+// minclude("CreateTransactionModal");
+/**
+ * 有两种显示模式，一种是显示年月日，一种是星期和日期
+ * 它会根据日期自动调整自己的样式（也就是显示"今天"）
+ * 
+ * DateItem(dayFlag)
+ * 		changeUiToYMD()
+ * 		changeUiToDD()
+ */
+var DateItem={
+	creatNew:function(DAY_FLAG){
+		var DateItem=Div.creatNew();
+
+		var dayFlag=DAY_FLAG;
+		var theMDate=MDate.creatNew(DAY_FLAG);
+		var dateBtn=Button.creatNew();
+		(function(){
+			initDateBtn();
+		})();
+
+		function initDateBtn(){
+			dateBtn.addClass("btn text-center col-xs-12 ");
+			dateBtn.appendTo(DateItem.ui);
+			if(isToday()){
+				dateBtn.addClass("btn-primary");
 			}
 			else{
-				return false;
+				dateBtn.addClass("btn-activity-main-dateBtn");
+			}
+			changeUiToYMD();
+		}
+
+		function isToday(){
+			var todayFlag=MDate.creatNew(new Date()).getDayFlag();
+			return dayFlag == todayFlag;
+		}
+
+		DateItem.changeUiToDD=function(){
+			changeUiToDD();
+		}
+
+		function changeUiToDD(){
+			dateBtn.html(theMDate.getChineseDay()+"&nbsp;&nbsp;&nbsp;"+theMDate.getDate());
+		}
+
+		DateItem.changeUiToYMD=function(){
+			changeUiToYMD();
+		}
+
+		function changeUiToYMD(){
+			dateBtn.html(theMDate.getFullYear()+"-"+(theMDate.getMonth()+1)+"-"+theMDate.getDate()+"&nbsp;&nbsp;&nbsp;&nbsp;"+getChineseDay(theMDate.getDay()));
+		}
+
+		function getChineseDay(NUM){
+			switch(NUM){
+				case 1:
+					return "一";
+				case 2:
+					return "二";
+				case 3:
+					return "三";
+				case 4:
+					return "四";
+				case 5:
+					return "五";
+				case 6:
+					return "六";
+				case 0:
+					return "日";
 			}
 		}
 
-		function getLength(){
-			return Number(getContent().length);
-		}
-
-		InputController.getContent=function(){
-			return getContent();
-		}
-
-		function getContent(){
-			return input.val();
-		}
-
-		InputController.onChange=function(CALL_BACK){
-			e_change=CALL_BACK;
-		}
-
-		InputController.setContent=function(CONTENT){
-			input.val(CONTENT);
-		}
-
-		InputController.empty=function(){
-			input.val("");
-		}
-
-		return InputController;
+		return DateItem;
 	}
 }
 
-var BacklogContentInputController={
-	creatNew:function(INPUT){
-		var BacklogContentInputController=InputController.creatNew(INPUT);
-		return BacklogContentInputController;
+
+minclude("Ui");
+
+var Button={
+	creatNew:function(){
+		var Button=Ui.creatNew($("<button></button>"));
+
+		Button.onClickListener=function(CALL_BACK){
+			Button.ui.bind("click",function(ev){
+				CALL_BACK($(this),ev);
+			});
+		}
+
+		return Button;
 	}
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+var Ui={
+	creatNew:function(UI){
+		var Ui={};
+
+		Ui.ui=UI;
+
+		Ui.addClass=function(PROP){
+			Ui.ui.addClass(PROP);
+		}
+
+		Ui.removeClass=function(PROP){
+			Ui.ui.removeClass(PROP);
+		}
+
+		Ui.html=function(HTML){
+			Ui.ui.html(HTML);
+		}
+		
+		Ui.addHtml=function(HTML){
+			var html=Ui.ui.html();
+			Ui.ui.html(html+HTML)
+		}
+
+		Ui.appendTo=function(SCOPE){
+			Ui.ui.appendTo(SCOPE);
+		}
+
+		Ui.remove=function(){
+			Ui.ui.remove();
+		}
+
+		Ui.setAttribute=function(NAME,VALUE){
+			Ui.ui.attr(NAME,VALUE);
+		}
+		
+		Ui.getAttribute=function(NAME){
+			return Ui.ui.attr(NAME);
+		}
+
+		Ui.one=function(ACTION,CALL_BACK){
+			Ui.ui.one(ACTION,CALL_BACK);
+		}
+		
+		Ui.hide=function(){
+			Ui.ui.hide();
+		}
+
+		return Ui;
+	}	
+}
+
+
+minclude("Button");
 
 /**
- * NameInputController()
+ * 这个按钮可以显示弹出框
+ *
+ * 它接收触发器选择，参数内容和bootstrap所要求的一致
+ * 接收标题（title）
+ * 接收内容（content）
+ * 
+ * PopoverButton(trigger,html,title,content)
+ * 		changeTitle(title)
+ * 		changeContent(content)
+ * 		changeHtml(html)
+ * 		changePosition(Position)	//指的是popver弹出的位置，上下左右
+ * 		showPopover()
+ * 		hidePopover()
+ * 		destroyPopover()
  */
-var NameInputController={
-	creatNew:function(INPUT){
-		var NameInputController=InputController.creatNew(INPUT);
 
-		var CONTENT_LENGTH_MAX=12;
-		var CONTENT_LENGTH_MIN=1;
+var PopoverButton={
+	creatNew:function(TRIGGER,HTML,TITLE,CONTENT){
+		var PopoverButton=Button.creatNew();
 
-		NameInputController.verify=function(){
-			return thisVerify();
+		(function(){
+			PopoverButton.addClass("btn btn-default text-center col-xs-12");
+			PopoverButton.setAttribute("style","text-overflow:ellipsis;overflow:hidden");
+			PopoverButton.setAttribute("data-toggle","popover");
+			PopoverButton.setAttribute("data-container","body");
+			PopoverButton.html(HTML);
+			PopoverButton.setAttribute("data-trigger",TRIGGER);
+			PopoverButton.setAttribute("data-original-title",TITLE);
+			PopoverButton.setAttribute("data-content",CONTENT);
+			PopoverButton.setAttribute("data-html","true");
+			PopoverButton.ui.popover();
+		})();
+
+		PopoverButton.changeHtml=function(Html){
+			PopoverButton.html(Html);
 		}
 
-		function thisVerify(){
-			if(CONTENT_LENGTH_MIN<=getLength() && getLength()<=CONTENT_LENGTH_MAX){
-				return true;
-			}
-			else{
-				return false;
-			}
+		PopoverButton.changeTitle=function(Title){
+			PopoverButton.setAttribute("data-original-title",Title);
 		}
 
-		function getLength(){
-			return Number(getContent().length);
+		PopoverButton.changeContent=function(CONTENT){
+			PopoverButton.setAttribute("data-content",CONTENT);
 		}
 
-		function getContent(){
-			return INPUT.val();
+		PopoverButton.changePosition=function(Position){
+			PopoverButton.setAttribute("data-placement",Position);
 		}
 
-		return NameInputController;
+		PopoverButton.destroyPopover=function(){
+			destroyPop();
+		}
+
+		function destroyPop(){
+			PopoverButton.ui.popover('destroy');
+		}
+
+		PopoverButton.hidePopover=function(){
+			hidePop();
+		}
+
+		function hidePop(){
+			PopoverButton.ui.popover('hide');
+		}
+
+		PopoverButton.showPopover=function(){
+			showPop();
+		}
+
+		function showPop(){
+			PopoverButton.ui.popover('show');
+		}
+
+		return PopoverButton;
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

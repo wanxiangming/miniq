@@ -6,14 +6,22 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="language" content="en" />
     <meta property="qc:admins" content="1422662147651611631457" />
+
+    <!-- jquery -->
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>jquery/jquery-2.1.4.js"></script>
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>jquery/jquery.json-2.4.js"></script>
+
+    <!-- bootstrap -->
     <script language="javascript" type="text/javascript" src="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/bootstrap-3.3.5-dist/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101305771" data-redirecturi="http://www.miniq.site/" charset="utf-8"></script>
-	<script type="text/javascript" src="<?php echo JS_URL; ?>activity/login/Login.js"></script>
-    
     <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>bootstrap/bootstrap-3.3.5-dist/css/bootstrap.min.css"/>
-    <link type="text/css" rel="stylesheet" href="<?php echo FRONT_OPEN_SOURCE_URL; ?>animate/animate.min.css"/>
+
+    <!-- QQ互联 -->
+    <script type="text/javascript" src="http://qzonestyle.gtimg.cn/qzone/openapi/qc_loader.js" data-appid="101305771" data-redirecturi="http://www.miniq.site/" charset="utf-8"></script>
+
+    <!-- js -->
+    <script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>internet/Internet.js"></script> 
+    <script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>internet/Url.js"></script> 
+    <script type="text/javascript" src="<?php echo JS_URL; ?>activity/login/Login.js"></script>
 </head>
 
 <body text-align:center style="height:100%">
@@ -29,7 +37,7 @@
             </div>
     
             <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
-                <div>帮助人们高效的传播通知</div>
+                <div>帮助人们高效的发布通知</div>
             </div>
             <div class="row text-center" style="font-size: 25px;color:#e6e2e2;">
                 <div>是我们的进步方向</div>

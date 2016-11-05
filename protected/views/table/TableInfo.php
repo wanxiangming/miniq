@@ -1,4 +1,4 @@
-<script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>activity/table/TableInfo.js"></script>
+<script language="javascript" type="text/javascript" src="<?php echo JS_URL; ?>activity/table/table-info/TableInfo.js"></script>
 
 
 
@@ -6,11 +6,11 @@
 <div class="container">
 	<div class="col-xs-offset-2 col-xs-8">
 		<div class="row correction-row-css" style="margin-top:20px;position:relative;">
-			<label class="control-label col-xs-2" style="padding-top: 12px;" for="input01">表名称</label>
+			<label class="control-label col-xs-2" style="padding-top: 12px;" for="input01">节点名称</label>
 			<div id="table" class="row col-xs-10"></div>
 			<div id="inheritSearch" class="row col-xs-offset-3 col-xs-9 hide" style="margin-top: 30px;margin-bottom: 30px">
 				<div class="col-xs-5 correction-clear-col-xs-padding">
-	              <input  id="search_input" class="col-xs-12" placeholder="输入表ID" type="text">
+	              <input  id="search_input" class="col-xs-12" placeholder="输入节点ID" type="text">
 	            </div>
 	            <div class="correction-clear-col-xs-padding">
 	            	<div id="search_button" class="btn correction-clear-col-xs-padding" style="font-size: 19px;"><span class="glyphicon glyphicon-search"></span></div>
@@ -19,11 +19,11 @@
 			</div>
 		</div>
 		<div class="row correction-row-css" style="margin-top:20px;position:relative;">
-			<label class="control-label col-xs-2" style="padding-top: 6px;" for="input01">父表列表</label>
+			<label class="control-label col-xs-2" style="padding-top: 6px;" for="input01">入口列表</label>
 			<div id="parentTable" class="row col-xs-10"></div>
 		</div>
-		<div class="row correction-row-css" style="margin-top:20px;position:relative;">
-			<label class="control-label col-xs-2" style="padding-top: 6px;" for="input01">子表列表</label>
+		<div id="export_list" class="row correction-row-css hide" style="margin-top:20px;position:relative;">
+			<label class="control-label col-xs-2" style="padding-top: 6px;" for="input01">出口列表</label>
 			<div id="childTable" class="row col-xs-10"></div>
 		</div>
 		<div id="follower" class="row correction-row-css hide" style="margin-top:20px;position:relative;">
@@ -52,7 +52,7 @@
 		  <form class="form-horizontal">
 		    <fieldset>
 		   		<div id="create_inp_parent_changeNickName" class="control-group row ">
-		          <label class="control-label col-xs-2" for="input01">日程名称</label>
+		          <label class="control-label col-xs-2" for="input01">节点名称</label>
 		          <div class="controls col-xs-10">
 		            <input id="log_name_inp_changeNickName" type="text" placeholder="1-12个字符长度！" class="input-xlarge form-control"/>
 		          </div>
@@ -94,6 +94,7 @@
 </div>
 
 
+<div class="row" style="height: 250px"></div>
 
 
 

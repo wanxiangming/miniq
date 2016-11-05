@@ -5,7 +5,8 @@
 	 * actionRepealManager()
 	 */
 	
-	include_once("protected/models/util/TableTableManagerGroup.php");
+	include_once("protected/models/database/MiniqDB.php");
+	include_once("protected/models/util/Cookie.php");
 
 	class MysqlTableManagerGroupController extends Controller{
 
@@ -14,8 +15,8 @@
 			$tableId=$_GET['tableId'];
 			$followerId=$_GET['followerId'];
 
-			$tableManagerGroup=new TableTableManagerGroup();
-			$tableManagerGroup->add($followerId,$tableId);
+			$miniqDB=new MiniqDB();
+			$miniqDB->insertManager($tableId,$followerId);
 			print_r(1);
 		}
 
@@ -23,8 +24,8 @@
 			$tableId=$_GET['tableId'];
 			$followerId=$_GET['followerId'];
 
-			$tableManagerGroup=new TableTableManagerGroup();
-			$tableManagerGroup->remove($followerId,$tableId);
+			$miniqDB=new MiniqDB();
+			$miniqDB->deleteManager($tableId,$followerId);
 			print_r(1);
 		}
 

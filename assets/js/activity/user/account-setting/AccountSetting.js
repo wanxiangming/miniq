@@ -9,9 +9,10 @@ function host(){
 
 	logOutBtn.click(function(){
 		var delCookie=DelCookie.creatNew();
-		delCookie.onSuccessLisenter(function(){
-			QC.Login.signOut();
-			window.location.href="?r=Login/Login";
+		delCookie.onSuccessLisenter(function(data){
+			if(data == 1){
+				window.location.href="?r=Login/Login";
+			}
 		});
 		delCookie.launch();
 	});
@@ -32,23 +33,3 @@ function host(){
 		}
 	});
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

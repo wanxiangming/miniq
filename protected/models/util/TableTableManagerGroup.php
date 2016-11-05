@@ -8,7 +8,7 @@
 	 * 		remove($managerId,$tableId)	//移除管理员，返回boolean
 	 * 		removeAll($tableId)			//移除某表的所有管理员
 	 * 		isManager($managerId,$tableId)	//查询某用户是否是某表的管理员，返回boolean
-	 * 		getAllManager($tableId)		//取得某表所有管理员名单，返回的是数组，没有数据是空数组
+	 * 		getAllManager($tableId)		//取得某表所有管理员名单，返回的是该表managerId字段组成的数组，没有数据返回空数组
 	 */
 	class TableTableManagerGroup{
 

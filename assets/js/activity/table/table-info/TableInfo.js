@@ -18,6 +18,7 @@ function host(){
 	var filtInput=$("#filt_follower_input");
 	var followerListScope=$("#follower_list_scope");
 	var loaderScope=$("#loaderScope");
+	var exportList=$("#export_list");
 
 	var loader=LoaderPiano.creatNew();
 	loader.show();
@@ -204,6 +205,7 @@ function host(){
 			getFollowerList.launch();
 		}
 
+		//向入口列表插入数据
 		if(TABLE_INFO_DATA_STRUCTURE.queryParentTableCount() > 0){
 			TABLE_INFO_DATA_STRUCTURE.parentTableIterator(function(PARENT_TABLE_ID,PARENT_TABLE_NAME){
 				var parentTableItem=ParentTableItem.creatNew(tableName,PARENT_TABLE_ID,PARENT_TABLE_NAME,isCreator);
@@ -227,6 +229,7 @@ function host(){
 			parentNullDiv.appendTo(parentTableListScope);
 		}
 
+		//向出口列表插入数据
 		if(TABLE_INFO_DATA_STRUCTURE.queryChildTableCount() > 0){
 			TABLE_INFO_DATA_STRUCTURE.childTableIterator(function(CHILE_TABLE_ID,CHILD_TABLE_NAME){
 				var childTableItem=ChildTableItem.creatNew(tableName,CHILE_TABLE_ID,CHILD_TABLE_NAME,isCreator);
@@ -239,6 +242,11 @@ function host(){
 			childNullDiv.addClass('col-xs-12');
 			childNullDiv.setAttribute("style","padding-top:6px;padding-left:30px");
 			childNullDiv.appendTo(childTableListScope);
+		}
+
+		//如果该用户是该表的创建者或者关注者(管理员),则显示入口列表
+		if(isAttention || isCreator){
+			exportList.removeClass('hide');
 		}
 		
 	});
@@ -519,10 +527,10 @@ var TableItem={
 		(function(){
 			var dropDownListItem=DropDownListItem.creatNew(true,"<span class=\"glyphicon glyphicon-cog\"></span>","alltime");
 			if(isCreator){
-				dropDownListItem.addDropDownMenu(getChangeTableNameBtn());
-				dropDownListItem.addDropDownMenu(getDeprecatedBtn());
+				// dropDownListItem.addDropDownMenu(getChangeTableNameBtn());
 				dropDownListItem.addDropDownMenu(getInheritBtn());
-				dropDownListItem.addDropDownMenu(getOpenFollowerListBtn());
+				// dropDownListItem.addDropDownMenu(getOpenFollowerListBtn());
+				dropDownListItem.addDropDownMenu(getDeprecatedBtn());
 				if(!isPublic){
 					dropDownListItem.addDropDownMenu(getOpenTableBtn());
 				}
@@ -594,9 +602,9 @@ var TableItem={
 
 		function getDeprecatedBtn(){
 			var btn=DropDownItemButton.creatNew();
-			btn.html("弃用此表");
+			btn.html("删除此节点");
 			btn.onClickListener(function(){
-				checkActionContent.html("您确定要弃用\""+tableName+"\"吗？");
+				checkActionContent.html("您确定要删除\""+tableName+"\"吗？</br>这将会切断所有入口和出口");
 				checkActionBtn.unbind().bind("click",function(){
 					e_deprecated();
 				});
@@ -621,7 +629,7 @@ var TableItem={
 
 		function getOpenTableBtn(){
 			var btn=DropDownItemButton.creatNew();
-			btn.html("公开此表");
+			btn.html("公开此节点");
 			btn.onClickListener(function(){
 				checkActionContent.html("您确定要公开\""+tableName+"\"吗？(公开后将无法再设为私有)");
 				checkActionBtn.unbind().bind("click",function(){
@@ -634,7 +642,7 @@ var TableItem={
 
 		function getInheritBtn(){
 			var btn=DropDownItemButton.creatNew();
-			btn.html("继承其他表");
+			btn.html("架设管道");
 			btn.onClickListener(function(){
 				tableItemInheritEdit.show();
 			});
@@ -1095,7 +1103,7 @@ minclude("Table");
  * 	parentTableAry
  * 	childTableAry
  * 
- * TableInfoDataStructure(isCreator,isPublic)
+ * TableInfoDataStructure(isCreator,isPublic,isAttention)
  * 		setTableId(tableId)
  * 		getTableId()
  *
@@ -1221,81 +1229,6 @@ var Div={
 		return Div;
 	}	
 }
-
-var HorizontalSlipDiv={
-	creatNew:function(){
-		var HorizontalSlipDiv=Div.creatNew();
-
-		HorizontalSlipDiv.addClass("animated bounceInRight hide");
-
-		HorizontalSlipDiv.show=function(){
-			HorizontalSlipDiv.removeClass('hide');
-		}
-
-		HorizontalSlipDiv.slipRemove=function(){
-			HorizontalSlipDiv.addClass("bounceOutLeft");
-			HorizontalSlipDiv.one('animationend',function(){
-				HorizontalSlipDiv.remove();
-			});
-		}
-
-		return HorizontalSlipDiv;
-	}
-}
-
-var FlipYDiv={
-	creatNew:function(){
-		var FlipYDiv=Div.creatNew();
-
-		FlipYDiv.addClass("animated flipInY hide");
-
-		FlipYDiv.show=function(){
-			FlipYDiv.removeClass('hide');
-		}
-
-		FlipYDiv.flipRemove=function(){
-			FlipYDiv.addClass("flipOutY");
-			FlipYDiv.one('animationend',function(){
-				FlipYDiv.remove();
-			});
-		}
-
-		return FlipYDiv;
-	}
-}
-
-var FadeDiv={
-	creatNew:function(){
-		var FadeDiv=Div.creatNew();
-
-		FadeDiv.addClass("fadeIn animated correction-animated-css hide");
-		
-		FadeDiv.show=function(){
-			FadeDiv.removeClass('hide');
-		}
-
-		FadeDiv.fadeRemove=function(){
-			FadeDiv.addClass("fadeOut");
-			FadeDiv.one("animationend",function(){
-				FadeDiv.remove();
-			});
-		}
-
-		return FadeDiv;
-	}
-}
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -1768,13 +1701,13 @@ var TableItemInheritEdit={
 			div.addClass('text-danger col-xs-12');
 			div.setAttribute("style","padding-top:15px;padding-left:13px;padding-right:0px");
 			if(ERROR_CODE == 1){
-				div.html("已继承此表");
+				div.html("管道已存在");
 			}
 			else if(ERROR_CODE == 2){
-				div.html("查无此表，或此表为私有表");
+				div.html("查无此节点，或此节点为私有");
 			}
 			else if(ERROR_CODE == 3){
-				div.html("无法继承自己");
+				div.html("管道无效");
 			}
 			return div.ui;
 		}
@@ -1853,7 +1786,7 @@ var InheritSearchResult={
 				var inheritBtn=Div.creatNew();
 				inheritBtn.addClass('col-xs-2 btn');
 				inheritBtn.setAttribute("style","color: cornflowerblue;");
-				inheritBtn.html("继承");
+				inheritBtn.html("确定");
 				inheritBtn.appendTo(div.ui);
 				inheritBtn.ui.bind("click",function(){
 					var def=e_inherit(tableId);
@@ -1863,10 +1796,10 @@ var InheritSearchResult={
 							errorTipDiv.html("未知的错误");
 						}
 						else if(ERROR_CODE == -2){
-							errorTipDiv.html("已继承该表");
+							errorTipDiv.html("管道已存在");
 						}
 						else if(ERROR_CODE == -3){
-							errorTipDiv.html("循环继承错误，</br>\""+tableName+"\"存在于您的子表链上，您无法继承它");
+							errorTipDiv.html("管道循环错误，</br>\""+tableName+"\"是您的下层节点，您无法对它架设管道");
 						}
 					});
 				});
